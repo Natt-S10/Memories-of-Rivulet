@@ -1,0 +1,19 @@
+@startuml
+class map.Map {
++ {static} Image dirtRawImg
++ {static} Image waterRawImg
++ {static} int tileSize
+- int mapWidth
+- int mapHeight
+- TileType[][] tileMatrix
+- WritableImage croppedTile
++ boolean isCollidable(int,int)
++ int getLayer()
++ void draw(GraphicsContext)
++ boolean isDestroyed()
++ boolean isVisible()
+}
+
+
+sharedObject.IRenderable <|.. map.Map
+@enduml
