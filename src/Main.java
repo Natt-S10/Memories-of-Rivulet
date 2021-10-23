@@ -12,16 +12,16 @@ public class Main extends Application {
     public static final int sceneH = 720;
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Application.launch(args);
     }
 
     @Override
     public void start(Stage stage) {
         StackPane root = new StackPane();
-        Scene gameScene = new Scene(root,sceneW,sceneH);
+        Scene gameScene = new Scene(root, sceneW, sceneH);
 
-        MapCanvas mapCanvas = new MapCanvas(sceneW,sceneH);
+        MapCanvas mapCanvas = new MapCanvas(sceneW, sceneH);
         root.getChildren().add(mapCanvas);
         mapCanvas.requestFocus();
 
@@ -40,7 +40,6 @@ public class Main extends Application {
         };
         animation.start();
     }
-
 
 
 }
