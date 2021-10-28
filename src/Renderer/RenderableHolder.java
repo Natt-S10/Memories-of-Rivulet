@@ -1,15 +1,15 @@
-package sharedObject;
+package Renderer;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 
 public class RenderableHolder {
     private static final RenderableHolder instance = new RenderableHolder();
-    private ArrayList<IRenderable> entities;
-    private Comparator<IRenderable> layerComparator;
+    private final ArrayList<IRenderable> elements;
+    private final Comparator<IRenderable> layerComparator;
 
     public RenderableHolder() {
-        entities = new ArrayList<IRenderable>();
+        elements = new ArrayList<IRenderable>();
         layerComparator = (IRenderable o1, IRenderable o2) -> {
             if (o1.getLayer() > o2.getLayer()) return 1;
             else if (o1.getLayer() == o2.getLayer()) return 0;
@@ -23,20 +23,20 @@ public class RenderableHolder {
     }
 
     public void add(IRenderable entity) {
-        entities.add(entity);
-        entities.sort(layerComparator);
+        elements.add(entity);
+        elements.sort(layerComparator);
     }
 
     public void update() {
-        for (int i = 0; i < entities.size(); i++) {
-            if (entities.get(i).isDestroyed()) {
-                entities.remove(i);
+        for (int i = 0; i < elements.size(); i++) {
+            if (elements.get(i).isDestroyed()) {
+                elements.remove(i);
             }
         }
     }
 
-    public ArrayList<IRenderable> getEntities() {
-        return entities;
+    public ArrayList<IRenderable> getElements() {
+        return elements;
     }
 
 }

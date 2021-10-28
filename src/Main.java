@@ -1,11 +1,13 @@
+import Input.InputUtils;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import map.Map;
-import sharedObject.MapCanvas;
-import sharedObject.RenderableHolder;
+import Renderer.GameScreen;
+import Renderer.GameScreenUtils;
+import Renderer.RenderableHolder;
 
 public class Main extends Application {
     public static final int sceneW = 1280;
@@ -21,20 +23,31 @@ public class Main extends Application {
         StackPane root = new StackPane();
         Scene gameScene = new Scene(root, sceneW, sceneH);
 
-        MapCanvas mapCanvas = new MapCanvas(sceneW, sceneH);
+        GameScreen mapCanvas = new GameScreen(sceneW, sceneH);
         root.getChildren().add(mapCanvas);
+
         mapCanvas.requestFocus();
 
-        RenderableHolder.getInstance().add(new Map());
+        Map demoMap = null;
+        try {
+            demoMap = new Map("res/demoMap.csv");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        RenderableHolder.getInstance().add(demoMap);
 
         stage.setTitle("About to be Game");
         stage.setScene(gameScene);
         stage.show();
 
+        Map finalDemoMap = demoMap;
         AnimationTimer animation = new AnimationTimer() {
             @Override
             public void handle(long l) {
                 mapCanvas.paintComponent();
+                assert finalDemoMap != null;
+                finalDemoMap.update();
+                InputUtils.updateInputState();
                 RenderableHolder.getInstance().update();
             }
         };
