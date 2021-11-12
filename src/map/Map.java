@@ -1,10 +1,10 @@
 package map;
 
-import Input.*;
+import Input.InputUtils;
+import Renderer.IRenderable;
+import Renderer.ResourcesLoader;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
-import Renderer.*;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -12,21 +12,19 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 public class Map implements IRenderable {
-    public static final Image dirtRawImg;
-    public static final Image waterRawImg;
     public static final int tileSize;
     //map info
     private int mapWidth; //pref 32
     private int mapHeight; //pref 18
+    private boolean drawn;
     private TileType[][] tileMatrix;
 
     static {
-        tileSize = 40;
-        String dirtImgPath = "dirt.bmp";
-        String waterImgPath = "water.bmp";
-        dirtRawImg = new Image(ClassLoader.getSystemResource(dirtImgPath).toString());
-        waterRawImg = new Image(ClassLoader.getSystemResource(waterImgPath).toString());
+        tileSize = 160; // kuay
     }
 
     private WritableImage croppedTile;
@@ -35,6 +33,7 @@ public class Map implements IRenderable {
         this.tileMatrix = tileMatrix;
         mapHeight = tileMatrix.length;
         mapWidth = tileMatrix[0].length;
+        drawn = false;
     }
 
     public Map() { //demo constructer
@@ -45,8 +44,11 @@ public class Map implements IRenderable {
                         {TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT},
                         {TileType.WATER, TileType.WATER, TileType.WATER, TileType.WATER, TileType.WATER, TileType.WATER},
                         {TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT}};
+
+
         mapHeight = tileMatrix.length;
         mapWidth = tileMatrix[0].length;
+        drawn = false;
     }
     //hee
     public Map(String filePath) throws Exception{
@@ -65,6 +67,7 @@ public class Map implements IRenderable {
             mapHeight = Hee.size();
             mapWidth = Hee.get(0).length;
             tileMatrix = new TileType[mapHeight][mapWidth]; //Y-axis then X-axis
+            drawn = false;
 
             for (int i = 0 ; i < mapHeight; i++ ) {
                 for( int j = 0 ; j < mapWidth; j++) {
@@ -76,6 +79,38 @@ public class Map implements IRenderable {
         } catch (IOException e){
             throw new IOException();
         }
+    }
+    
+    public void drawEveryTiles(GraphicsContext gc){
+        WritableImage croppedTile = null;
+        for (int i = 0; i < mapHeight; i++) {
+            for (int j = 0; j < mapWidth; j++) {
+                switch (tileMatrix[i][j]) {
+                    case DIRT -> croppedTile = new WritableImage(ResourcesLoader.dirt.getPixelReader(), tileSize, tileSize);
+                    case WATER -> croppedTile = new WritableImage(ResourcesLoader.water.getPixelReader(), tileSize, tileSize);
+                }
+                gc.drawImage(croppedTile, j * tileSize, i * tileSize);
+            }
+        }
+    }
+    
+    public void drawAroundPoint(GraphicsContext gc, int x, int y){
+        WritableImage croppedTile = null;
+        int snappedX = snapToGrid(x);
+        int snappedY = snapToGrid(y);
+        for (int i = max(0,snappedY-3); i < min(snappedY+4,mapHeight); i++) {
+            for (int j = max(0,snappedX-3); j < min(snappedX+4,mapWidth); j++) {
+                switch (tileMatrix[i][j]) {
+                    case DIRT -> croppedTile = new WritableImage(ResourcesLoader.dirt.getPixelReader(), tileSize, tileSize);
+                    case WATER -> croppedTile = new WritableImage(ResourcesLoader.water.getPixelReader(), tileSize, tileSize);
+                }
+                gc.drawImage(croppedTile, j * tileSize, i * tileSize);
+            }
+        }
+    }
+
+    public void viewAroundCharacter(GraphicsContext gc){
+        //TODO getCharPos -> Calc i j -> render map within (i,j) to (i2,j2)
     }
 
 
@@ -89,16 +124,19 @@ public class Map implements IRenderable {
             default -> true;
         };
     }
-
+    // TODO: Render only visible tiles
     public void update(){
         if(InputUtils.mouseOnScreen && InputUtils.isLeftClickTriggered()){
-            int i = (int) (InputUtils.mouseY / tileSize);
-            int j = (int) (InputUtils.mouseX / tileSize);
+            int i = snapToGrid((int)InputUtils.mouseX);
+            int j = snapToGrid((int)InputUtils.mouseY);
             if(0<=i && i<mapHeight && 0<=j && j<mapWidth)
                 System.out.println(tileMatrix[i][j].toString());
         }
+        if(!InputUtils.mouseOnScreen){drawn = false;}
     }
 
+    private int snapToGrid(int pos){return (int)(pos/tileSize);}
+    
     @Override
     public int getLayer() {
         return -99;
@@ -106,16 +144,9 @@ public class Map implements IRenderable {
 
     @Override
     public void draw(GraphicsContext gc) {
-        WritableImage croppedTile = null;
-        for (int i = 0; i < mapHeight; i++) {
-            for (int j = 0; j < mapWidth; j++) {
-                switch (tileMatrix[i][j]) {
-                    case DIRT -> croppedTile = new WritableImage(dirtRawImg.getPixelReader(), tileSize, tileSize);
-                    case WATER -> croppedTile = new WritableImage(waterRawImg.getPixelReader(), tileSize, tileSize);
-                }
-                gc.drawImage(croppedTile, j * tileSize, i * tileSize);
-            }
-        }
+//        if(!drawn){ drawEveryTiles(gc); drawn=true;}
+//        else{drawAroundPoint(gc,(int) InputUtils.mouseX,(int)InputUtils.mouseY);}
+        drawEveryTiles(gc);
     }
 
     @Override
@@ -126,5 +157,13 @@ public class Map implements IRenderable {
     @Override
     public boolean isVisible() {
         return true;
+    }
+
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public int getMapHeight() {
+        return mapHeight;
     }
 }

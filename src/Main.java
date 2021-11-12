@@ -1,17 +1,23 @@
 import Input.InputUtils;
+import Logic.LogicController;
+import Renderer.*;
+import entity.ActuallyBall;
+import entity.Character;
+import entity.Entity;
+import entity.base.Movable;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import map.Map;
-import Renderer.GameScreen;
-import Renderer.GameScreenUtils;
-import Renderer.RenderableHolder;
+import map.Seasons;
 
 public class Main extends Application {
     public static final int sceneW = 1280;
     public static final int sceneH = 720;
+    public static long lastFrameST = 0;
 
 
     public static void main(String[] args) {
@@ -31,24 +37,38 @@ public class Main extends Application {
         Map demoMap = null;
         try {
             demoMap = new Map("res/demoMap.csv");
+            //demoMap = new Map();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        RenderableHolder.getInstance().add(demoMap);
+        //ActuallyBall ball = new ActuallyBall("Ball",demoMap.getMapWidth()/2,demoMap.getMapHeight()/2,75,49, false, Seasons.SUMMER);
+        Character mainChar = new Character("Steve",
+                sceneW/2, sceneH/2,30,60, 3.0);
 
-        stage.setTitle("About to be Game");
+        RenderableHolder.getInstance().add(demoMap);
+        RenderableHolder.getInstance().add(mainChar);
+
+        LogicController.getInstance().addMovable(mainChar);
+
+        stage.setTitle("Memories of Rivulet");
         stage.setScene(gameScene);
         stage.show();
 
         Map finalDemoMap = demoMap;
+
         AnimationTimer animation = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                mapCanvas.paintComponent();
-                assert finalDemoMap != null;
+                //System.out.println(InputUtils.isLeftClickDown()+" "+InputUtils.mouseOnScreen);
+                System.out.println(1_000_000_000.0/(lastFrameST-l)); lastFrameST = l;
+                //Logic update
+                LogicController.getInstance().update();
                 finalDemoMap.update();
-                InputUtils.updateInputState();
+                //render
                 RenderableHolder.getInstance().update();
+                mapCanvas.paintComponent();
+                //Input reset
+                InputUtils.updateInputState();
             }
         };
         animation.start();
