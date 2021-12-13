@@ -12,7 +12,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import map.Map;
-//import map.Seasons;
+import map.Seasons;
 
 public class Main extends Application {
     public static final int sceneW = 1280;
@@ -43,12 +43,12 @@ public class Main extends Application {
         }
         //ActuallyBall ball = new ActuallyBall("Ball",demoMap.getMapWidth()/2,demoMap.getMapHeight()/2,75,49, false, Seasons.SUMMER);
         Character mainChar = new Character("Steve",
-                sceneW/2, sceneH/2,160,200, 5);
+                sceneW/2, sceneH/2,80,160, 8);
         //demoMap = new Map();
         RenderableHolder.getInstance().add(demoMap);
         RenderableHolder.getInstance().add(mainChar);
 
-        LogicController.getInstance().addMovable(mainChar);
+        LogicController.getInstance().setMainChar(mainChar);
 
         stage.setTitle("Memories of Rivulet");
         stage.setResizable(false);
@@ -58,11 +58,12 @@ public class Main extends Application {
         //Map finalDemoMap = demoMap;
 
         Map finalDemoMap = demoMap;
+
         AnimationTimer animation = new AnimationTimer() {
             @Override
             public void handle(long l) {
                 //System.out.println(InputUtils.isLeftClickDown()+" "+InputUtils.mouseOnScreen);
-                //System.out.println(1000000000.0/(lastFrameST-l)); lastFrameST = l;
+                System.out.println(1000000000.0/(lastFrameST-l)); lastFrameST = l;
                 //Logic update
                 LogicController.getInstance().update();
                 finalDemoMap.update();

@@ -9,6 +9,7 @@ public class LogicController {
     private static final LogicController instance = new LogicController();
     private final ArrayList<Movable> movableEntities;
     private final ArrayList<Collidable> collidableEntities;
+    private Character mainChar;
     //private static final Character mainChar;
     private LogicController(){
         movableEntities = new ArrayList<>();
@@ -32,5 +33,24 @@ public class LogicController {
 
     public ArrayList<Collidable> getCollidableEntities() {
         return collidableEntities;
+    }
+    public Character getMainChar() {
+        return mainChar;
+    }
+
+    public void setMainChar(Character mainChar) {
+        if(this.mainChar == null) {
+            this.mainChar = mainChar;
+            addMovable(mainChar);
+            return;
+        }
+        int id = movableEntities.indexOf(mainChar);
+        if(id == -1){
+            addMovable(mainChar);
+            this.mainChar = mainChar;
+            return;
+        }
+        movableEntities.set(id, (Movable) mainChar);
+        this.mainChar = mainChar;
     }
 }

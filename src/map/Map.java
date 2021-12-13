@@ -1,6 +1,8 @@
 package map;
 
 import Input.InputUtils;
+import Logic.LogicController;
+import Renderer.GameScreen;
 import Renderer.IRenderable;
 import Renderer.ResourcesLoader;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,8 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import static java.lang.Math.*;
 
 public class Map implements IRenderable {
     public static final int tileSize;
@@ -56,22 +57,22 @@ public class Map implements IRenderable {
         try{
             String row;
             BufferedReader csvReader = new BufferedReader(new FileReader(filePath));
-            ArrayList<String[]> Hee = new ArrayList<>();
+            ArrayList<String[]> preMap = new ArrayList<>();
             while ((row = csvReader.readLine()) != null) {
                 String[] data = row.split(",");
                 // do something with the data
-                Hee.add(data);
+                preMap.add(data);
             }
             csvReader.close();
 
-            mapHeight = Hee.size();
-            mapWidth = Hee.get(0).length;
+            mapHeight = preMap.size();
+            mapWidth = preMap.get(0).length;
             tileMatrix = new TileType[mapHeight][mapWidth]; //Y-axis then X-axis
             drawn = false;
 
             for (int i = 0 ; i < mapHeight; i++ ) {
                 for( int j = 0 ; j < mapWidth; j++) {
-                    tileMatrix[i][j] = TileType.valueOf(Hee.get(i)[j]);
+                    tileMatrix[i][j] = TileType.valueOf(preMap.get(i)[j]);
                 }
             }
         } catch ( FileNotFoundException e){
@@ -86,28 +87,38 @@ public class Map implements IRenderable {
         for (int i = 0; i < mapHeight; i++) {
             for (int j = 0; j < mapWidth; j++) {
                 switch (tileMatrix[i][j]) {
+//                    case DIRT -> croppedTile = new WritableImage(ResourcesLoader.dirt.getPixelReader(), tileSize, tileSize);
+//                    case WATER -> croppedTile = new WritableImage(ResourcesLoader.water.getPixelReader(), tileSize, tileSize);
                     case DIRT -> croppedTile = ResourcesLoader.dirt16;
                     case WATER -> croppedTile = ResourcesLoader.water16;
                 }
-                gc.drawImage(croppedTile, j * tileSize, i * tileSize);
+                gc.drawImage(croppedTile, j * tileSize, i * tileSize); //posx, posy
             }
         }
     }
-    
-//    public void drawAroundPoint(GraphicsContext gc, int x, int y){
-//        WritableImage croppedTile = null;
-//        int snappedX = snapToGrid(x);
-//        int snappedY = snapToGrid(y);
-//        for (int i = max(0,snappedY-3); i < min(snappedY+4,mapHeight); i++) {
-//            for (int j = max(0,snappedX-3); j < min(snappedX+4,mapWidth); j++) {
-//                switch (tileMatrix[i][j]) {
+
+    public void drawCamView(GraphicsContext gc){
+        WritableImage croppedTile = null;
+        double anchorX = (LogicController.getInstance().getMainChar().getPosX() - GameScreen.screenWidth/2);
+        double anchorY = (LogicController.getInstance().getMainChar().getPosY() - GameScreen.screenHeight/2);
+        int lowI = (int)floor(anchorX/tileSize);
+        int hiI = (int) ceil((anchorX+GameScreen.screenWidth)/tileSize);
+        int lowJ = (int) floor(anchorY/tileSize);
+        int hiJ = (int) ceil((anchorY+GameScreen.screenHeight)/tileSize);
+        for(int j=max(lowJ,0); j< min(hiJ,mapHeight); j++){
+            for(int i = max(lowI,0); i<min(hiI,mapWidth); i++){
+                switch (tileMatrix[j][i]) {
 //                    case DIRT -> croppedTile = new WritableImage(ResourcesLoader.dirt.getPixelReader(), tileSize, tileSize);
 //                    case WATER -> croppedTile = new WritableImage(ResourcesLoader.water.getPixelReader(), tileSize, tileSize);
-//                }
-//                gc.drawImage(croppedTile, j * tileSize, i * tileSize);
-//            }
-//        }
-//    }
+                    case DIRT -> croppedTile = ResourcesLoader.dirt16;
+                    case WATER -> croppedTile = ResourcesLoader.water16;
+                }
+                gc.drawImage(croppedTile, i* tileSize - anchorX, j * tileSize - anchorY); //posx, posy
+            }
+        }
+    }
+
+
 
     public void viewAroundCharacter(GraphicsContext gc){
         //TODO getCharPos -> Calc i j -> render map within (i,j) to (i2,j2)
@@ -146,7 +157,7 @@ public class Map implements IRenderable {
     public void draw(GraphicsContext gc) {
 //        if(!drawn){ drawEveryTiles(gc); drawn=true;}
 //        else{drawAroundPoint(gc,(int) InputUtils.mouseX,(int)InputUtils.mouseY);}
-        drawEveryTiles(gc);
+        drawCamView(gc);
     }
 
     @Override

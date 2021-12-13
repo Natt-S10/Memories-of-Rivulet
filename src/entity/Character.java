@@ -1,8 +1,6 @@
 package entity;
 
-import Renderer.GameScreen;
 import Renderer.IRenderable;
-import Renderer.ResourcesLoader;
 import entity.base.Boundary;
 import entity.base.Collidable;
 import entity.base.Direction;
@@ -33,15 +31,12 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         this.speed = speed;
         screenX = GameScreen.screenWidth;
         screenY = GameScreen.screenHeight;
-    }
-    public boolean isMoving(){
-        if(facing != Direction.STABLE) return true;
-        return false;
+        visualBoundary.setByCenterX(screenX/2);
+        visualBoundary.setByCenterY(screenY/2);
     }
 
     @Override
     public void update() {
-
         facing = Movable.directionByKeyboard();
 
         if(spriteCounter > 3){

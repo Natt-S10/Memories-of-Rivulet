@@ -25,4 +25,15 @@ public abstract class Entity { // sort by greater Y then Smaller X
     }
     //setters
 
+    public String getName() {
+        return name;
+    }
+
+    public double getPosX() {
+        return posX;
+    }
+
+    public double getPosY() {
+        return posY;
+    }
 }
