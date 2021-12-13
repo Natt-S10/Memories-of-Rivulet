@@ -141,15 +141,23 @@ public class Map implements IRenderable {
     }
     // TODO: Render only visible tiles
     public void update(){
-        if(InputUtils.mouseOnScreen && InputUtils.isLeftClickTriggered()){
-            int i = snapToGrid((int)InputUtils.mouseX);
-            int j = snapToGrid((int)InputUtils.mouseY);
-            if(0<=i && i<mapHeight && 0<=j && j<mapWidth)
-                System.out.println(tileMatrix[i][j].toString());
+        double anchorX, anchorY;
+        anchorX = LogicController.getInstance().getAnchorX();
+        anchorY = LogicController.getInstance().getAnchorY();
+
+        if(InputUtils.mouseOnScreen && InputUtils.isLeftClickTriggered()) {
+            int i = snapToGrid(InputUtils.mouseX + anchorX);
+            int j = snapToGrid(InputUtils.mouseY + anchorY);
+            if (0 <= i && i < mapWidth && 0 <= j && j < mapHeight)
+                System.out.println(tileMatrix[j][i].toString());
+            if(tileMatrix[j][i] == TileType.WATER) {
+                LogicController.getInstance().setFishing(true);
+                LogicController.getInstance().setFishingDuration(200);
+            }
         }
     }
 
-    private int snapToGrid(int pos){return (int)(pos/tileSize);}
+    private int snapToGrid(double pos){return (int)(pos/tileSize);}
     
     @Override
     public int getLayer() {

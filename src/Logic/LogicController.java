@@ -15,10 +15,18 @@ public class LogicController {
     private final ArrayList<Collidable> collidableEntities;
     private Character mainChar;
     private Map currentMap;
+    private boolean isFishing; //game status
+    private double fishingDuration;
     //private static final Character mainChar;
     private LogicController(){
         movableEntities = new ArrayList<>();
         collidableEntities = new ArrayList<>();
+        isFishing = false;
+    }
+    private void fishingState(){
+        System.out.println(fishingDuration);
+        if(fishingDuration <= 0) isFishing = false;
+        fishingDuration-= 1;
     }
     public static LogicController getInstance(){return instance;}
 
@@ -26,11 +34,14 @@ public class LogicController {
     public void addCollidable(Collidable c){collidableEntities.add(c);}
 
     public void update(){
-        for(Movable eM: movableEntities){
-            eM.move();
-            eM.update();
+        if(isFishing) fishingState();
+        else{
+            for (Movable eM : movableEntities) {
+                eM.move();
+                eM.update();
+            }
+            currentMap.update();
         }
-        currentMap.update();
     }
 
     public ArrayList<Movable> getMovableEntities() {
@@ -86,5 +97,13 @@ public class LogicController {
     }
     public Map getCurrentMap() {
         return currentMap;
+    }
+
+    public void setFishing(boolean fishing) {
+        isFishing = fishing;
+    }
+
+    public void setFishingDuration(double fishingDuration) {
+        this.fishingDuration = fishingDuration;
     }
 }
