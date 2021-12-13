@@ -43,12 +43,12 @@ public class Main extends Application {
         }
         //ActuallyBall ball = new ActuallyBall("Ball",demoMap.getMapWidth()/2,demoMap.getMapHeight()/2,75,49, false, Seasons.SUMMER);
         Character mainChar = new Character("Steve",
-                sceneW/2, sceneH/2,160,240, 16);
+                sceneW/2, sceneH/2,160,220, 7);
         //demoMap = new Map();
         RenderableHolder.getInstance().add(demoMap);
         LogicController.getInstance().setCurrentMap(demoMap);
-
         RenderableHolder.getInstance().add(mainChar);
+
         LogicController.getInstance().setMainChar(mainChar);
 
         stage.setTitle("Memories of Rivulet");
@@ -67,6 +67,7 @@ public class Main extends Application {
                 //System.out.println(1000000000.0/(lastFrameST-l)); lastFrameST = l;
                 //Logic update
                 LogicController.getInstance().update();
+                finalDemoMap.update();
                 //render
                 RenderableHolder.getInstance().update();
                 mapCanvas.paintComponent();

@@ -1,14 +1,18 @@
 package Renderer;
 
+import map.Map;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 
 public class RenderableHolder {
     private static final RenderableHolder instance = new RenderableHolder();
+
     private final ArrayList<IRenderable> elements;
     private final Comparator<IRenderable> layerComparator;
 
     public RenderableHolder() {
+
         elements = new ArrayList<IRenderable>();
         layerComparator = (IRenderable o1, IRenderable o2) -> {
             if (o1.getLayer() > o2.getLayer()) return 1;

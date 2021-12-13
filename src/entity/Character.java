@@ -19,6 +19,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     private Direction facing;
     private boolean isRight;
     private double speed;
+    boolean isColliding;
     private int spriteCounter;
     private int spriteNum;
     public final int screenX;
@@ -34,11 +35,12 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
 
     public Character(String name, int posX, int posY, int width, int height, double speed) {
         super(name, posX, posY, width, height);
-        collisionBoundary = new Boundary(posX+(width/4),posY+(height/2),width/2,height/2);
+        collisionBoundary = new Boundary(posX -(width/6),posY+(height/11),width/3,height/4);
         facing = Direction.STABLE;
         isRight = true;
         spriteCounter = 0;
         spriteNum = 1;
+        isColliding = false;
         this.speed = speed;
         screenX = GameScreen.screenWidth;
         screenY = GameScreen.screenHeight;
@@ -49,8 +51,12 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     @Override
     public void update() {
         facing = Movable.directionByKeyboard();
-
-        if(spriteCounter > 4){
+        checkCollide();
+        collisionBoundary.setPosX((int)posX  -this.getWidth()/6);
+        collisionBoundary.setPosY((int)posY+(this.getHeight()/11));
+        //System.out.println(height);
+        System.out.println(isColliding);
+        if(spriteCounter > 3){
             if(spriteNum == 16) {
                 spriteNum = 1;
             }
@@ -60,20 +66,117 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         spriteCounter++;
 
     }
+    //check objects and check tiles
+    public void checkCollide(){
+
+        double posx = 0; double posx2 = 0; double posx3 = 0;
+        double posy = 0; double posy2 = 0; double posy3 = 0;
+        boolean sCase = false;
+        switch(facing){
+            case N-> {
+                posx += collisionBoundary.left();
+                posx2 += collisionBoundary.right();
+                posy += collisionBoundary.top();
+                posy2 = posy;
+            }
+            case NE -> {
+                sCase= true;
+                posx += collisionBoundary.left();
+                posx2 += collisionBoundary.right();
+                posy += collisionBoundary.top();
+                posy2 = posy;
+                posx3 = posx2;
+                posy3 = collisionBoundary.bottom();
+
+            }
+            case NW -> {
+                sCase = true;
+                posx += collisionBoundary.left();
+                posx2 += collisionBoundary.left();
+                posy += collisionBoundary.top();
+                posy2 = posy;
+                posx3 = posx2;
+                posy3 = collisionBoundary.bottom();
+            }
+            case E -> {
+
+                posx = collisionBoundary.right();
+                posx2 = posx;
+                posy = collisionBoundary.top();
+                posy2 = collisionBoundary.bottom();
+
+            }
+            case W -> {
+
+                posx = collisionBoundary.left();
+                posx2 = posx;
+                posy = collisionBoundary.top();
+                posy2 = collisionBoundary.bottom();
+
+            }
+            case S -> {
+                posx += collisionBoundary.left();
+                posx2 = collisionBoundary.right();
+                posy += collisionBoundary.bottom();
+                posy2 = posy;
+
+            }
+            case SW -> {
+                sCase = true;
+                posx += collisionBoundary.left();
+                posx2 += collisionBoundary.right();
+                posy += collisionBoundary.bottom();
+                posy2 = posy;
+                posx3 = posx;
+                posy3 += collisionBoundary.top();
+            }
+            case SE -> {
+                sCase = true;
+                posx += collisionBoundary.right();
+                posx2 += collisionBoundary.left();
+                posy += collisionBoundary.bottom();
+                posy2 = posy;
+                posx3 = posx;
+                posy3 = collisionBoundary.top();
+            }
+
+        }
+//        System.out.println("X = " +posx );
+//        System.out.println("Y = " +posy );
+        if(LogicController.getInstance().getCurrentMap().isCollidable((int)posx, (int)posy) || LogicController.getInstance().getCurrentMap().isCollidable((int)posx2, (int)posy2)){
+            if(sCase){
+                if (LogicController.getInstance().getCurrentMap().isCollidable((int)posx3, (int)posy3)){
+                    isColliding = true;
+                    return;
+                }
+            }
+            isColliding = true;
+            return;
+        }
+
+
+        isColliding = false;
+        return;
+
+
+    }
 
     @Override
     public void move() {
-        double calcPosX = posX + Movable.deltaX(speed,facing);
-        double calcPosY = posY + Movable.deltaY(speed,facing);
-        if(calcPosX < visualBoundary.getWidth()/2) calcPosX = visualBoundary.getWidth()/2;
-        else if(calcPosX > LogicController.getInstance().getCurrentMap().getPhysicalWidth()- visualBoundary.getWidth()/2)
-            calcPosX = LogicController.getInstance().getCurrentMap().getPhysicalWidth()- visualBoundary.getWidth()/2;
-        if(calcPosY < visualBoundary.getHeight()/2) calcPosY = visualBoundary.getHeight()/2;
-        else if(calcPosY > LogicController.getInstance().getCurrentMap().getPhysicalHeight()- visualBoundary.getHeight()/2)
-            calcPosY = LogicController.getInstance().getCurrentMap().getPhysicalHeight()- visualBoundary.getHeight()/2;
-        posX = calcPosX;
-        posY = calcPosY;
-        updateVisualBoundary();
+        if(!isColliding){
+            double calcPosX = posX + Movable.deltaX(speed,facing);
+            double calcPosY = posY + Movable.deltaY(speed,facing);
+            if(calcPosX < visualBoundary.getWidth()/2) calcPosX = visualBoundary.getWidth()/2;
+            else if(calcPosX > LogicController.getInstance().getCurrentMap().getPhysicalWidth()- visualBoundary.getWidth()/2)
+                calcPosX = LogicController.getInstance().getCurrentMap().getPhysicalWidth()- visualBoundary.getWidth()/2;
+            if(calcPosY < visualBoundary.getHeight()/2) calcPosY = visualBoundary.getHeight()/2;
+            else if(calcPosY > LogicController.getInstance().getCurrentMap().getPhysicalHeight()- visualBoundary.getHeight()/2)
+                calcPosY = LogicController.getInstance().getCurrentMap().getPhysicalHeight()- visualBoundary.getHeight()/2;
+            posX = calcPosX;
+            posY = calcPosY;
+            updateVisualBoundary();
+        }
+
     }
     @Override
     public int getLayer() {
