@@ -108,7 +108,6 @@ public class Map implements IRenderable {
         int hiI = (int) ceil((anchorX+GameScreen.screenWidth)/tileSize);
         int lowJ = (int) floor(anchorY/tileSize);
         int hiJ = (int) ceil((anchorY+GameScreen.screenHeight)/tileSize);
-        System.out.println(lowI*tileSize - anchorX);
         for(int j=max(lowJ,0); j< min(hiJ,mapHeight); j++){
             for(int i = max(lowI,0); i<min(hiI,mapWidth); i++){
                 switch (tileMatrix[j][i]) {

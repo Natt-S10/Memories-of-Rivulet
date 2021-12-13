@@ -24,12 +24,12 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     public final int screenX;
     public final int screenY;
     private void updateVisualBoundary(){
-        if(posX <= (screenX-visualBoundary.getWidth())/2) visualBoundary.setPosX((int)posX);
-        else if(posX >= LogicController.getInstance().getCurrentMap().getPhysicalWidth() - (screenX/2+ visualBoundary.getWidth()))
-            visualBoundary.setPosX((int)(posX-LogicController.getInstance().getCurrentMap().getPhysicalWidth()+screenX));
-        if(posY <= (screenY-visualBoundary.getHeight())/2) visualBoundary.setPosY((int)posY);
-        else if(posY >= LogicController.getInstance().getCurrentMap().getPhysicalHeight() - (screenY/2+ visualBoundary.getHeight())/2)
-            visualBoundary.setPosY((int)(posY-LogicController.getInstance().getCurrentMap().getPhysicalHeight()+screenY));
+        if(posX <= screenX/2) visualBoundary.setByCenterX((int)posX);
+        else if(posX >= LogicController.getInstance().getCurrentMap().getPhysicalWidth() - (screenX/2))
+            visualBoundary.setByCenterX((int)(posX-LogicController.getInstance().getCurrentMap().getPhysicalWidth()+screenX));
+        if(posY <= screenY/2) visualBoundary.setByCenterY((int)posY);
+        else if(posY >= LogicController.getInstance().getCurrentMap().getPhysicalHeight() - (screenY/2))
+            visualBoundary.setByCenterY((int)(posY-LogicController.getInstance().getCurrentMap().getPhysicalHeight()+screenY));
     }
 
     public Character(String name, int posX, int posY, int width, int height, double speed) {
@@ -65,10 +65,10 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     public void move() {
         double calcPosX = posX + Movable.deltaX(speed,facing);
         double calcPosY = posY + Movable.deltaY(speed,facing);
-        if(calcPosX < 0) calcPosX = 0.0;
+        if(calcPosX < visualBoundary.getWidth()/2) calcPosX = visualBoundary.getWidth()/2;
         else if(calcPosX > LogicController.getInstance().getCurrentMap().getPhysicalWidth()- visualBoundary.getWidth()/2)
             calcPosX = LogicController.getInstance().getCurrentMap().getPhysicalWidth()- visualBoundary.getWidth()/2;
-        if(calcPosY < 0) calcPosY = 0.0;
+        if(calcPosY < visualBoundary.getHeight()/2) calcPosY = visualBoundary.getHeight()/2;
         else if(calcPosY > LogicController.getInstance().getCurrentMap().getPhysicalHeight()- visualBoundary.getHeight()/2)
             calcPosY = LogicController.getInstance().getCurrentMap().getPhysicalHeight()- visualBoundary.getHeight()/2;
         posX = calcPosX;
