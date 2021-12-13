@@ -21,7 +21,7 @@ public class Map implements IRenderable {
     //map info
     private int mapWidth; //pref 32
     private int mapHeight; //pref 18
-    private boolean drawn;
+    private int physicalWidth, physicalHeight;
     private TileType[][] tileMatrix;
 
     static {
@@ -34,7 +34,6 @@ public class Map implements IRenderable {
         this.tileMatrix = tileMatrix;
         mapHeight = tileMatrix.length;
         mapWidth = tileMatrix[0].length;
-        drawn = false;
     }
 
     public Map() { //demo constructer
@@ -49,7 +48,8 @@ public class Map implements IRenderable {
 
         mapHeight = tileMatrix.length;
         mapWidth = tileMatrix[0].length;
-        drawn = false;
+        physicalWidth = mapWidth * tileSize;
+        physicalHeight = mapHeight *tileSize;
     }
     //hee
     public Map(String filePath) throws Exception{
@@ -67,8 +67,9 @@ public class Map implements IRenderable {
 
             mapHeight = preMap.size();
             mapWidth = preMap.get(0).length;
+            physicalWidth = mapWidth * tileSize;
+            physicalHeight = mapHeight *tileSize;
             tileMatrix = new TileType[mapHeight][mapWidth]; //Y-axis then X-axis
-            drawn = false;
 
             for (int i = 0 ; i < mapHeight; i++ ) {
                 for( int j = 0 ; j < mapWidth; j++) {
@@ -99,12 +100,15 @@ public class Map implements IRenderable {
 
     public void drawCamView(GraphicsContext gc){
         WritableImage croppedTile = null;
-        double anchorX = (LogicController.getInstance().getMainChar().getPosX() - GameScreen.screenWidth/2);
-        double anchorY = (LogicController.getInstance().getMainChar().getPosY() - GameScreen.screenHeight/2);
+        double anchorX, anchorY;
+        anchorX = LogicController.getInstance().getAnchorX();
+        anchorY = LogicController.getInstance().getAnchorY();
+
         int lowI = (int)floor(anchorX/tileSize);
         int hiI = (int) ceil((anchorX+GameScreen.screenWidth)/tileSize);
         int lowJ = (int) floor(anchorY/tileSize);
         int hiJ = (int) ceil((anchorY+GameScreen.screenHeight)/tileSize);
+        System.out.println(lowI*tileSize - anchorX);
         for(int j=max(lowJ,0); j< min(hiJ,mapHeight); j++){
             for(int i = max(lowI,0); i<min(hiI,mapWidth); i++){
                 switch (tileMatrix[j][i]) {
@@ -143,7 +147,6 @@ public class Map implements IRenderable {
             if(0<=i && i<mapHeight && 0<=j && j<mapWidth)
                 System.out.println(tileMatrix[i][j].toString());
         }
-        if(!InputUtils.mouseOnScreen){drawn = false;}
     }
 
     private int snapToGrid(int pos){return (int)(pos/tileSize);}
@@ -176,5 +179,13 @@ public class Map implements IRenderable {
 
     public int getMapHeight() {
         return mapHeight;
+    }
+
+    public int getPhysicalWidth() {
+        return physicalWidth;
+    }
+
+    public int getPhysicalHeight() {
+        return physicalHeight;
     }
 }

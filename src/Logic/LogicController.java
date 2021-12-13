@@ -1,8 +1,10 @@
 package Logic;
 
+import Renderer.GameScreen;
 import entity.Character;
 import entity.base.Collidable;
 import entity.base.Movable;
+import map.Map;
 
 import java.util.ArrayList;
 
@@ -11,6 +13,7 @@ public class LogicController {
     private final ArrayList<Movable> movableEntities;
     private final ArrayList<Collidable> collidableEntities;
     private Character mainChar;
+    private Map currentMap;
     //private static final Character mainChar;
     private LogicController(){
         movableEntities = new ArrayList<>();
@@ -26,6 +29,7 @@ public class LogicController {
             eM.move();
             eM.update();
         }
+        currentMap.update();
     }
 
     public ArrayList<Movable> getMovableEntities() {
@@ -53,5 +57,25 @@ public class LogicController {
         }
         movableEntities.set(id, (Movable) mainChar);
         this.mainChar = mainChar;
+    }
+
+    public Double getAnchorX(){
+        double anchorX = (mainChar.getPosX() - GameScreen.screenWidth/2);
+        if(anchorX <0) anchorX = 0.0;
+        else if(anchorX > currentMap.getPhysicalWidth() - GameScreen.screenWidth) anchorX = currentMap.getPhysicalWidth() - GameScreen.screenWidth;
+        return anchorX;
+    }
+
+    public Double getAnchorY(){
+        double anchorY = (mainChar.getPosY() - GameScreen.screenHeight/2); // true location sys
+        if(anchorY <0) anchorY = 0.0;
+        else if(anchorY > currentMap.getPhysicalHeight() - GameScreen.screenHeight) anchorY = currentMap.getPhysicalHeight() - GameScreen.screenHeight;
+        return anchorY;
+    }
+    public void setCurrentMap(Map m){
+        currentMap = m;
+    }
+    public Map getCurrentMap() {
+        return currentMap;
     }
 }

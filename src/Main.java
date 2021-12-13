@@ -46,8 +46,9 @@ public class Main extends Application {
                 sceneW/2, sceneH/2,160,240, 8);
         //demoMap = new Map();
         RenderableHolder.getInstance().add(demoMap);
-        RenderableHolder.getInstance().add(mainChar);
+        LogicController.getInstance().setCurrentMap(demoMap);
 
+        RenderableHolder.getInstance().add(mainChar);
         LogicController.getInstance().setMainChar(mainChar);
 
         stage.setTitle("Memories of Rivulet");
@@ -63,10 +64,9 @@ public class Main extends Application {
             @Override
             public void handle(long l) {
                 //System.out.println(InputUtils.isLeftClickDown()+" "+InputUtils.mouseOnScreen);
-                System.out.println(1000000000.0/(lastFrameST-l)); lastFrameST = l;
+                //System.out.println(1000000000.0/(lastFrameST-l)); lastFrameST = l;
                 //Logic update
                 LogicController.getInstance().update();
-                finalDemoMap.update();
                 //render
                 RenderableHolder.getInstance().update();
                 mapCanvas.paintComponent();
