@@ -1,6 +1,7 @@
 package Logic;
 
 import Renderer.GameScreen;
+import Renderer.RenderableHolder;
 import entity.Character;
 import entity.base.Collidable;
 import entity.base.Movable;
@@ -72,8 +73,16 @@ public class LogicController {
         else if(anchorY > currentMap.getPhysicalHeight() - GameScreen.screenHeight) anchorY = currentMap.getPhysicalHeight() - GameScreen.screenHeight;
         return anchorY;
     }
-    public void setCurrentMap(Map m){
-        currentMap = m;
+
+    public void setCurrentMap(Map map){
+        if(this.currentMap == null){
+            this.currentMap = map;
+            RenderableHolder.getInstance().add(currentMap);
+            return;
+        }
+
+        //change-map method is asap
+
     }
     public Map getCurrentMap() {
         return currentMap;

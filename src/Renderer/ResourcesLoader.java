@@ -10,7 +10,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class ResourcesLoader {
-
+    public static final String demo_map;
+    public static final String River_map;
+    public static final String Beach_map;
+    public static final String Waterfall_map;
 
     public static Image ballsri;
     public static WritableImage dirt16;
@@ -19,6 +22,11 @@ public class ResourcesLoader {
     public static final Image w1,w2,w3,w4,w5,w6,w7,w8;
 
     static {
+        demo_map = "res/demoMap.csv";
+        River_map = "";
+        Beach_map = "";
+        Waterfall_map = "";
+
 
 
 
@@ -46,6 +54,7 @@ public class ResourcesLoader {
         w6 = new Image((ClassLoader.getSystemResource(walk6).toString()));
         w7 = new Image((ClassLoader.getSystemResource(walk7).toString()));
         w8 = new Image((ClassLoader.getSystemResource(walk8).toString()));
+
         try{
             rpg = new Image(ClassLoader.getSystemResource(rpgPath).toString());
             dirt16 = new WritableImage(ResourcesLoader.rpg.getPixelReader(),6 * (size+10),0, size, size);
