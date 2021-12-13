@@ -8,7 +8,7 @@ import entity.base.Collidable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
-import map.Seasons;
+//import map.Seasons;
 import entity.base.Boundary;
 
 
@@ -16,16 +16,16 @@ import entity.base.Boundary;
 
 public class ActuallyBall extends Entity implements Collidable, IRenderable {
     private boolean isNight;
-    private Seasons season;
+    //private Seasons season;
     private Boundary collisionBoundary;
     private int z;
 
 
-    public ActuallyBall(String name, int posX, int posY, int width, int height, boolean isNight, Seasons season){
+    public ActuallyBall(String name, int posX, int posY, int width, int height, boolean isNight){//, Seasons season){
         super(name, posX, posY, width, height);
         setCollisionBoundary(new Boundary(posX, posY, width, height));
         setNight(isNight);
-        setSeason(season);
+        //setSeason(season);
         
     }
 
@@ -78,13 +78,13 @@ public class ActuallyBall extends Entity implements Collidable, IRenderable {
         return isNight;
     }
 
-    public void setSeason(Seasons season){
-        this.season = season;
-    }
-
-    public Seasons getSeason(){
-        return season;
-    }
+//    public void setSeason(Seasons season){
+//        this.season = season;
+//    }
+//
+//    public Seasons getSeason(){
+//        return season;
+//    }
 
 
 }

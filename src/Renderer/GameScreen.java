@@ -8,6 +8,10 @@ import javafx.scene.paint.Color;
 
 
 public class GameScreen extends Canvas {
+
+    public static int screenWidth = 1280;
+    public static int screenHeight = 720;
+
     public GameScreen(double w, double h) {
         super(w, h);
         this.setVisible(true);

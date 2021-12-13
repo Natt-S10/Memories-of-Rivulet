@@ -9,7 +9,7 @@ public class LogicController {
     private static final LogicController instance = new LogicController();
     private final ArrayList<Movable> movableEntities;
     private final ArrayList<Collidable> collidableEntities;
-    private static final Character mainChar;
+    //private static final Character mainChar;
     private LogicController(){
         movableEntities = new ArrayList<>();
         collidableEntities = new ArrayList<>();
@@ -21,8 +21,8 @@ public class LogicController {
 
     public void update(){
         for(Movable eM: movableEntities){
-            eM.update();
             eM.move();
+            eM.update();
         }
     }
 
