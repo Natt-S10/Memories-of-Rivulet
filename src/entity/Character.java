@@ -1,6 +1,8 @@
 package entity;
 
+import Renderer.GameScreen;
 import Renderer.IRenderable;
+import Renderer.ResourcesLoader;
 import entity.base.Boundary;
 import entity.base.Collidable;
 import entity.base.Direction;
@@ -13,12 +15,18 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     private Boundary collisionBoundary;
     private Direction facing;
     private double speed;
+    public final int screenX;
+    public final int screenY;
 
     public Character(String name, int posX, int posY, int width, int height, double speed) {
         super(name, posX, posY, width, height);
         collisionBoundary = new Boundary(posX+(width/4),posY+(height/2),width/2,height/2);
         facing = Direction.STABLE;
         this.speed = speed;
+        screenX = GameScreen.screenWidth;
+        screenY = GameScreen.screenHeight;
+        visualBoundary.setByCenterX(screenX/2);
+        visualBoundary.setByCenterY(screenY/2);
     }
 
     @Override
@@ -32,8 +40,6 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         double calcPosY = posY + Movable.deltaY(speed,facing);
         posX = calcPosX;
         posY = calcPosY;
-        visualBoundary.setByCenterX((int)posX);
-        visualBoundary.setByCenterY((int)posY);
     }
     @Override
     public int getLayer() {
@@ -52,9 +58,10 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
 
     @Override
     public void draw(GraphicsContext gc) {
-        gc.setFill(Color.BLACK);
-        gc.fillRect(visualBoundary.left(),visualBoundary.top()
-                ,visualBoundary.getWidth(), visualBoundary.getHeight());
+       //gc.setFill(Color.BLACK);
+        //gc.fillRect(visualBoundary.left(),visualBoundary.top()
+                //,visualBoundary.getWidth(), visualBoundary.getHeight());
+        gc.drawImage(ResourcesLoader.w1160,visualBoundary.left(),visualBoundary.top(),visualBoundary.getWidth(), visualBoundary.getHeight());
     }
 
     @Override

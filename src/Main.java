@@ -34,7 +34,7 @@ public class Main extends Application {
 
         mapCanvas.requestFocus();
 
-        Map demoMap = null;
+        Map demoMap = new Map();
         try {
             demoMap = new Map("res/demoMap.csv");
             //demoMap = new Map();
@@ -43,16 +43,19 @@ public class Main extends Application {
         }
         //ActuallyBall ball = new ActuallyBall("Ball",demoMap.getMapWidth()/2,demoMap.getMapHeight()/2,75,49, false, Seasons.SUMMER);
         Character mainChar = new Character("Steve",
-                sceneW/2, sceneH/2,30,60, 3.0);
-
+                sceneW/2, sceneH/2,80,160, 8);
+        //demoMap = new Map();
         RenderableHolder.getInstance().add(demoMap);
         RenderableHolder.getInstance().add(mainChar);
 
-        LogicController.getInstance().addMovable(mainChar);
+        LogicController.getInstance().setMainChar(mainChar);
 
         stage.setTitle("Memories of Rivulet");
+        stage.setResizable(false);
         stage.setScene(gameScene);
         stage.show();
+
+        //Map finalDemoMap = demoMap;
 
         Map finalDemoMap = demoMap;
 
@@ -60,7 +63,7 @@ public class Main extends Application {
             @Override
             public void handle(long l) {
                 //System.out.println(InputUtils.isLeftClickDown()+" "+InputUtils.mouseOnScreen);
-                System.out.println(1_000_000_000.0/(lastFrameST-l)); lastFrameST = l;
+                System.out.println(1000000000.0/(lastFrameST-l)); lastFrameST = l;
                 //Logic update
                 LogicController.getInstance().update();
                 finalDemoMap.update();
