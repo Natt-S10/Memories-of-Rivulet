@@ -56,15 +56,12 @@ public class Main extends Application {
 
 
 
-        //ActuallyBall ball = new ActuallyBall("Ball",demoMap.getMapWidth()/2,demoMap.getMapHeight()/2,75,49, false, Seasons.SUMMER);
-        Character mainChar = new Character("Steve",
-                sceneW/2, sceneH/2,160,220, 7);
-        //demoMap = new Map();
+
         RenderableHolder.getInstance().add(demoMap);
         LogicController.getInstance().setCurrentMap(demoMap);
-        RenderableHolder.getInstance().add(mainChar);
+        RenderableHolder.getInstance().add(ResourcesLoader.mainChar);
 
-        LogicController.getInstance().setMainChar(mainChar);
+        LogicController.getInstance().setMainChar(ResourcesLoader.mainChar);
 
         stage.setTitle("Memories of Rivulet");
         stage.setResizable(false);

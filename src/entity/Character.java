@@ -4,7 +4,6 @@ import Logic.GameState;
 import Logic.LogicController;
 import Renderer.GameScreen;
 import Renderer.IRenderable;
-import Renderer.RenderableHolder;
 import Renderer.ResourcesLoader;
 import entity.base.Boundary;
 import entity.base.Collidable;
@@ -12,9 +11,7 @@ import entity.base.Direction;
 import entity.base.Movable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 public class Character extends Entity implements IRenderable, Movable, Collidable {
     private Boundary collisionBoundary;
@@ -68,27 +65,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         spriteCounter++;
 
     }
-    //check objects and check tiles
-    public void checkCollide(){
 
-        double posx = 0; double posx2 = 0; double posx3 = 0;
-        double posy = 0; double posy2 = 0; double posy3 = 0;
-        boolean sCase = false;
-        switch(facing){
-            case N-> {
-                posx += collisionBoundary.left();
-                posx2 += collisionBoundary.right();
-                posy += collisionBoundary.top();
-                posy2 = posy;
-            }
-            case NE -> {
-                sCase= true;
-                posx += collisionBoundary.left();
-                posx2 += collisionBoundary.right();
-                posy += collisionBoundary.top();
-                posy2 = posy;
-                posx3 = posx2;
-                posy3 = collisionBoundary.bottom();
 
     public int[] checkTile(double calcPosX, double calcPosY){
         double newPosX = calcPosX;
@@ -160,7 +137,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         posX = calcPosX;
         posY = calcPosY;
             updateVisualBoundary();
-        }
+
 
     }
     @Override

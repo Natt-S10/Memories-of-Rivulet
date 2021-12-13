@@ -4,6 +4,7 @@ import Input.InputUtils;
 import Input.KeyMap;
 import Renderer.GameScreen;
 import Renderer.RenderableHolder;
+import Renderer.ResourcesLoader;
 import UIpanel.VisualFX.FishCaughtFX;
 import UIpanel.fishing.FishingPanel;
 import entity.Character;
@@ -41,12 +42,25 @@ public class LogicController {
 
 
 
-    private GameState gameState;
     //private static final Character mainChar;
     private LogicController(){
         movableEntities = new ArrayList<>();
         collidableEntities = new ArrayList<>();
-        RenderableHolder.getInstance().add(new UIButton(ResourcesLoader.ballsri,50));
+
+        gameState = GameState.WALK;
+
+        //for fishing
+        qtState = new boolean[]{false, false, false, false};
+        fishingPanel = new FishingPanel(GameScreen.screenWidth,GameScreen.screenHeight);
+        RenderableHolder.getInstance().add(fishingPanel);
+        trigCount = 0;
+
+        //for afterFishing
+        isFishCaught = false;
+        fishCaughtFX = new FishCaughtFX();
+        RenderableHolder.getInstance().add(fishCaughtFX);
+
+
     }
     public static LogicController getInstance(){return instance;}
 
@@ -198,14 +212,14 @@ public class LogicController {
     }
 
     public void setCurrentMap(Map map){
-        if(this.currentMap == null){
+
             this.currentMap = map;
             RenderableHolder.getInstance().setElements();
             RenderableHolder.getInstance().add(currentMap);
             setMainChar(ResourcesLoader.mainChar);
             RenderableHolder.getInstance().add(ResourcesLoader.mainChar);
             return;
-        }
+
 
         //change-map method is asap
 

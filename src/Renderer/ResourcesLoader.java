@@ -45,7 +45,7 @@ public class ResourcesLoader {
         Waterfall_map = "";
 
         mainChar = new Character("Steve",
-                sceneW/2, sceneH/2,160,220, 7);
+                sceneW/2, sceneH/2,160,220, 7,5);
 
 
 
