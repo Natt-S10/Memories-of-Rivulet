@@ -43,7 +43,7 @@ public class Main extends Application {
         }
         //ActuallyBall ball = new ActuallyBall("Ball",demoMap.getMapWidth()/2,demoMap.getMapHeight()/2,75,49, false, Seasons.SUMMER);
         Character mainChar = new Character("Steve",
-                sceneW/2, sceneH/2,80,160, 8);
+                sceneW/2, sceneH/2,160,240, 8);
         //demoMap = new Map();
         RenderableHolder.getInstance().add(demoMap);
         RenderableHolder.getInstance().add(mainChar);

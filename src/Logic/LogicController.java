@@ -1,5 +1,6 @@
 package Logic;
 
+import entity.Character;
 import entity.base.Collidable;
 import entity.base.Movable;
 

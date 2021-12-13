@@ -1,6 +1,8 @@
 package entity;
 
+import Renderer.GameScreen;
 import Renderer.IRenderable;
+import Renderer.ResourcesLoader;
 import entity.base.Boundary;
 import entity.base.Collidable;
 import entity.base.Direction;
@@ -39,7 +41,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     public void update() {
         facing = Movable.directionByKeyboard();
 
-        if(spriteCounter > 3){
+        if(spriteCounter > 4){
             if(spriteNum == 16) {
                 spriteNum = 1;
             }
@@ -56,8 +58,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         double calcPosY = posY + Movable.deltaY(speed,facing);
         posX = calcPosX;
         posY = calcPosY;
-        visualBoundary.setByCenterX((int)posX);
-        visualBoundary.setByCenterY((int)posY);
+
     }
     @Override
     public int getLayer() {
@@ -120,7 +121,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         }
         int resize = isRight ? 0 : 160;
         int rotate = isRight ? 1 : -1;
-        //System.out.println(spriteNum);
+
         gc.drawImage(image,visualBoundary.left()+resize,visualBoundary.top(),rotate*visualBoundary.getWidth(), visualBoundary.getHeight());
     }
 
