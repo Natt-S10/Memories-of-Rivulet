@@ -2,6 +2,8 @@ package Logic;
 
 import Renderer.GameScreen;
 import Renderer.RenderableHolder;
+import Renderer.ResourcesLoader;
+import UIcontainer.UIButton;
 import entity.Character;
 import entity.base.Collidable;
 import entity.base.Movable;
@@ -19,6 +21,7 @@ public class LogicController {
     private LogicController(){
         movableEntities = new ArrayList<>();
         collidableEntities = new ArrayList<>();
+        RenderableHolder.getInstance().add(new UIButton(ResourcesLoader.ballsri,50));
     }
     public static LogicController getInstance(){return instance;}
 
