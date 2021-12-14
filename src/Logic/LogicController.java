@@ -1,7 +1,10 @@
 package Logic;
 
+import Input.InputUtils;
+import Input.KeyMap;
 import Renderer.GameScreen;
 import Renderer.RenderableHolder;
+import UIpanel.fishing.FishingPanel;
 import entity.Character;
 import entity.base.Collidable;
 import entity.base.Movable;
@@ -15,35 +18,67 @@ public class LogicController {
     private final ArrayList<Collidable> collidableEntities;
     private Character mainChar;
     private Map currentMap;
-    private boolean isFishing; //game status
-    private double fishingDuration;
+    FishingPanel fishingPanel;
+
+
+    private GameState gameState; //game status
+    //fishing state field
+    private double initFishingDur, fishingTimeCount;
+    private boolean[] qtState;
+
+
+
     //private static final Character mainChar;
+    public static LogicController getInstance(){return instance;}
     private LogicController(){
         movableEntities = new ArrayList<>();
         collidableEntities = new ArrayList<>();
-        isFishing = false;
+        gameState = GameState.WALK;
+
+        //for fishing
+        qtState = new boolean[]{false, false, false, false};
+        fishingPanel = new FishingPanel(GameScreen.screenWidth,GameScreen.screenHeight);
+        RenderableHolder.getInstance().add(fishingPanel);
     }
-    private void fishingState(){
-        System.out.println(fishingDuration);
-        if(fishingDuration <= 0) isFishing = false;
-        fishingDuration-= 1;
-    }
-    public static LogicController getInstance(){return instance;}
+
 
     public void addMovable(Movable m){movableEntities.add(m);}
     public void addCollidable(Collidable c){collidableEntities.add(c);}
 
     public void update(){
-        if(isFishing) fishingState();
-        else{
-            for (Movable eM : movableEntities) {
-                eM.move();
-                eM.update();
-            }
-            currentMap.update();
+        fishingPanel.update();
+        switch (gameState){
+            case WALK -> walkingState();
+            case FISHING -> fishingState();
         }
     }
 
+    //TODO
+    private void fishingState(){
+        if(InputUtils.isKeyTriggered(KeyMap.W)) qtState[0] = false;
+        if(InputUtils.isKeyTriggered(KeyMap.A)) qtState[1] = false;
+        if(InputUtils.isKeyTriggered(KeyMap.S)) qtState[2] = false;
+        if(InputUtils.isKeyTriggered(KeyMap.D)) qtState[3] = false;
+        //terminating cond/
+        boolean check = false;
+        for(boolean e:qtState) check = check || e;
+        if(!check){
+            System.out.println("OK u got it");
+            gameState = GameState.WALK;
+        }
+        if(fishingTimeCount < 0) {
+            System.out.println("Stupid Shit");
+            gameState = GameState.WALK;
+        }
+        fishingTimeCount -= 1;
+    }
+    private void walkingState(){
+        for (Movable eM : movableEntities) {
+            eM.move();
+            eM.update();
+        }
+        currentMap.update();
+    }
     public ArrayList<Movable> getMovableEntities() {
         return movableEntities;
     }
@@ -99,11 +134,39 @@ public class LogicController {
         return currentMap;
     }
 
-    public void setFishing(boolean fishing) {
-        isFishing = fishing;
+    public GameState getGameState() {
+        return gameState;
     }
 
-    public void setFishingDuration(double fishingDuration) {
-        this.fishingDuration = fishingDuration;
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public double getInitFishingDur() {
+        return initFishingDur;
+    }
+
+    public void setInitFishingDur(double initFishingDur) {
+        this.initFishingDur = initFishingDur;
+        this.fishingTimeCount = initFishingDur;
+    }
+
+    public double getFishingTimeCount() {
+        return fishingTimeCount;
+    }
+    public double getFishingTimeRatio(){
+        return fishingTimeCount/initFishingDur;
+    }
+
+    public void setFishingTimeCount(double fishingTimeCount) {
+        this.fishingTimeCount = fishingTimeCount;
+    }
+
+    public boolean[] getQtState() {
+        return qtState;
+    }
+
+    public void setQtState(boolean[] qtState) {
+        this.qtState = qtState;
     }
 }

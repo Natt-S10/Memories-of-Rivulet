@@ -1,6 +1,7 @@
 package map;
 
 import Input.InputUtils;
+import Logic.GameState;
 import Logic.LogicController;
 import Renderer.GameScreen;
 import Renderer.IRenderable;
@@ -131,6 +132,7 @@ public class Map implements IRenderable {
 
 
     public boolean isCollidable(int x, int y) { //for charactor logic
+        System.out.println(x+ " " +y);
         int i = y / tileSize;
         int j = x / tileSize;
         return switch (tileMatrix[i][j]) {
@@ -151,8 +153,9 @@ public class Map implements IRenderable {
             if (0 <= i && i < mapWidth && 0 <= j && j < mapHeight)
                 System.out.println(tileMatrix[j][i].toString());
             if(tileMatrix[j][i] == TileType.WATER) {
-                LogicController.getInstance().setFishing(true);
-                LogicController.getInstance().setFishingDuration(200);
+                LogicController.getInstance().setGameState(GameState.FISHING);
+                LogicController.getInstance().setInitFishingDur(130);
+                LogicController.getInstance().setQtState(new boolean[]{true, true, true, true});
             }
         }
     }

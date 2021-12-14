@@ -166,6 +166,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         if(!isColliding){
             double calcPosX = posX + Movable.deltaX(speed,facing);
             double calcPosY = posY + Movable.deltaY(speed,facing);
+
             if(calcPosX < visualBoundary.getWidth()/2) calcPosX = visualBoundary.getWidth()/2;
             else if(calcPosX > LogicController.getInstance().getCurrentMap().getPhysicalWidth()- visualBoundary.getWidth()/2)
                 calcPosX = LogicController.getInstance().getCurrentMap().getPhysicalWidth()- visualBoundary.getWidth()/2;
