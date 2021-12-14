@@ -20,6 +20,9 @@ public class ResourcesLoader {
     public static WritableImage water16;
     public static Image rpg;
     public static final Image w1,w2,w3,w4,w5,w6,w7,w8;
+    public static final Image fireworkSP;
+    public static final WritableImage[] fireworks;
+
 
     static {
         demo_map = "res/demoMap.csv";
@@ -34,6 +37,7 @@ public class ResourcesLoader {
         String rpgPath = "rpg.png";
         String rpg80 = "roguelikeSheetx5.png";
         int size = 160;
+        String fireworkPath = "Firework.png";
 
         String walk1 = "player/Frame_1.png";
         String walk2 = "player/Frame_2.png";
@@ -55,6 +59,8 @@ public class ResourcesLoader {
         w7 = new Image((ClassLoader.getSystemResource(walk7).toString()));
         w8 = new Image((ClassLoader.getSystemResource(walk8).toString()));
 
+        fireworkSP = new Image(ClassLoader.getSystemResource(fireworkPath).toString());
+        fireworks = loadFireworks();
         try{
             rpg = new Image(ClassLoader.getSystemResource(rpgPath).toString());
             dirt16 = new WritableImage(ResourcesLoader.rpg.getPixelReader(),6 * (size+10),0, size, size);
@@ -66,5 +72,16 @@ public class ResourcesLoader {
 
 
 
+    }
+
+    private static WritableImage[] loadFireworks(){
+        WritableImage[] fw = new WritableImage[30];
+        int counter=0;
+        for(int i=0; i<6;i++){
+            for(int j=0; j<5; j++){
+                fw[counter++] = new WritableImage(fireworkSP.getPixelReader(),256*i,256*j,256,256);
+            }
+        }
+        return fw;
     }
 }

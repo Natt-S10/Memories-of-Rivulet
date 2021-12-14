@@ -1,5 +1,5 @@
 package Logic;
 
 public enum GameState {
-    WALK, FISHING
+    WALK, BAITING, FISHING, AFTERFISHING
 }

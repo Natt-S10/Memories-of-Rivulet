@@ -44,7 +44,7 @@ public class Main extends Application {
         }
         //ActuallyBall ball = new ActuallyBall("Ball",demoMap.getMapWidth()/2,demoMap.getMapHeight()/2,75,49, false, Seasons.SUMMER);
         Character mainChar = new Character("Steve",
-                sceneW/2, sceneH/2,160,220, 7);
+                sceneW/2, sceneH/2,160,220, 7, 190);
 
         //demoMap = new Map();
         RenderableHolder.getInstance().add(demoMap);
@@ -67,7 +67,7 @@ public class Main extends Application {
             @Override
             public void handle(long l) {
                 //System.out.println(InputUtils.isLeftClickDown()+" "+InputUtils.mouseOnScreen);
-                //System.out.println(1000000000.0/(lastFrameST-l)); lastFrameST = l;
+                //System.out.println(1000000000.0/(l-lastFrameST)); lastFrameST = l;
                 //Logic update
                 LogicController.getInstance().update();
                 //render

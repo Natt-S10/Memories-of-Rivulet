@@ -6,6 +6,7 @@ import Logic.LogicController;
 import Renderer.GameScreen;
 import Renderer.IRenderable;
 import Renderer.ResourcesLoader;
+import com.sun.javafx.iio.gif.GIFImageLoader2;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
 
@@ -132,7 +133,7 @@ public class Map implements IRenderable {
 
 
     public boolean isCollidable(int x, int y) { //for charactor logic
-        System.out.println(x+ " " +y);
+        //System.out.println(x+ " " +y);
         int i = y / tileSize;
         int j = x / tileSize;
         return switch (tileMatrix[i][j]) {
@@ -146,16 +147,14 @@ public class Map implements IRenderable {
         double anchorX, anchorY;
         anchorX = LogicController.getInstance().getAnchorX();
         anchorY = LogicController.getInstance().getAnchorY();
-
-        if(InputUtils.mouseOnScreen && InputUtils.isLeftClickTriggered()) {
+        if(InputUtils.mouseOnScreen && InputUtils.isLeftClickTriggered() &&
+                LogicController.getInstance().getMainChar().isReachable(InputUtils.mouseX,InputUtils.mouseY)) {
             int i = snapToGrid(InputUtils.mouseX + anchorX);
             int j = snapToGrid(InputUtils.mouseY + anchorY);
             if (0 <= i && i < mapWidth && 0 <= j && j < mapHeight)
-                System.out.println(tileMatrix[j][i].toString());
+                //System.out.println(tileMatrix[j][i].toString());
             if(tileMatrix[j][i] == TileType.WATER) {
-                LogicController.getInstance().setGameState(GameState.FISHING);
-                LogicController.getInstance().setInitFishingDur(130);
-                LogicController.getInstance().setQtState(new boolean[]{true, true, true, true});
+                LogicController.getInstance().startBaiting();
             }
         }
     }

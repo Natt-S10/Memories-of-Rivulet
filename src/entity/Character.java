@@ -1,5 +1,6 @@
 package entity;
 
+import Logic.GameState;
 import Logic.LogicController;
 import Renderer.GameScreen;
 import Renderer.IRenderable;
@@ -17,8 +18,9 @@ import javafx.scene.paint.Paint;
 public class Character extends Entity implements IRenderable, Movable, Collidable {
     private Boundary collisionBoundary;
     private Direction facing;
+    private double baitX, baitY, baitProgress;
     private boolean isRight;
-    private double speed;
+    private double speed, reachingDist;
     boolean isColliding;
     private int spriteCounter;
     private int spriteNum;
@@ -33,7 +35,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
             visualBoundary.setByCenterY((int)(posY-LogicController.getInstance().getCurrentMap().getPhysicalHeight()+screenY));
     }
 
-    public Character(String name, int posX, int posY, int width, int height, double speed) {
+    public Character(String name, int posX, int posY, int width, int height, double speed, double reachingDist) {
         super(name, posX, posY, width, height);
         collisionBoundary = new Boundary(posX -(width/6),posY+(height/11),width/3,height/4);
         facing = Direction.STABLE;
@@ -42,6 +44,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         spriteNum = 1;
         isColliding = false;
         this.speed = speed;
+        this.reachingDist = reachingDist;
         screenX = GameScreen.screenWidth;
         screenY = GameScreen.screenHeight;
         visualBoundary.setByCenterX(screenX/2);
@@ -55,7 +58,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         collisionBoundary.setPosX((int)posX  -this.getWidth()/6);
         collisionBoundary.setPosY((int)posY+(this.getHeight()/11));
         //System.out.println(height);
-        System.out.println(isColliding);
+        //System.out.println(isColliding);
         if(spriteCounter > 3){
             if(spriteNum == 16) {
                 spriteNum = 1;
@@ -196,6 +199,22 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
 
     @Override
     public void draw(GraphicsContext gc) {
+        if(LogicController.getInstance().getGameState() == GameState.BAITING ||
+            LogicController.getInstance().getGameState() == GameState.FISHING){
+            baitProgress = Math.min(baitProgress, 1.0);
+            gc.setLineWidth(2.0);
+            gc.setStroke(Color.BLACK);
+            gc.strokeLine(visualBoundary.getCenterX(),visualBoundary.getCenterY(),
+                    visualBoundary.getCenterX()*(1-baitProgress)+baitX*baitProgress,
+                    visualBoundary.getCenterY()*(1-baitProgress)+baitY*baitProgress);
+            if(baitProgress==1.0){
+                gc.setStroke(Color.BLACK);
+                gc.setFill(Color.RED);
+                gc.fillOval(baitX-5,baitY-5,10,10);
+                gc.strokeOval(baitX-5,baitY-5,10,10);
+            }
+            baitProgress+=0.035;
+        }
         switch(facing){
             case STABLE -> {
                 if(isRight){
@@ -244,6 +263,13 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         gc.drawImage(image,visualBoundary.left()+resize,visualBoundary.top(),rotate*visualBoundary.getWidth(), visualBoundary.getHeight());
     }
 
+    public boolean isReachable(double pointX, double pointY){
+        double deltaX,deltaY;
+        deltaX = LogicController.getInstance().getAnchorX()+pointX-posX;
+        deltaY = LogicController.getInstance().getAnchorY()+pointY-posY;
+        return (Math.sqrt(Math.pow(deltaX,2)+Math.pow(deltaY,2)) < reachingDist);
+    }
+
     @Override
     public Boundary getCollisionBoundary() {
         return collisionBoundary;
@@ -268,5 +294,17 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     @Override
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    public void setBaitX(double baitX) {
+        this.baitX = baitX;
+    }
+
+    public void setBaitY(double baitY) {
+        this.baitY = baitY;
+    }
+
+    public void setBaitProgress(double baitProgress) {
+        this.baitProgress = baitProgress;
     }
 }

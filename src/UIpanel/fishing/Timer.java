@@ -20,6 +20,7 @@ public class Timer extends BaseObject{
     public void draw(int refX,int refY,GraphicsContext gc) {
         gc.setFill(Color.RED);
         gc.fillArc(refX+ refpointX, refY+ refpointY,DIAMETER, DIAMETER,90,arcAngle, ArcType.ROUND);
+        gc.strokeArc(refX+ refpointX, refY+ refpointY,DIAMETER, DIAMETER,90,arcAngle, ArcType.ROUND);
     }
 
     @Override
