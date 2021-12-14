@@ -120,7 +120,7 @@ public class Map implements IRenderable {
         for(int j=max(lowJ,0); j< min(hiJ,mapHeight); j++){
             for(int i = max(lowI,0); i<min(hiI,mapWidth); i++){
                 switch (tileMatrix[j][i]) {
-
+                    case GRASS -> croppedTile = ResourcesLoader.grass;
                     case DIRT -> croppedTile = ResourcesLoader.dirt16;
                     case WATER -> {
                         if( spriteNum <=8 ){
@@ -149,7 +149,7 @@ public class Map implements IRenderable {
 
         if (i>= tileMatrix.length || j >= tileMatrix[i].length) return true;
         return switch (tileMatrix[i][j]) {
-            case DIRT -> false;
+            case DIRT, GRASS -> false;
             case WATER -> true;
             default -> true;
         };

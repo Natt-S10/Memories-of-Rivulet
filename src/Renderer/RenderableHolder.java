@@ -32,6 +32,10 @@ public class RenderableHolder {
         System.out.println(elements);
     }
 
+    public void setElements(){
+        elements.clear();
+    }
+
     public void update() {
         for (int i = 0; i < elements.size(); i++) {
             if (elements.get(i).isDestroyed()) {
