@@ -42,26 +42,11 @@ public class LogicController {
 
 
     //private static final Character mainChar;
-    public static LogicController getInstance(){return instance;}
     private LogicController(){
         movableEntities = new ArrayList<>();
         collidableEntities = new ArrayList<>();
-        gameState = GameState.WALK;
-
-        //for fishing
-        qtState = new boolean[]{false, false, false, false};
-        fishingPanel = new FishingPanel(GameScreen.screenWidth,GameScreen.screenHeight);
-        RenderableHolder.getInstance().add(fishingPanel);
-        trigCount = 0;
-
-        //for afterFishing
-        isFishCaught = false;
-        fishCaughtFX = new FishCaughtFX();
-        RenderableHolder.getInstance().add(fishCaughtFX);
-
-
     }
-
+    public static LogicController getInstance(){return instance;}
 
     public void addMovable(Movable m){movableEntities.add(m);}
     public void addCollidable(Collidable c){collidableEntities.add(c);}

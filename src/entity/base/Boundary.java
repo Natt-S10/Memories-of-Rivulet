@@ -74,4 +74,12 @@ public class Boundary {
     public int getCenterY(){
         return posY + (height-1)/2;
     }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
 }

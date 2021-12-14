@@ -1,7 +1,6 @@
 import Input.InputUtils;
 import Logic.LogicController;
 import Renderer.*;
-import UIpanel.fishing.FishingPanel;
 import entity.ActuallyBall;
 import entity.Character;
 import entity.Entity;
@@ -44,15 +43,13 @@ public class Main extends Application {
         }
         //ActuallyBall ball = new ActuallyBall("Ball",demoMap.getMapWidth()/2,demoMap.getMapHeight()/2,75,49, false, Seasons.SUMMER);
         Character mainChar = new Character("Steve",
-                sceneW/2, sceneH/2,160,220, 7, 190);
-
+                sceneW/2, sceneH/2,160,220, 7);
         //demoMap = new Map();
         RenderableHolder.getInstance().add(demoMap);
         LogicController.getInstance().setCurrentMap(demoMap);
-
         RenderableHolder.getInstance().add(mainChar);
-        LogicController.getInstance().setMainChar(mainChar);
 
+        LogicController.getInstance().setMainChar(mainChar);
 
         stage.setTitle("Memories of Rivulet");
         stage.setResizable(false);
@@ -67,9 +64,10 @@ public class Main extends Application {
             @Override
             public void handle(long l) {
                 //System.out.println(InputUtils.isLeftClickDown()+" "+InputUtils.mouseOnScreen);
-                //System.out.println(1000000000.0/(l-lastFrameST)); lastFrameST = l;
+                //System.out.println(1000000000.0/(lastFrameST-l)); lastFrameST = l;
                 //Logic update
                 LogicController.getInstance().update();
+                finalDemoMap.update();
                 //render
                 RenderableHolder.getInstance().update();
                 mapCanvas.paintComponent();

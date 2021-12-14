@@ -18,6 +18,7 @@ public class ResourcesLoader {
     public static Image ballsri;
     public static WritableImage dirt16;
     public static WritableImage water16;
+    public static WritableImage water16_2;
     public static Image rpg;
     public static final Image w1,w2,w3,w4,w5,w6,w7,w8;
     public static final Image fireworkSP;
@@ -65,6 +66,7 @@ public class ResourcesLoader {
             rpg = new Image(ClassLoader.getSystemResource(rpgPath).toString());
             dirt16 = new WritableImage(ResourcesLoader.rpg.getPixelReader(),6 * (size+10),0, size, size);
             water16 = new WritableImage(ResourcesLoader.rpg.getPixelReader(),0,0, size, size);
+            water16_2 = new WritableImage(ResourcesLoader.rpg.getPixelReader(),size+10,0, size, size);
             ballsri = new Image(ClassLoader.getSystemResource(ballsriPath).toString());
         } catch(Exception e){
 

@@ -24,6 +24,9 @@ public class Map implements IRenderable {
     private int mapWidth; //pref 32
     private int mapHeight; //pref 18
     private int physicalWidth, physicalHeight;
+    private int spriteCounter;
+    private int spriteNum;
+
     private TileType[][] tileMatrix;
 
     static {
@@ -36,6 +39,8 @@ public class Map implements IRenderable {
         this.tileMatrix = tileMatrix;
         mapHeight = tileMatrix.length;
         mapWidth = tileMatrix[0].length;
+        spriteCounter = 0;
+        spriteNum = 1;
     }
 
     public Map() { //demo constructer
@@ -52,6 +57,8 @@ public class Map implements IRenderable {
         mapWidth = tileMatrix[0].length;
         physicalWidth = mapWidth * tileSize;
         physicalHeight = mapHeight *tileSize;
+        spriteCounter = 0;
+        spriteNum = 1;
     }
     //hee
     public Map(String filePath) throws Exception{
@@ -72,6 +79,8 @@ public class Map implements IRenderable {
             physicalWidth = mapWidth * tileSize;
             physicalHeight = mapHeight *tileSize;
             tileMatrix = new TileType[mapHeight][mapWidth]; //Y-axis then X-axis
+            spriteCounter = 0;
+            spriteNum = 1;
 
             for (int i = 0 ; i < mapHeight; i++ ) {
                 for( int j = 0 ; j < mapWidth; j++) {
@@ -90,8 +99,7 @@ public class Map implements IRenderable {
         for (int i = 0; i < mapHeight; i++) {
             for (int j = 0; j < mapWidth; j++) {
                 switch (tileMatrix[i][j]) {
-//                    case DIRT -> croppedTile = new WritableImage(ResourcesLoader.dirt.getPixelReader(), tileSize, tileSize);
-//                    case WATER -> croppedTile = new WritableImage(ResourcesLoader.water.getPixelReader(), tileSize, tileSize);
+
                     case DIRT -> croppedTile = ResourcesLoader.dirt16;
                     case WATER -> croppedTile = ResourcesLoader.water16;
                 }
@@ -114,10 +122,15 @@ public class Map implements IRenderable {
         for(int j=max(lowJ,0); j< min(hiJ,mapHeight); j++){
             for(int i = max(lowI,0); i<min(hiI,mapWidth); i++){
                 switch (tileMatrix[j][i]) {
-//                    case DIRT -> croppedTile = new WritableImage(ResourcesLoader.dirt.getPixelReader(), tileSize, tileSize);
-//                    case WATER -> croppedTile = new WritableImage(ResourcesLoader.water.getPixelReader(), tileSize, tileSize);
+
                     case DIRT -> croppedTile = ResourcesLoader.dirt16;
-                    case WATER -> croppedTile = ResourcesLoader.water16;
+                    case WATER -> {
+                        if( spriteNum <=8 ){
+                            croppedTile = ResourcesLoader.water16;
+                        } else if (spriteNum >=9 ){
+                            croppedTile = ResourcesLoader.water16_2;
+                        }
+                    }
                 }
                 gc.drawImage(croppedTile, i* tileSize - anchorX, j * tileSize - anchorY); //posx, posy
             }
@@ -136,6 +149,8 @@ public class Map implements IRenderable {
         //System.out.println(x+ " " +y);
         int i = y / tileSize;
         int j = x / tileSize;
+
+        if (i>= tileMatrix.length || j >= tileMatrix[i].length) return true;
         return switch (tileMatrix[i][j]) {
             case DIRT -> false;
             case WATER -> true;
@@ -157,6 +172,16 @@ public class Map implements IRenderable {
                 LogicController.getInstance().startBaiting();
             }
         }
+//        System.out.println(spriteNum);
+//        System.out.println(spriteCounter);
+        if(spriteCounter > 16){
+            if(spriteNum == 16) {
+                spriteNum = 1;
+            }
+            spriteNum++;
+            spriteCounter = 0;
+        }
+        spriteCounter++;
     }
 
     private int snapToGrid(double pos){return (int)(pos/tileSize);}
@@ -197,5 +222,9 @@ public class Map implements IRenderable {
 
     public int getPhysicalHeight() {
         return physicalHeight;
+    }
+
+    public int getTileSize(){
+        return tileSize;
     }
 }
