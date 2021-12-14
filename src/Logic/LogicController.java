@@ -41,10 +41,12 @@ public class LogicController {
 
 
 
+    private GameState gameState;
     //private static final Character mainChar;
     private LogicController(){
         movableEntities = new ArrayList<>();
         collidableEntities = new ArrayList<>();
+        RenderableHolder.getInstance().add(new UIButton(ResourcesLoader.ballsri,50));
     }
     public static LogicController getInstance(){return instance;}
 
@@ -198,7 +200,10 @@ public class LogicController {
     public void setCurrentMap(Map map){
         if(this.currentMap == null){
             this.currentMap = map;
+            RenderableHolder.getInstance().setElements();
             RenderableHolder.getInstance().add(currentMap);
+            setMainChar(ResourcesLoader.mainChar);
+            RenderableHolder.getInstance().add(ResourcesLoader.mainChar);
             return;
         }
 

@@ -1,18 +1,28 @@
 import Input.InputUtils;
 import Logic.LogicController;
 import Renderer.*;
+import UIcontainer.ButtonList;
+import UIcontainer.MapChanger;
+import UIcontainer.UIButton;
 import entity.ActuallyBall;
 import entity.Character;
 import entity.Entity;
 import entity.base.Movable;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import map.Map;
 import map.Seasons;
+
+import java.util.Stack;
+
+import static Renderer.ResourcesLoader.sceneH;
+import static Renderer.ResourcesLoader.sceneW;
 
 public class Main extends Application {
     public static final int sceneW = 1280;
@@ -36,11 +46,16 @@ public class Main extends Application {
 
         Map demoMap = new Map();
         try {
-            demoMap = new Map("res/demoMap.csv");
+            demoMap = new Map(ResourcesLoader.demo_map);
             //demoMap = new Map();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        ButtonList buttonlists = new ButtonList(root);
+
+
+
         //ActuallyBall ball = new ActuallyBall("Ball",demoMap.getMapWidth()/2,demoMap.getMapHeight()/2,75,49, false, Seasons.SUMMER);
         Character mainChar = new Character("Steve",
                 sceneW/2, sceneH/2,160,220, 7);
@@ -56,6 +71,8 @@ public class Main extends Application {
         stage.setScene(gameScene);
         stage.show();
 
+
+
         //Map finalDemoMap = demoMap;
 
         Map finalDemoMap = demoMap;
@@ -65,6 +82,7 @@ public class Main extends Application {
             public void handle(long l) {
                 //System.out.println(InputUtils.isLeftClickDown()+" "+InputUtils.mouseOnScreen);
                 //System.out.println(1000000000.0/(lastFrameST-l)); lastFrameST = l;
+                buttonlists.update();
                 //Logic update
                 LogicController.getInstance().update();
                 finalDemoMap.update();

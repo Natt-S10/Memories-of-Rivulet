@@ -118,7 +118,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         boolean lrdown = LogicController.getInstance().getCurrentMap().isCollidable((int)calcPosX+xplus*collisionBoundary.getWidth()/2, playerBottomY);
         boolean updownl = LogicController.getInstance().getCurrentMap().isCollidable(playerLeftX, (int)calcPosY + yplus*collisionBoundary.getHeight()+getHeight()/11);
         boolean updownr = LogicController.getInstance().getCurrentMap().isCollidable(playerRightX, (int)calcPosY+ yplus*collisionBoundary.getHeight()+getHeight()/11);
-        System.out.println(lrup);
+        //System.out.println(lrup);
         if(lrup){
             i = 1;
             newPosX = posX;
