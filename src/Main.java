@@ -1,23 +1,21 @@
 import Input.InputUtils;
+import Logic.GameState;
 import Logic.LogicController;
 import Renderer.*;
-import UIpanel.fishing.FishingPanel;
-import entity.ActuallyBall;
-import entity.Character;
-import entity.Entity;
-import entity.base.Movable;
+import UIcontainer.MapChanger.*;
+import UIcontainer.Menu.*;
+import UIcontainer.Option.OptionMenu;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import map.Map;
-import map.Seasons;
+
+import static Renderer.ResourcesLoader.sceneH;
+import static Renderer.ResourcesLoader.sceneW;
 
 public class Main extends Application {
-    public static final int sceneW = 1280;
-    public static final int sceneH = 720;
     public static long lastFrameST = 0;
 
 
@@ -37,27 +35,31 @@ public class Main extends Application {
 
         Map demoMap = new Map();
         try {
-            demoMap = new Map("res/demoMap.csv");
-            //demoMap = new Map();
+            demoMap = new Map(ResourcesLoader.demo_map);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //ActuallyBall ball = new ActuallyBall("Ball",demoMap.getMapWidth()/2,demoMap.getMapHeight()/2,75,49, false, Seasons.SUMMER);
-        Character mainChar = new Character("Steve",
-                sceneW/2, sceneH/2,160,220, 7, 190);
 
-        //demoMap = new Map();
-        RenderableHolder.getInstance().add(demoMap);
+        ButtonList buttonlists = new ButtonList(root);
+        MenuButtonList menuButtonList = new MenuButtonList(root);
+        PauseButtonList pauseButtonList = new PauseButtonList(root);
+        OptionMenu optionMenu = new OptionMenu(root);
+
+        LogicController.getInstance().setMainChar(ResourcesLoader.mainChar);
         LogicController.getInstance().setCurrentMap(demoMap);
+        LogicController.getInstance().setGameState(GameState.MENU);
 
-        RenderableHolder.getInstance().add(mainChar);
-        LogicController.getInstance().setMainChar(mainChar);
+        RenderableHolder.getInstance().add(demoMap);
+        RenderableHolder.getInstance().add(ResourcesLoader.mainChar);
 
 
         stage.setTitle("Memories of Rivulet");
         stage.setResizable(false);
         stage.setScene(gameScene);
         stage.show();
+
+
 
         //Map finalDemoMap = demoMap;
 
@@ -67,9 +69,14 @@ public class Main extends Application {
             @Override
             public void handle(long l) {
                 //System.out.println(InputUtils.isLeftClickDown()+" "+InputUtils.mouseOnScreen);
-                //System.out.println(1000000000.0/(l-lastFrameST)); lastFrameST = l;
+                //System.out.println(1000000000.0/(lastFrameST-l)); lastFrameST = l;
+                buttonlists.update();
+                menuButtonList.update();
+                pauseButtonList.update();
+                optionMenu.update();
                 //Logic update
                 LogicController.getInstance().update();
+                //finalDemoMap.update();
                 //render
                 RenderableHolder.getInstance().update();
                 mapCanvas.paintComponent();

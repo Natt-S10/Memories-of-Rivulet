@@ -7,9 +7,10 @@ import UIpanel.IPanel;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import java.io.Serializable;
 import java.lang.invoke.LambdaConversionException;
 
-public class FishingPanel implements IRenderable {
+public class FishingPanel implements IRenderable, Serializable {
     //for Panel Background
     private static final int panelW = 640,
                             panelH =  360;
@@ -47,7 +48,7 @@ public class FishingPanel implements IRenderable {
 
     @Override
     public boolean isVisible() {
-        return isVisible;
+        return LogicController.getInstance().getGameState() == GameState.FISHING;
     }
 
     public void setVisible(boolean visible) {
@@ -56,7 +57,6 @@ public class FishingPanel implements IRenderable {
 
     public void update(){
         timer.update();
-        if(LogicController.getInstance().getGameState() == GameState.FISHING) isVisible = true;
-        else isVisible = false;
+
     }
 }

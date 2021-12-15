@@ -4,7 +4,9 @@ import entity.base.Boundary;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public abstract class Entity { // sort by greater Y then Smaller X
+import java.io.Serializable;
+
+public abstract class Entity implements Serializable { // sort by greater Y then Smaller X
     protected String name;
     protected Boundary visualBoundary;
     protected double posX, posY;
@@ -18,7 +20,6 @@ public abstract class Entity { // sort by greater Y then Smaller X
         setWidth(width);
         this.posX = posX;
         this.posY = posY;
-
     }
 
     public int getWidth() {
@@ -55,5 +56,13 @@ public abstract class Entity { // sort by greater Y then Smaller X
 
     public double getPosY() {
         return posY;
+    }
+
+    public void setPosX(double posX) {
+        this.posX = posX;
+    }
+
+    public void setPosY(double posY) {
+        this.posY = posY;
     }
 }

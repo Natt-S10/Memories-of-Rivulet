@@ -14,6 +14,7 @@ public class GameScreenUtils {
             if (event.getButton() == MouseButton.PRIMARY)
                 InputUtils.mouseLeftDown();
         });
+
         //listener listen to all keys -> if for each keys;
 
         gameScreen.setOnKeyPressed((KeyEvent event) ->{
@@ -36,6 +37,7 @@ public class GameScreenUtils {
             } else if(event.getCode() == KeyCode.SPACE){
                 InputUtils.keyPressed(KeyMap.SPACE);
             }
+
         });
 
         gameScreen.setOnKeyReleased((KeyEvent event) -> {
@@ -75,6 +77,7 @@ public class GameScreenUtils {
         });
 
         gameScreen.setOnMouseMoved((MouseEvent event) -> {
+
             if (InputUtils.mouseOnScreen) {
                 InputUtils.mouseX = event.getX();
                 InputUtils.mouseY = event.getY();

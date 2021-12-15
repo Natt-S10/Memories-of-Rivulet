@@ -5,7 +5,9 @@ import Logic.LogicController;
 import Renderer.IRenderable;
 import javafx.scene.canvas.GraphicsContext;
 
-public class FishCaughtFX implements IRenderable {
+import java.io.Serializable;
+
+public class FishCaughtFX implements IRenderable, Serializable {
     private boolean isVisible;
     private Twinkle[] twinkles;
 

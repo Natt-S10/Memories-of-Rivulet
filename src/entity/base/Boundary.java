@@ -1,6 +1,6 @@
 package entity.base;
 
-public class Boundary {
+public class Boundary implements  java.io.Serializable{
     private int posX, posY, width, height;
 
     public Boundary(int posX, int posY, int width, int height) {
@@ -73,5 +73,13 @@ public class Boundary {
     }
     public int getCenterY(){
         return posY + (height-1)/2;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosY() {
+        return posY;
     }
 }
