@@ -6,14 +6,17 @@ import Logic.LogicController;
 import Renderer.GameScreen;
 import Renderer.IRenderable;
 import Renderer.ResourcesLoader;
-import UIcontainer.MapChanger.MapChanger;
 import entity.base.Boundary;
 import entity.base.Collidable;
 import entity.base.Direction;
 import entity.base.Movable;
+import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import map.Map;
 import map.MapName;
 import map.TileType;
@@ -208,7 +211,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         switch (LogicController.getInstance().getGameState()){
             case WALK -> drawWalkingChar(gc);
             case FISHING, BAITING ->  {drawWalkingChar(gc); animateFishingRod(gc);}
-            case FISHRAISING -> drawAfterFishing(gc);
+            case FISHRAISING -> drawFishRaising(gc);
         }
     }
 
@@ -245,7 +248,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
             baitSpriteCounter++;
         }
         else{
-            baitProgress += 0.035;
+            baitProgress += 0.06;
             baitProgress = Math.min(baitProgress, 1.0);
         }
         drawFishingRod(isRight, gc);
@@ -268,27 +271,30 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
             rodTipX = rodPosX-(54*rodSize)/64;
             flip = -1;
         }
-        gc.drawImage(ResourcesLoader.fishingRod[baitSprite],rodPosX, rodPosY, rodSize*flip, rodSize);
-        gc.setLineWidth(2.0);
-        gc.setStroke(Color.BLACK);
-        gc.strokeLine(rodTipX, rodTipY,
-                rodTipX * (1 - baitProgress) + baitX * baitProgress,
-                rodTipY * (1 - baitProgress) + baitY * baitProgress);
+        if(baitSprite == 2){
+            gc.setLineWidth(2.0);
+            gc.setStroke(Color.BLACK);
+            gc.strokeLine(rodTipX, rodTipY,
+                    rodTipX * (1 - baitProgress) + baitX * baitProgress,
+                    rodTipY * (1 - baitProgress) + baitY * baitProgress);
+        }
         if (baitProgress == 1.0) {
             gc.setStroke(Color.BLACK);
             gc.setFill(Color.RED);
             gc.fillOval(baitX - 5, baitY - 5, 10, 10);
             gc.strokeOval(baitX - 5, baitY - 5, 10, 10);
         }
+        gc.drawImage(ResourcesLoader.fishingRod[baitSprite], rodPosX, rodPosY, rodSize * flip, rodSize);
 
     }
 
-    private void drawAfterFishing(GraphicsContext gc){
+    private void drawFishRaising(GraphicsContext gc){
         gc.drawImage(ResourcesLoader.wShow,visualBoundary.left(),visualBoundary.top(),visualBoundary.getWidth(), visualBoundary.getHeight());
         gc.drawImage(LogicController.getInstance().getCaughtFish().getImage(),
                 visualBoundary.getCenterX()- FishUtils.imgW/2,
                 visualBoundary.top()-FishUtils.imgH/2,
                 FishUtils.imgW, FishUtils.imgH);
+        drawNameTag(gc);
     }
 
     public void drawSP(GraphicsContext gc, int spriteCounter, int spriteNum, boolean isRight){
@@ -314,6 +320,30 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         int rotate = isRight ? 1 : -1;
 
         gc.drawImage(image,visualBoundary.left()+resize,visualBoundary.top(),rotate*visualBoundary.getWidth(), visualBoundary.getHeight());
+    }
+
+    private void drawNameTag(GraphicsContext gc){
+        gc.drawImage(LogicController.getInstance().getCaughtFish().getImage(),
+                visualBoundary.getCenterX()- FishUtils.imgW/2,
+                visualBoundary.top()-FishUtils.imgH/2,
+                FishUtils.imgW, FishUtils.imgH);
+
+        gc.setStroke(Color.BLACK);
+        gc.setFill(Color.LEMONCHIFFON);
+        gc.setFont(Font.font("Century Gothic", FontWeight.LIGHT, 35));
+        gc.setTextAlign(TextAlignment.CENTER);
+
+        gc.fillRoundRect(visualBoundary.getCenterX()-128,
+                visualBoundary.top()-FishUtils.imgH+40,256,64,16,16);
+        gc.strokeRoundRect(visualBoundary.getCenterX()-128,
+                visualBoundary.top()-FishUtils.imgH+40,256,64,16,16);
+        gc.setFill(Color.BLACK);
+        gc.fillText(LogicController.getInstance().getCaughtFish().toString(),
+                visualBoundary.getCenterX(),
+                visualBoundary.top()-FishUtils.imgH+87
+                ,246);
+        //reset
+        gc.setTextAlign(TextAlignment.LEFT);
     }
 
     public boolean isReachable(double pointX, double pointY){
@@ -384,8 +414,9 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         this.baitProgress = baitProgress;
     }
 
-    public void setBaitSprite(int baitSprite) {
-        this.baitSprite = baitSprite;
+    public void animateBating() {
+        this.baitSprite = 0;
         baitSpriteCounter=0;
+        baitProgress = 0.0;
     }
 }

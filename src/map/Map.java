@@ -166,7 +166,6 @@ public class Map implements IRenderable, java.io.Serializable {
     }
     // TODO: Render only visible tiles
     public void update(){
-        if(LogicController.getInstance().getGameState() == GameState.LOADING) return;
 //        System.out.println(LogicController.getInstance().getGameState());
         double anchorX, anchorY;
         anchorX = LogicController.getInstance().getAnchorX();
@@ -174,6 +173,13 @@ public class Map implements IRenderable, java.io.Serializable {
 
 //        System.out.println(spriteNum);
 //        System.out.println(spriteCounter);
+        switch (LogicController.getInstance().getGameState()){
+            case WALK, BAITING, FISHING, AFTERFISHING, FISHRAISING -> waterTileUpdate();
+        }
+
+    }
+
+    private void waterTileUpdate() {
         if(spriteCounter > 16){
             if(spriteNum == 16) {
                 spriteNum = 1;

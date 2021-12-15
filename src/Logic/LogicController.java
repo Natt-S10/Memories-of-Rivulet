@@ -3,6 +3,7 @@ package Logic;
 import Input.InputUtils;
 import Input.KeyMap;
 import Items.Fish.Fish;
+import Items.Fish.FishUtils;
 import Renderer.GameScreen;
 import Renderer.RenderableHolder;
 import Renderer.ResourcesLoader;
@@ -10,19 +11,14 @@ import UIcontainer.MapChanger.*;
 import UIcontainer.Menu.*;
 import UIcontainer.Option.OptionMenu;
 import UIcontainer.Option.OptionPuss;
-import UIpanel.VisualFX.FishCaughtFX;
 import UIpanel.VisualFX.LoadingFX;
-import UIpanel.fishing.FishingPanel;
 import entity.Character;
 import entity.base.Collidable;
 import entity.base.Movable;
 import javafx.stage.FileChooser;
 import map.Map;
-import map.MapName;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class LogicController  implements Serializable{
@@ -32,6 +28,7 @@ public class LogicController  implements Serializable{
     private Character mainChar;
     private Map currentMap;
     private Map nextMap;
+    private int money;
     private int MapLoadingT;
 
 
@@ -43,10 +40,13 @@ public class LogicController  implements Serializable{
     private boolean isResume;
     private boolean isMenu;
 
+    private boolean[] fishAchievement;
+
 
 
     private GameState gameState; //game status
     private int timeCount;
+
     //TODO: Baiting
     private double warpDist;
 
@@ -66,19 +66,16 @@ public class LogicController  implements Serializable{
     public LogicController(){
         movableEntities = new ArrayList<>();
         collidableEntities = new ArrayList<>();
+        fishAchievement = new boolean[FishUtils.fishStatMap.size()];
 
         gameState = GameState.WALK;
         isResume = false;
         MapLoadingT = 240;
         //for fishing
         qtState = new boolean[]{false, false, false, false};
-
-        //RenderableHolder.getInstance().add(fishingPanel);
         trigCount = 0;
         warpDist = 350;
-        //for afterFishing
 
-        //RenderableHolder.getInstance().add(fishCaughtFX);
 
         isSetup = false;
         buttonTriggered = false;
@@ -94,6 +91,7 @@ public class LogicController  implements Serializable{
 
     public void update(){
         ResourcesLoader.fishCaughtFX.update();
+        currentMap.update();
         //System.out.println(LogicController.getInstance().getGameState());
         //System.out.println((LogicController.getInstance().isMenu()));
         //System.out.println(isMenu);
@@ -318,15 +316,13 @@ public class LogicController  implements Serializable{
             eM.move();
             eM.update();
         }
-        currentMap.update();
     }
     public void startBaiting(){
         gameState = GameState.BAITING;
         timeCount = (int)(300+Math.random()*900);
         mainChar.setBaitX(InputUtils.mouseX);
         mainChar.setBaitY(InputUtils.mouseY);
-        mainChar.setBaitProgress(0.0);
-        mainChar.setBaitSprite(0);
+        mainChar.animateBating();
     }
     private void baitingState(){
         if(InputUtils.isLeftClickTriggered()){
@@ -417,6 +413,7 @@ public class LogicController  implements Serializable{
                     e.printStackTrace();
                 }
                 caughtFish = new Fish();
+                money+= caughtFish.getFishPrice();
             });
             thread.start();
             gameState = GameState.AFTERFISHING;
@@ -588,5 +585,17 @@ public class LogicController  implements Serializable{
 
     public void setMenu(boolean menu) {
         isMenu = menu;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    public void addMoney(int diff){
+        money+=diff;
     }
 }

@@ -11,7 +11,7 @@ import java.lang.invoke.LambdaConversionException;
 
 public class QuickTimeSign extends BaseObject implements Serializable {
    private final String[] buttonSign = {"W","A","S","D"};
-   private final int spacing = 3, rectSize = 30, radius = 3;
+   private final int spacing = 3, rectSize = 30, radius = 10;
 
    public QuickTimeSign(int anchorX, int anchorY){
       this.refpointX = anchorX;
