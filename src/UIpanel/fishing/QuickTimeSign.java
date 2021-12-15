@@ -19,12 +19,12 @@ public class QuickTimeSign extends BaseObject implements Serializable {
    }
 
    @Override
-   public void draw(int refX, int refY, GraphicsContext gc) {
+   public void draw(int panelX, int panelY, GraphicsContext gc) {
       int textShift = 7,maxWidth = 20;
       gc.setStroke(Color.BLACK);
       gc.setLineWidth(1.5);
       gc.setFont(Font.font("Century Gothic", FontWeight.LIGHT, 20));
-      int pX = refpointX +refX, pY = refpointY +refY;
+      int pX = refpointX + panelX, pY = refpointY + panelY;
       for(int i=0; i<buttonSign.length; i++){
          // TODO: move signState to LC
          gc.setFill((LogicController.getInstance().getQtState()[i])? Color.LIME:Color.GRAY);
@@ -44,8 +44,4 @@ public class QuickTimeSign extends BaseObject implements Serializable {
       }
    }
 
-   @Override
-   public void update() {
-
-   }
 }

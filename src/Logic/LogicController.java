@@ -2,6 +2,7 @@ package Logic;
 
 import Input.InputUtils;
 import Input.KeyMap;
+import Items.Fish.Fish;
 import Renderer.GameScreen;
 import Renderer.RenderableHolder;
 import Renderer.ResourcesLoader;
@@ -44,7 +45,7 @@ public class LogicController  implements Serializable{
 
 
     private GameState gameState; //game status
-    private int frameCount;
+    private int timeCount;
     //TODO: Baiting
     private double warpDist;
 
@@ -55,9 +56,8 @@ public class LogicController  implements Serializable{
     private static final double trigPenalty = 5;
 
     //TODO: AfterFishing state fields
-    //missing Type Fish
-    private boolean isFishCaught;
     private static final int CongratAnimateDur = 120; // 2.5sec x 60fps
+    private Fish caughtFish;
 
 
 
@@ -76,7 +76,6 @@ public class LogicController  implements Serializable{
         trigCount = 0;
         warpDist = 350;
         //for afterFishing
-        isFishCaught = false;
         fishCaughtFX = new FishCaughtFX();
         //RenderableHolder.getInstance().add(fishCaughtFX);
 
@@ -93,7 +92,6 @@ public class LogicController  implements Serializable{
     public void addCollidable(Collidable c){collidableEntities.add(c);}
 
     public void update(){
-        fishingPanel.update();
         fishCaughtFX.update();
 
 
@@ -102,6 +100,7 @@ public class LogicController  implements Serializable{
             case WALK -> walkingState();
             case BAITING -> baitingState();
             case FISHING -> fishingState();
+            case FISHRAISING -> fishRaisingState();
             case AFTERFISHING -> afterFishingState();
             case LOADING -> loading();
             case LOADED -> loadedMap();
@@ -291,23 +290,23 @@ public class LogicController  implements Serializable{
         currentMap.update();
     }
     public void startBaiting(){
-        System.out.println("baiting");
         gameState = GameState.BAITING;
-        frameCount = (int)(300+Math.random()*900);
+        timeCount = (int)(300+Math.random()*900);
         mainChar.setBaitX(InputUtils.mouseX);
         mainChar.setBaitY(InputUtils.mouseY);
         mainChar.setBaitProgress(0.0);
+        mainChar.setBaitSprite(0);
     }
     private void baitingState(){
         if(InputUtils.isLeftClickTriggered()){
             gameState = GameState.WALK;
             return;
         }
-        if(frameCount<0){
+        if(timeCount <0){
             startFishing();
             return;
         }
-        frameCount--;
+        timeCount--;
     }
 
     private void fishingState(){
@@ -349,7 +348,6 @@ public class LogicController  implements Serializable{
     public void startFishing(int trigCount){
         setGameState(GameState.FISHING);
         this.trigCount =trigCount;
-        isFishCaught = false;
         qtState = new boolean[]{false,false,false,false};
         nextQTEvent();
     }
@@ -362,17 +360,38 @@ public class LogicController  implements Serializable{
     }
 
     private void afterFishingState(){
-        if(frameCount<0){
+        if(caughtFish != null){
+            timeCount = CongratAnimateDur;
+            gameState = GameState.FISHRAISING;
+            return;
+        }
+    }
+
+    private void fishRaisingState(){
+        if(timeCount <0){
             gameState = GameState.WALK;
             return;
         }
-        frameCount--;
+        timeCount--;
     }
 
     private void finishFishing(boolean success){
-        isFishCaught = success;
-        gameState = GameState.AFTERFISHING;
-        frameCount = CongratAnimateDur;
+        if(success) {
+            timeCount = CongratAnimateDur;
+            caughtFish = null;
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                caughtFish = new Fish();
+            });
+            thread.start();
+            gameState = GameState.AFTERFISHING;
+        }
+        else gameState = GameState.WALK;
+
     }
 
 
@@ -537,5 +556,13 @@ public class LogicController  implements Serializable{
 
     public void setMenuOpuss(GameState menuOpuss) {
         this.menuOpuss = menuOpuss;
+    }
+
+    public boolean isFishCaught(){
+        return (gameState == GameState.AFTERFISHING);
+    }
+
+    public Fish getCaughtFish() {
+        return caughtFish;
     }
 }

@@ -3,7 +3,6 @@ package UIpanel.fishing;
 import Logic.GameState;
 import Logic.LogicController;
 import Renderer.IRenderable;
-import UIpanel.IPanel;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -18,13 +17,15 @@ public class FishingPanel implements IRenderable, Serializable {
     private boolean isVisible;
     private Timer timer;
     private QuickTimeSign qtSign;
+    private SpinningRod spinningRod;
 
     public FishingPanel(int screenW, int screenH){
         this.anchorX = (screenW-panelW)/2;
         this.anchorY = (screenH-panelH)/2;
         isVisible = false;
-        timer = new Timer(320,130);
-        qtSign = new QuickTimeSign(25, 220);
+        timer = new Timer(378,120);
+        qtSign = new QuickTimeSign(330, 180);
+        spinningRod = new SpinningRod(37,-45);
     }
 
     @Override
@@ -39,6 +40,7 @@ public class FishingPanel implements IRenderable, Serializable {
         gc.strokeRoundRect(anchorX,anchorY,panelW, panelH, 6,6);
         timer.draw(anchorX, anchorY, gc);
         qtSign.draw(anchorX, anchorY, gc);
+        spinningRod.draw(anchorX,anchorX,gc);
     }
 
     @Override
@@ -48,15 +50,16 @@ public class FishingPanel implements IRenderable, Serializable {
 
     @Override
     public boolean isVisible() {
-        return LogicController.getInstance().getGameState() == GameState.FISHING;
+        boolean isVisible;
+        switch (LogicController.getInstance().getGameState()){
+            case FISHING, AFTERFISHING -> isVisible = true;
+            default -> isVisible = false;
+        }
+        return isVisible;
     }
 
     public void setVisible(boolean visible) {
         isVisible = visible;
     }
 
-    public void update(){
-        timer.update();
-
-    }
 }
