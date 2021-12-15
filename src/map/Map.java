@@ -6,7 +6,6 @@ import Logic.LogicController;
 import Renderer.GameScreen;
 import Renderer.IRenderable;
 import Renderer.ResourcesLoader;
-import com.sun.javafx.iio.gif.GIFImageLoader2;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
 
@@ -18,9 +17,10 @@ import java.util.ArrayList;
 
 import static java.lang.Math.*;
 
-public class Map implements IRenderable {
+public class Map implements IRenderable, java.io.Serializable {
     public static final int tileSize;
     //map info
+    private MapName mapName;
     private int mapWidth; //pref 32
     private int mapHeight; //pref 18
     private int physicalWidth, physicalHeight;
@@ -52,7 +52,7 @@ public class Map implements IRenderable {
                         {TileType.WATER, TileType.WATER, TileType.WATER, TileType.WATER, TileType.WATER, TileType.WATER},
                         {TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT}};
 
-
+        mapName = MapName.DEMO_MAP;
         mapHeight = tileMatrix.length;
         mapWidth = tileMatrix[0].length;
         physicalWidth = mapWidth * tileSize;
@@ -92,6 +92,12 @@ public class Map implements IRenderable {
         } catch (IOException e){
             throw new IOException();
         }
+        String[] name = filePath.split("/");
+        //System.out.println(name[1]);
+        String[] nameOnly = name[1].split("\\.");
+        //System.out.println(nameOnly[0]);
+        mapName = MapName.valueOf(nameOnly[0].toUpperCase());
+
     }
     
     public void drawEveryTiles(GraphicsContext gc){
@@ -224,6 +230,14 @@ public class Map implements IRenderable {
 
     public int getTileSize(){
         return tileSize;
+    }
+
+    public MapName getMapName() {
+        return mapName;
+    }
+
+    public void setMapList(MapName mapName) {
+        this.mapName = mapName;
     }
 
     public TileType clickedTile(){

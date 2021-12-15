@@ -6,6 +6,7 @@ import Logic.LogicController;
 import Renderer.GameScreen;
 import Renderer.IRenderable;
 import Renderer.ResourcesLoader;
+import UIcontainer.MapChanger.MapChanger;
 import entity.base.Boundary;
 import entity.base.Collidable;
 import entity.base.Direction;
@@ -13,9 +14,12 @@ import entity.base.Movable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import map.Map;
+import map.MapName;
 import map.TileType;
 
-public class Character extends Entity implements IRenderable, Movable, Collidable {
+public class Character extends Entity implements IRenderable, Movable, Collidable, java.io.Serializable {
+    private static final long serialVersionUID = 1113799434508676095L;
     private Boundary collisionBoundary;
     private Direction facing;
     private double baitX, baitY, baitProgress;
@@ -26,13 +30,25 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     private int spriteNum;
     public final int screenX;
     public final int screenY;
-    private void updateVisualBoundary(){
-        if(posX <= screenX/2) visualBoundary.setByCenterX((int)posX);
-        else if(posX >= LogicController.getInstance().getCurrentMap().getPhysicalWidth() - (screenX/2))
+    public Map playerCurMap;
+
+
+
+
+
+    public boolean updateVisualBoundary(){
+        boolean a = posX <= screenX/2;
+        boolean b = posX >= LogicController.getInstance().getCurrentMap().getPhysicalWidth() - (screenX/2);
+        boolean c = posY <= screenY/2;
+        boolean d = posY >= LogicController.getInstance().getCurrentMap().getPhysicalHeight() - (screenY/2);
+        if(a) visualBoundary.setByCenterX((int)posX);
+        else if(b)
             visualBoundary.setByCenterX((int)(posX-LogicController.getInstance().getCurrentMap().getPhysicalWidth()+screenX));
-        if(posY <= screenY/2) visualBoundary.setByCenterY((int)posY);
-        else if(posY >= LogicController.getInstance().getCurrentMap().getPhysicalHeight() - (screenY/2))
+        if(c) visualBoundary.setByCenterY((int)posY);
+        else if(d)
             visualBoundary.setByCenterY((int)(posY-LogicController.getInstance().getCurrentMap().getPhysicalHeight()+screenY));
+
+        return a||b||c||d;
     }
 
     public Character(String name, int posX, int posY, int width, int height, double speed, double reachingDist) {
@@ -49,6 +65,8 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         screenY = GameScreen.screenHeight;
         visualBoundary.setByCenterX(screenX/2);
         visualBoundary.setByCenterY(screenY/2);
+
+
     }
 
     @Override
@@ -58,11 +76,21 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
             if(LogicController.getInstance().getCurrentMap().clickedTile() == TileType.WATER)
                 LogicController.getInstance().startBaiting();
         }
+        //System.out.println(isWarpable());
+            //System.out.println(playerCurMap.getMapName());
 
 
-            facing = Movable.directionByKeyboard();
+//        System.out.println("POSX = " + posX);
+//        System.out.println("POSY = " + posY);
+//        System.out.println("vPOSX = " + visualBoundary.getCenterX());
+//        System.out.println("vPOSY = " + visualBoundary.getCenterY());
+//        System.out.println("cPOSX = " + collisionBoundary.getCenterX());
+//        System.out.println("cPOSY = " + collisionBoundary.getCenterY());
+        facing = Movable.directionByKeyboard();
         collisionBoundary.setPosX((int)posX -this.getWidth()/6);
         collisionBoundary.setPosY((int)posY + (this.getHeight()/11));
+
+
 
         if(spriteCounter > 3){
             if(spriteNum == 16) {
@@ -72,7 +100,6 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
             spriteCounter = 0;
         }
         spriteCounter++;
-
     }
 
 
@@ -86,10 +113,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
 
         int t = LogicController.getInstance().getCurrentMap().getTileSize();
         int i = 0;
-        int playerLeftCol = playerLeftX/t;
-        int playerRightCol = playerRightX/t;
-        int playerTopRow = playerTopY/t;
-        int playerBottomRow = playerBottomY/t;
+
 
         int xplus = -1;
         int yplus = 0;
@@ -137,6 +161,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         if(calcPosY < collisionBoundary.getHeight()/2) calcPosY = collisionBoundary.getHeight()/2;
         else if(calcPosY > LogicController.getInstance().getCurrentMap().getPhysicalHeight()- collisionBoundary.getHeight()/2)
             calcPosY = LogicController.getInstance().getCurrentMap().getPhysicalHeight()- collisionBoundary.getHeight()/2;
+
         if(collideChecker[0] == 1){
             isColliding = true;
             calcPosX = collideChecker[1];
@@ -145,7 +170,10 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         }else isColliding = false;
         posX = calcPosX;
         posY = calcPosY;
-            updateVisualBoundary();
+        if(!updateVisualBoundary()){
+            visualBoundary.setByCenterX(screenX/2);
+            visualBoundary.setByCenterY(screenY/2);
+        };
 
 
     }
@@ -161,6 +189,10 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
 
     @Override
     public boolean isVisible() {
+        switch (LogicController.getInstance().getGameState()){
+            case LOADING -> {return false;}
+            case WALK ,AFTERFISHING, BAITING , FISHING, LOADED-> {return true;}
+        }
         return true;
     }
 
@@ -237,6 +269,23 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         return (Math.sqrt(Math.pow(deltaX,2)+Math.pow(deltaY,2)) < reachingDist);
     }
 
+    public boolean isWarpable(){
+        double pointX = MapName.getValidX(LogicController.getInstance().getCurrentMap()),pointY = MapName.getValidY(LogicController.getInstance().getCurrentMap());
+        double deltaX,deltaY;
+        deltaX = posX/LogicController.getInstance().getCurrentMap().getTileSize()-pointX;
+        deltaY = posY/LogicController.getInstance().getCurrentMap().getTileSize()-pointY;
+        //System.out.println((Math.sqrt(Math.pow(deltaX,2)+Math.pow(deltaY,2))));
+//        System.out.println(deltaX);
+//        System.out.println(deltaY);
+        return (Math.sqrt(Math.pow(deltaX,2)+Math.pow(deltaY,2)) < LogicController.getInstance().getWarpDist()/LogicController.getInstance().getCurrentMap().getTileSize());
+    }
+
+    public void setValidPOS(Map map){
+        setPosX(MapName.getValidX(map)*map.getTileSize());
+        setPosY(MapName.getValidY(map)*map.getTileSize());
+
+    }
+
     @Override
     public Boundary getCollisionBoundary() {
         return collisionBoundary;
@@ -274,4 +323,5 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     public void setBaitProgress(double baitProgress) {
         this.baitProgress = baitProgress;
     }
+
 }

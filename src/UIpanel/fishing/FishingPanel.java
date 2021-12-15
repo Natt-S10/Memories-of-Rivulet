@@ -7,9 +7,10 @@ import UIpanel.IPanel;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import java.io.Serializable;
 import java.lang.invoke.LambdaConversionException;
 
-public class FishingPanel implements IRenderable {
+public class FishingPanel implements IRenderable, Serializable {
     //for Panel Background
     private static final int panelW = 640,
                             panelH =  360;

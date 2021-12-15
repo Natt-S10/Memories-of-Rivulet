@@ -1,26 +1,16 @@
 import Input.InputUtils;
+import Logic.GameState;
 import Logic.LogicController;
 import Renderer.*;
-import UIcontainer.ButtonList;
-import UIcontainer.MapChanger;
-import UIcontainer.UIButton;
-import UIpanel.VisualFX.LoadingFX;
-import entity.ActuallyBall;
-import entity.Character;
-import entity.Entity;
-import entity.base.Movable;
+import UIcontainer.MapChanger.*;
+import UIcontainer.Menu.*;
+import UIcontainer.Option.OptionMenu;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import map.Map;
-import map.Seasons;
-
-import java.util.Stack;
 
 import static Renderer.ResourcesLoader.sceneH;
 import static Renderer.ResourcesLoader.sceneW;
@@ -52,15 +42,17 @@ public class Main extends Application {
         }
 
         ButtonList buttonlists = new ButtonList(root);
-
-
-
-
-        RenderableHolder.getInstance().add(demoMap);
-        LogicController.getInstance().setCurrentMap(demoMap);
-        RenderableHolder.getInstance().add(ResourcesLoader.mainChar);
+        MenuButtonList menuButtonList = new MenuButtonList(root);
+        PauseButtonList pauseButtonList = new PauseButtonList(root);
+        OptionMenu optionMenu = new OptionMenu(root);
 
         LogicController.getInstance().setMainChar(ResourcesLoader.mainChar);
+        LogicController.getInstance().setCurrentMap(demoMap);
+        LogicController.getInstance().setGameState(GameState.MENU);
+
+        RenderableHolder.getInstance().add(demoMap);
+        RenderableHolder.getInstance().add(ResourcesLoader.mainChar);
+
 
         stage.setTitle("Memories of Rivulet");
         stage.setResizable(false);
@@ -79,7 +71,9 @@ public class Main extends Application {
                 //System.out.println(InputUtils.isLeftClickDown()+" "+InputUtils.mouseOnScreen);
                 //System.out.println(1000000000.0/(lastFrameST-l)); lastFrameST = l;
                 buttonlists.update();
-
+                menuButtonList.update();
+                pauseButtonList.update();
+                optionMenu.update();
                 //Logic update
                 LogicController.getInstance().update();
                 //finalDemoMap.update();

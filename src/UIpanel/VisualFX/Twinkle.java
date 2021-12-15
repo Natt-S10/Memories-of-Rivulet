@@ -4,7 +4,9 @@ import Renderer.GameScreen;
 import Renderer.ResourcesLoader;
 import javafx.scene.canvas.GraphicsContext;
 
-public class Twinkle {
+import java.io.Serializable;
+
+public class Twinkle implements Serializable {
     private int posX, posY, size;
     private int animateCounter, spriteNum;
 

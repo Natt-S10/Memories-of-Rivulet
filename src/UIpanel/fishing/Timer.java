@@ -5,7 +5,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 
-public class Timer extends BaseObject{
+import java.io.Serializable;
+
+public class Timer extends BaseObject implements Serializable {
     private static final int DIAMETER = 70;
     private int arcAngle;
 

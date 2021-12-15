@@ -5,17 +5,25 @@ import Input.KeyMap;
 import Renderer.GameScreen;
 import Renderer.RenderableHolder;
 import Renderer.ResourcesLoader;
+import UIcontainer.MapChanger.*;
+import UIcontainer.Menu.*;
+import UIcontainer.Option.OptionMenu;
 import UIpanel.VisualFX.FishCaughtFX;
 import UIpanel.VisualFX.LoadingFX;
 import UIpanel.fishing.FishingPanel;
 import entity.Character;
 import entity.base.Collidable;
 import entity.base.Movable;
+import javafx.stage.FileChooser;
 import map.Map;
+import map.MapName;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
-public class LogicController {
+public class LogicController  implements Serializable{
     private static final LogicController instance = new LogicController();
     private final ArrayList<Movable> movableEntities;
     private final ArrayList<Collidable> collidableEntities;
@@ -26,12 +34,19 @@ public class LogicController {
     private FishingPanel fishingPanel;
     private FishCaughtFX fishCaughtFX;
 
+    //MENU SETTING
+    private boolean isSetup;
+    private  boolean buttonTriggered;
+
+    private GameState menuOpuss;
+    private boolean isResume;
+
 
 
     private GameState gameState; //game status
     private int frameCount;
     //TODO: Baiting
-
+    private double warpDist;
 
     //TODO: fishing state field
     private double initFishingDur, fishingTimeCount;
@@ -47,34 +62,41 @@ public class LogicController {
 
 
     //private static final Character mainChar;
-    private LogicController(){
+    public LogicController(){
         movableEntities = new ArrayList<>();
         collidableEntities = new ArrayList<>();
 
         gameState = GameState.WALK;
+        isResume = false;
         MapLoadingT = 240;
         //for fishing
         qtState = new boolean[]{false, false, false, false};
         fishingPanel = new FishingPanel(GameScreen.screenWidth,GameScreen.screenHeight);
-        RenderableHolder.getInstance().add(fishingPanel);
+        //RenderableHolder.getInstance().add(fishingPanel);
         trigCount = 0;
-
+        warpDist = 350;
         //for afterFishing
         isFishCaught = false;
         fishCaughtFX = new FishCaughtFX();
-        RenderableHolder.getInstance().add(fishCaughtFX);
+        //RenderableHolder.getInstance().add(fishCaughtFX);
 
+        isSetup = false;
+        buttonTriggered = false;
 
     }
     public static LogicController getInstance(){return instance;}
 
-    public void addMovable(Movable m){movableEntities.add(m);}
+    public void addMovable(Movable m){
+
+        movableEntities.add(m);
+    }
     public void addCollidable(Collidable c){collidableEntities.add(c);}
 
     public void update(){
         fishingPanel.update();
         fishCaughtFX.update();
-        currentMap.update();
+
+
 
         switch (gameState){
             case WALK -> walkingState();
@@ -83,12 +105,151 @@ public class LogicController {
             case AFTERFISHING -> afterFishingState();
             case LOADING -> loading();
             case LOADED -> loadedMap();
+            case MENU -> mainMenu();
+            case NEW_GAME -> newGame();
+            case LOAD_GAME -> loadGame(ResourcesLoader.saveData);
+            case OPTION -> option();
+            case PAUSE -> pauseMenu();
+            case EXIT -> exit();
+            case SAVE -> save(ResourcesLoader.saveData);
+            case RESUME -> resume();
         }
     }
-    public void loading(){
+
+
+    public void mainMenu(){
+        if(!isSetup){
+            LoadHoldingScreen();
+            MenuButtonList.setVisible(true);
+            isSetup = true;
+            menuOpuss = GameState.MENU;
+        }
+    }
+
+    public void newGame(){ //save a new save file
+        try{
+
+
+            nextMap = new Map(ResourcesLoader.demo_map);
+            ResourcesLoader.saveData = ResourcesLoader.newsaveData;
+            ResourcesLoader.saveLogic = ResourcesLoader.defaultLogic;
+            ResourcesLoader.saveLogic.mainChar = ResourcesLoader.mainChar;
+            setMainChar(ResourcesLoader.mainChar);
+
+
+            save(ResourcesLoader.newsaveData);
+            MapLoadingT = 240;
+            gameState = GameState.LOADING;
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void pauseMenu(){
+
+        if(!isSetup){
+            LoadHoldingScreen();
+            PauseButtonList.setVisible(true);
+            isSetup = true;
+            menuOpuss = GameState.PAUSE;
+            save(ResourcesLoader.saveData);
+        }
+
+    }
+
+    private void LoadHoldingScreen() {
+        try{
+            RenderableHolder.getInstance().resetElements();
+            this.currentMap = new Map(ResourcesLoader.Loading_map);
+            RenderableHolder.getInstance().add(currentMap);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        OptionMenu.setVisible(false);
+        ButtonList.setVisible(false);
+        PauseButtonList.setVisible(false);
+    }
+
+    public void resume(){
+        isResume = true;
+        gameState = GameState.LOADING;
+    }
+
+    public void save(String saveData){ // save at old file
+        try{
+            FileOutputStream fos = new FileOutputStream(saveData);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(LogicController.getInstance());
+            oos.flush();
+            oos.close();
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println("-------------------SAVE-------------------");
+
+
+    }
+    public void loadGame(String saveData){ // open file chooser and read a save file
 
             try{
+                FileChooser fc = new FileChooser();
+                fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("SAVE File","*.sav"));
+                File selectedFile = fc.showOpenDialog(null);
 
+                if(selectedFile != null){
+
+                    FileInputStream fis = new FileInputStream(selectedFile);
+                    ObjectInputStream ois = new ObjectInputStream(fis);
+                    ResourcesLoader.saveLogic = (LogicController) ois.readObject();
+                    nextMap = ResourcesLoader.saveLogic.getNextMap();
+                    System.out.println(nextMap.getMapName());
+                    setMainChar(ResourcesLoader.saveLogic.mainChar);
+
+                    ResourcesLoader.saveData = selectedFile.toString();
+
+                    ois.close();
+                    MapLoadingT = 240;
+                    setGameState(GameState.LOADING);
+
+                } else{
+                    setGameState(GameState.MENU);
+                }
+            }catch ( Exception e){
+                e.printStackTrace();
+        }
+
+    }
+
+    public void option(){
+        if(!isSetup){
+            try{
+                RenderableHolder.getInstance().resetElements();
+                this.currentMap = new Map(ResourcesLoader.Loading_map);
+                RenderableHolder.getInstance().add(currentMap);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            OptionMenu.setVisible(true);
+            MenuButtonList.setVisible(false);
+            isSetup = true;
+        }
+
+    }
+
+    public void exit(){
+        System.exit(0);
+    }
+
+
+
+    public void loading(){
+
+
+        ButtonList.setVisible(false);
+            try{
                 if(MapLoadingT == 240){
 
                     RenderableHolder.getInstance().resetElements();
@@ -98,34 +259,36 @@ public class LogicController {
                     RenderableHolder.getInstance().add(loadingFX);
 
                 }
-
             } catch (Exception e){
                 e.printStackTrace();
             }
-
-
             if(MapLoadingT <0){
                 gameState = GameState.LOADED;
             }
             MapLoadingT--;
-
-
     }
 
     private void loadedMap(){
         try{
+
             setCurrentMap(nextMap);
+            buttonTriggered = false;
+            ButtonList.setVisible(true);
 
         } catch (Exception e){
             e.printStackTrace();
         }
+        isResume = false;
+
         gameState = GameState.WALK;
     }
     private void walkingState(){
+
         for (Movable eM : movableEntities) {
             eM.move();
             eM.update();
         }
+        currentMap.update();
     }
     public void startBaiting(){
         System.out.println("baiting");
@@ -188,7 +351,6 @@ public class LogicController {
         this.trigCount =trigCount;
         isFishCaught = false;
         qtState = new boolean[]{false,false,false,false};
-
         nextQTEvent();
     }
     public void startFishing(){
@@ -206,6 +368,7 @@ public class LogicController {
         }
         frameCount--;
     }
+
     private void finishFishing(boolean success){
         isFishCaught = success;
         gameState = GameState.AFTERFISHING;
@@ -227,20 +390,26 @@ public class LogicController {
     }
 
     public void setMainChar(Character mainChar) {
+
         if(this.mainChar == null) {
             this.mainChar = mainChar;
             addMovable(mainChar);
             return;
         }
         int id = movableEntities.indexOf(mainChar);
+
         if(id == -1){
             addMovable(mainChar);
             this.mainChar = mainChar;
             return;
         }
+
         movableEntities.set(id, (Movable) mainChar);
         this.mainChar = mainChar;
+
     }
+
+
 
     public Double getAnchorX(){
         double anchorX = (mainChar.getPosX() - GameScreen.screenWidth/2);
@@ -258,12 +427,16 @@ public class LogicController {
 
     public void setCurrentMap(Map map){
 
-            this.currentMap = map;
-            RenderableHolder.getInstance().resetElements();
-            RenderableHolder.getInstance().add(currentMap);
-            setMainChar(ResourcesLoader.mainChar);
-            RenderableHolder.getInstance().add(ResourcesLoader.mainChar);
-            return;
+        this.currentMap = map;
+        RenderableHolder.getInstance().resetElements();
+        movableEntities.clear();
+
+        RenderableHolder.getInstance().add(currentMap);
+        setMainChar(ResourcesLoader.mainChar);
+        RenderableHolder.getInstance().add(mainChar);
+        if(!isResume) mainChar.setValidPOS(currentMap);
+
+
 
     }
     public Map getCurrentMap() {
@@ -336,5 +509,33 @@ public class LogicController {
 
     public void setMapLoadingT(int mapLoadingT) {
         MapLoadingT = mapLoadingT;
+    }
+
+    public boolean isSetup() {
+        return isSetup;
+    }
+
+    public void setSetup(boolean setup) {
+        isSetup = setup;
+    }
+
+    public boolean isButtonTriggered() {
+        return buttonTriggered;
+    }
+
+    public void setButtonTriggered(boolean buttonTriggered) {
+        this.buttonTriggered = buttonTriggered;
+    }
+
+    public double getWarpDist() {
+        return warpDist;
+    }
+
+    public GameState getMenuOpuss() {
+        return menuOpuss;
+    }
+
+    public void setMenuOpuss(GameState menuOpuss) {
+        this.menuOpuss = menuOpuss;
     }
 }

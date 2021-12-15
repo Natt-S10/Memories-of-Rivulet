@@ -14,12 +14,21 @@ import javafx.scene.input.MouseEvent;
 public abstract class UIButton extends ImageView  {
 
     private boolean isVisible;
-    private int size;
+    private int sizex;
+    private int sizey;
+    private boolean isSquare;
 
-    public UIButton(Image image, int size){
+    public UIButton(Image image, int sizex, int sizey, boolean isSquare){
         this.setImage( image);
-        this.setPreserveRatio(true);
-        this.setFitWidth(size);
+        this.isSquare = isSquare;
+        if(isSquare){
+            this.setPreserveRatio(true);
+            this.setFitWidth(sizex);
+
+        } else{
+            this.setFitWidth(sizex);
+            this.setFitHeight(sizey);
+        }
 
     }
 

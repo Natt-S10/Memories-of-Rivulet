@@ -1,5 +1,6 @@
 package Renderer;
 
+import Logic.LogicController;
 import entity.Character;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
@@ -36,31 +37,46 @@ public class ResourcesLoader {
     public static Image logo_waterfall_B;
     public static Image logo_fire_B;
     public static Image rpg;
-    public static Image logo;
+    public static Image button_play;
+    public static Image button_load;
+    public static Image button_option;
+    public static Image button_resume;
+    public static Image button_exit;
+    public static Image button_menu;
     public static final Image w1,w2,w3,w4,w5,w6,w7,w8;
     public static final Image fireworkSP;
     public static final Image loadingSP;
     public static final WritableImage[] fireworks;
     public static final WritableImage[] loadings;
+    public static LogicController saveLogic;
+    public static LogicController defaultLogic;
 
     public static  Character mainChar;
 
+    public static String saveData;
+    public static String newsaveData;
     public static final int sceneW = 1280;
     public static final int sceneH = 720;
 
 
 
     static {
-        demo_map = "res/demoMap.csv";
+
+
+        saveData = "";
+        newsaveData = "gamesave.sav";
+
+
+        demo_map = "res/demo_Map.csv";
         River_map = "res/River_Map.csv";
         Beach_map = "res/Beach_Map.csv";
-        Waterfall_map = "res/demoMap1.csv";
-        Loading_map = "res/loadingMap.csv";
+        Waterfall_map = "res/demo_Map1.csv";
+        Loading_map = "res/loading_Map.csv";
 
         mainChar = new Character("Steve",
                 sceneW/2, sceneH/2,160,220, 7,190);
 
-
+        defaultLogic = new LogicController();
 
 
         String ballsriPath = "Ball.png";
@@ -90,6 +106,13 @@ public class ResourcesLoader {
         String walk7 = "player/Frame_7.png";
         String walk8 = "player/Frame_8.png";
 
+        String bplay = "button/play.png";
+        String bload = "button/load.png";
+        String boption = "button/option.png";
+        String bexit = "button/quit.png";
+        String bresume = "button/resume.png";
+        String bmenu = "button/menu.png";
+
 
 
         w1 = new Image((ClassLoader.getSystemResource(walk1).toString()));
@@ -100,6 +123,14 @@ public class ResourcesLoader {
         w6 = new Image((ClassLoader.getSystemResource(walk6).toString()));
         w7 = new Image((ClassLoader.getSystemResource(walk7).toString()));
         w8 = new Image((ClassLoader.getSystemResource(walk8).toString()));
+
+
+        button_play = new Image((ClassLoader.getSystemResource(bplay).toString()));
+        button_load = new Image((ClassLoader.getSystemResource(bload).toString()));
+        button_option = new Image((ClassLoader.getSystemResource(boption).toString()));
+        button_resume = new Image((ClassLoader.getSystemResource(bresume).toString()));
+        button_exit = new Image((ClassLoader.getSystemResource(bexit).toString()));
+        button_menu = new Image((ClassLoader.getSystemResource(bmenu).toString()));
 
         fireworkSP = new Image(ClassLoader.getSystemResource(fireworkPath).toString());
         fireworks = loadFireworks();

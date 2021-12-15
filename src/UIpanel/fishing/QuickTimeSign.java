@@ -6,9 +6,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.io.Serializable;
 import java.lang.invoke.LambdaConversionException;
 
-public class QuickTimeSign extends BaseObject {
+public class QuickTimeSign extends BaseObject implements Serializable {
    private final String[] buttonSign = {"W","A","S","D"};
    private final int spacing = 3, rectSize = 30, radius = 3;
 
