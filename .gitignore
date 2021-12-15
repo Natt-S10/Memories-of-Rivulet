@@ -9,7 +9,7 @@
 .idea/**/shelf
 
 # Custom for this proj
-Memory-of-Rivulet.iml
+*.iml
 #--------------
 
 # AWS User-specific

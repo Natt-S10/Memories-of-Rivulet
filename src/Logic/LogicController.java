@@ -2,6 +2,7 @@ package Logic;
 
 import Input.InputUtils;
 import Input.KeyMap;
+import Items.Fish.Fish;
 import Renderer.GameScreen;
 import Renderer.RenderableHolder;
 import Renderer.ResourcesLoader;
@@ -29,7 +30,7 @@ public class LogicController {
 
 
     private GameState gameState; //game status
-    private int frameCount;
+    private int timeCount;
     //TODO: Baiting
 
 
@@ -40,9 +41,9 @@ public class LogicController {
     private static final double trigPenalty = 5;
 
     //TODO: AfterFishing state fields
-    //missing Type Fish
     private boolean isFishCaught;
     private static final int CongratAnimateDur = 120; // 2.5sec x 60fps
+    private Fish caughtfish;
 
 
 
@@ -128,23 +129,23 @@ public class LogicController {
         }
     }
     public void startBaiting(){
-        System.out.println("baiting");
         gameState = GameState.BAITING;
-        frameCount = (int)(300+Math.random()*900);
+        timeCount = (int)(300+Math.random()*900);
         mainChar.setBaitX(InputUtils.mouseX);
         mainChar.setBaitY(InputUtils.mouseY);
         mainChar.setBaitProgress(0.0);
+        mainChar.setBaitSprite(0);
     }
     private void baitingState(){
         if(InputUtils.isLeftClickTriggered()){
             gameState = GameState.WALK;
             return;
         }
-        if(frameCount<0){
+        if(timeCount <0){
             startFishing();
             return;
         }
-        frameCount--;
+        timeCount--;
     }
 
     private void fishingState(){
@@ -200,16 +201,20 @@ public class LogicController {
     }
 
     private void afterFishingState(){
-        if(frameCount<0){
+        if(timeCount <0){
             gameState = GameState.WALK;
             return;
         }
-        frameCount--;
+        timeCount--;
     }
     private void finishFishing(boolean success){
-        isFishCaught = success;
-        gameState = GameState.AFTERFISHING;
-        frameCount = CongratAnimateDur;
+        if(success) {
+            timeCount = CongratAnimateDur;
+            caughtfish = new Fish();
+            gameState = GameState.AFTERFISHING;
+        }
+        else gameState = GameState.WALK;
+
     }
 
 
@@ -336,5 +341,9 @@ public class LogicController {
 
     public void setMapLoadingT(int mapLoadingT) {
         MapLoadingT = mapLoadingT;
+    }
+
+    public Fish getCaughtfish() {
+        return caughtfish;
     }
 }

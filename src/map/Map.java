@@ -144,10 +144,6 @@ public class Map implements IRenderable {
 
 
 
-    public void viewAroundCharacter(GraphicsContext gc){
-        //TODO getCharPos -> Calc i j -> render map within (i,j) to (i2,j2)
-    }
-
 
 
     public boolean isCollidable(int x, int y) { //for charactor logic
