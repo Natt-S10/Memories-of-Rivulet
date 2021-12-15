@@ -164,19 +164,12 @@ public class Map implements IRenderable {
     }
     // TODO: Render only visible tiles
     public void update(){
+        if(LogicController.getInstance().getGameState() == GameState.LOADING) return;
+//        System.out.println(LogicController.getInstance().getGameState());
         double anchorX, anchorY;
         anchorX = LogicController.getInstance().getAnchorX();
         anchorY = LogicController.getInstance().getAnchorY();
-        if(InputUtils.mouseOnScreen && InputUtils.isLeftClickTriggered() &&
-                LogicController.getInstance().getMainChar().isReachable(InputUtils.mouseX,InputUtils.mouseY)) {
-            int i = snapToGrid(InputUtils.mouseX + anchorX);
-            int j = snapToGrid(InputUtils.mouseY + anchorY);
-            if (0 <= i && i < mapWidth && 0 <= j && j < mapHeight)
-                //System.out.println(tileMatrix[j][i].toString());
-            if(tileMatrix[j][i] == TileType.WATER) {
-                LogicController.getInstance().startBaiting();
-            }
-        }
+
 //        System.out.println(spriteNum);
 //        System.out.println(spriteCounter);
         if(spriteCounter > 16){
@@ -231,5 +224,11 @@ public class Map implements IRenderable {
 
     public int getTileSize(){
         return tileSize;
+    }
+
+    public TileType clickedTile(){
+        int i = snapToGrid(InputUtils.mouseX + LogicController.getInstance().getAnchorX());
+        int j = snapToGrid(InputUtils.mouseY + LogicController.getInstance().getAnchorY());
+        return tileMatrix[j][i];
     }
 }

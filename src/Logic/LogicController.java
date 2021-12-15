@@ -74,6 +74,8 @@ public class LogicController {
     public void update(){
         fishingPanel.update();
         fishCaughtFX.update();
+        currentMap.update();
+
         switch (gameState){
             case WALK -> walkingState();
             case BAITING -> baitingState();
@@ -124,9 +126,9 @@ public class LogicController {
             eM.move();
             eM.update();
         }
-        currentMap.update();
     }
     public void startBaiting(){
+        System.out.println("baiting");
         gameState = GameState.BAITING;
         frameCount = (int)(300+Math.random()*900);
         mainChar.setBaitX(InputUtils.mouseX);

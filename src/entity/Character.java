@@ -1,5 +1,6 @@
 package entity;
 
+import Input.InputUtils;
 import Logic.GameState;
 import Logic.LogicController;
 import Renderer.GameScreen;
@@ -12,6 +13,7 @@ import entity.base.Movable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import map.TileType;
 
 public class Character extends Entity implements IRenderable, Movable, Collidable {
     private Boundary collisionBoundary;
@@ -51,7 +53,14 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
 
     @Override
     public void update() {
-        facing = Movable.directionByKeyboard();
+        if(InputUtils.mouseOnScreen && InputUtils.isLeftClickTriggered() &&
+                isReachable(InputUtils.mouseX,InputUtils.mouseY)) {
+            if(LogicController.getInstance().getCurrentMap().clickedTile() == TileType.WATER)
+                LogicController.getInstance().startBaiting();
+        }
+
+
+            facing = Movable.directionByKeyboard();
         collisionBoundary.setPosX((int)posX -this.getWidth()/6);
         collisionBoundary.setPosY((int)posY + (this.getHeight()/11));
 
@@ -176,9 +185,9 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         switch(facing){
             case STABLE -> {
                 if(isRight){
-                    gc.drawImage(ResourcesLoader.w1,visualBoundary.left(),visualBoundary.top(),visualBoundary.getWidth(), visualBoundary.getHeight());
+                    gc.drawImage(ResourcesLoader.w4,visualBoundary.left(),visualBoundary.top(),visualBoundary.getWidth(), visualBoundary.getHeight());
                 } else{
-                    gc.drawImage(ResourcesLoader.w1,visualBoundary.left()+160,visualBoundary.top(),-visualBoundary.getWidth(), visualBoundary.getHeight());
+                    gc.drawImage(ResourcesLoader.w4,visualBoundary.left()+160,visualBoundary.top(),-visualBoundary.getWidth(), visualBoundary.getHeight());
                 }
             }
             case N, S ->{
