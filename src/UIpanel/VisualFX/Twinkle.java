@@ -1,5 +1,6 @@
 package UIpanel.VisualFX;
 
+import Renderer.GameScreen;
 import Renderer.ResourcesLoader;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -17,6 +18,7 @@ public class Twinkle {
 
     public void draw(GraphicsContext gc){
         gc.drawImage(ResourcesLoader.fireworks[spriteNum],posX, posY, size, size);
+
         update();
     }
 

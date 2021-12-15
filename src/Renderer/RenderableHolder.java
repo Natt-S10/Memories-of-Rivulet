@@ -1,5 +1,8 @@
 package Renderer;
 
+import Logic.LogicController;
+import UIpanel.VisualFX.FishCaughtFX;
+import UIpanel.fishing.FishingPanel;
 import map.Map;
 
 import java.util.ArrayList;
@@ -32,11 +35,22 @@ public class RenderableHolder {
         System.out.println(elements);
     }
 
+    public void resetElements(){
+        elements.clear();
+        FishingPanel fishingPanel = new FishingPanel(GameScreen.screenWidth,GameScreen.screenHeight);
+        FishCaughtFX fishCaughtFX = new FishCaughtFX();
+        LogicController.getInstance().setFishingPanel(fishingPanel);
+        LogicController.getInstance().setFishCaughtFX(fishCaughtFX);
+        RenderableHolder.getInstance().add(fishCaughtFX);
+        RenderableHolder.getInstance().add(fishingPanel);
+    }
+
     public void update() {
         for (int i = 0; i < elements.size(); i++) {
             if (elements.get(i).isDestroyed()) {
                 elements.remove(i);
             }
+
         }
     }
 

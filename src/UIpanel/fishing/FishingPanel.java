@@ -47,7 +47,7 @@ public class FishingPanel implements IRenderable {
 
     @Override
     public boolean isVisible() {
-        return isVisible;
+        return LogicController.getInstance().getGameState() == GameState.FISHING;
     }
 
     public void setVisible(boolean visible) {
@@ -56,7 +56,6 @@ public class FishingPanel implements IRenderable {
 
     public void update(){
         timer.update();
-        if(LogicController.getInstance().getGameState() == GameState.FISHING) isVisible = true;
-        else isVisible = false;
+
     }
 }

@@ -1,24 +1,27 @@
 package entity;
 
+import Input.InputUtils;
+import Items.Fish.FishUtils;
 import Logic.GameState;
 import Logic.LogicController;
 import Renderer.GameScreen;
 import Renderer.IRenderable;
 import Renderer.ResourcesLoader;
+import com.sun.javafx.reflect.FieldUtil;
 import entity.base.Boundary;
 import entity.base.Collidable;
 import entity.base.Direction;
 import entity.base.Movable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+import map.TileType;
 
 public class Character extends Entity implements IRenderable, Movable, Collidable {
     private Boundary collisionBoundary;
     private Direction facing;
     private double baitX, baitY, baitProgress;
+    private int baitSprite, baitSpriteCounter;
     private boolean isRight;
     private double speed, reachingDist;
     boolean isColliding;
@@ -42,6 +45,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         isRight = true;
         spriteCounter = 0;
         spriteNum = 1;
+        baitSprite =0;
         isColliding = false;
         this.speed = speed;
         this.reachingDist = reachingDist;
@@ -53,12 +57,20 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
 
     @Override
     public void update() {
-        facing = Movable.directionByKeyboard();
-        checkCollide();
-        collisionBoundary.setPosX((int)posX  -this.getWidth()/6);
-        collisionBoundary.setPosY((int)posY+(this.getHeight()/11));
-        //System.out.println(height);
-        //System.out.println(isColliding);
+        if(InputUtils.mouseOnScreen && InputUtils.isLeftClickTriggered() &&
+                isReachable(InputUtils.mouseX,InputUtils.mouseY)) {
+            if(LogicController.getInstance().getCurrentMap().clickedTile() == TileType.WATER) {
+                setIsRightToClicked(InputUtils.mouseX);
+                LogicController.getInstance().startBaiting();
+            }
+        }
+        else {
+            facing = Movable.directionByKeyboard();
+        }
+
+        collisionBoundary.setPosX((int)posX -this.getWidth()/6);
+        collisionBoundary.setPosY((int)posY + (this.getHeight()/11));
+
         if(spriteCounter > 3){
             if(spriteNum == 16) {
                 spriteNum = 1;
@@ -69,117 +81,79 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         spriteCounter++;
 
     }
-    //check objects and check tiles
-    public void checkCollide(){
 
-        double posx = 0; double posx2 = 0; double posx3 = 0;
-        double posy = 0; double posy2 = 0; double posy3 = 0;
-        boolean sCase = false;
-        switch(facing){
-            case N-> {
-                posx += collisionBoundary.left();
-                posx2 += collisionBoundary.right();
-                posy += collisionBoundary.top();
-                posy2 = posy;
-            }
-            case NE -> {
-                sCase= true;
-                posx += collisionBoundary.left();
-                posx2 += collisionBoundary.right();
-                posy += collisionBoundary.top();
-                posy2 = posy;
-                posx3 = posx2;
-                posy3 = collisionBoundary.bottom();
 
-            }
-            case NW -> {
-                sCase = true;
-                posx += collisionBoundary.left();
-                posx2 += collisionBoundary.left();
-                posy += collisionBoundary.top();
-                posy2 = posy;
-                posx3 = posx2;
-                posy3 = collisionBoundary.bottom();
-            }
-            case E -> {
+    public int[] checkTile(double calcPosX, double calcPosY){
+        double newPosX = calcPosX;
+        double newPosY = calcPosY;
+        int playerLeftX = collisionBoundary.left();
+        int playerRightX = collisionBoundary.right();
+        int playerTopY = collisionBoundary.top();
+        int playerBottomY = collisionBoundary.bottom();
 
-                posx = collisionBoundary.right();
-                posx2 = posx;
-                posy = collisionBoundary.top();
-                posy2 = collisionBoundary.bottom();
+        int t = LogicController.getInstance().getCurrentMap().getTileSize();
+        int i = 0;
+        int playerLeftCol = playerLeftX/t;
+        int playerRightCol = playerRightX/t;
+        int playerTopRow = playerTopY/t;
+        int playerBottomRow = playerBottomY/t;
 
-            }
-            case W -> {
-
-                posx = collisionBoundary.left();
-                posx2 = posx;
-                posy = collisionBoundary.top();
-                posy2 = collisionBoundary.bottom();
-
-            }
-            case S -> {
-                posx += collisionBoundary.left();
-                posx2 = collisionBoundary.right();
-                posy += collisionBoundary.bottom();
-                posy2 = posy;
-
-            }
-            case SW -> {
-                sCase = true;
-                posx += collisionBoundary.left();
-                posx2 += collisionBoundary.right();
-                posy += collisionBoundary.bottom();
-                posy2 = posy;
-                posx3 = posx;
-                posy3 += collisionBoundary.top();
-            }
-            case SE -> {
-                sCase = true;
-                posx += collisionBoundary.right();
-                posx2 += collisionBoundary.left();
-                posy += collisionBoundary.bottom();
-                posy2 = posy;
-                posx3 = posx;
-                posy3 = collisionBoundary.top();
-            }
-
+        int xplus = -1;
+        int yplus = 0;
+        if(facing == Direction.E || facing == Direction.NE || facing == Direction.SE){
+            xplus = 1;
         }
-//        System.out.println("X = " +posx );
-//        System.out.println("Y = " +posy );
-        if(LogicController.getInstance().getCurrentMap().isCollidable((int)posx, (int)posy) || LogicController.getInstance().getCurrentMap().isCollidable((int)posx2, (int)posy2)){
-            if(sCase){
-                if (LogicController.getInstance().getCurrentMap().isCollidable((int)posx3, (int)posy3)){
-                    isColliding = true;
-                    return;
-                }
-            }
-            isColliding = true;
-            return;
+        if(facing == Direction.S || facing == Direction.SE || facing == Direction.SW){
+            yplus = 1;
+        }
+
+        boolean lrup = LogicController.getInstance().getCurrentMap().isCollidable((int)calcPosX+xplus*collisionBoundary.getWidth()/2, playerTopY);
+        boolean lrdown = LogicController.getInstance().getCurrentMap().isCollidable((int)calcPosX+xplus*collisionBoundary.getWidth()/2, playerBottomY);
+        boolean updownl = LogicController.getInstance().getCurrentMap().isCollidable(playerLeftX, (int)calcPosY + yplus*collisionBoundary.getHeight()+getHeight()/11);
+        boolean updownr = LogicController.getInstance().getCurrentMap().isCollidable(playerRightX, (int)calcPosY+ yplus*collisionBoundary.getHeight()+getHeight()/11);
+        //System.out.println(lrup);
+        if(lrup){
+            i = 1;
+            newPosX = posX;
+        } else if(lrdown){
+            i = 1;
+            newPosX= posX;
+        }
+        if(updownl){
+            i = 1;
+            newPosY = posY;
+        } else if (updownr){
+            i = 1;
+            newPosY = posY;
         }
 
 
-        isColliding = false;
-        return;
-
-
+        return new int[]{i, (int)newPosX, (int) newPosY};
     }
 
     @Override
     public void move() {
-        if(!isColliding){
-            double calcPosX = posX + Movable.deltaX(speed,facing);
-            double calcPosY = posY + Movable.deltaY(speed,facing);
+        double calcPosX = posX + Movable.deltaX(speed,facing);
+        double calcPosY = posY + Movable.deltaY(speed,facing);
+        int[] collideChecker = checkTile(calcPosX,calcPosY);
 
-            if(calcPosX < visualBoundary.getWidth()/2) calcPosX = visualBoundary.getWidth()/2;
-            else if(calcPosX > LogicController.getInstance().getCurrentMap().getPhysicalWidth()- visualBoundary.getWidth()/2)
-                calcPosX = LogicController.getInstance().getCurrentMap().getPhysicalWidth()- visualBoundary.getWidth()/2;
-            if(calcPosY < visualBoundary.getHeight()/2) calcPosY = visualBoundary.getHeight()/2;
-            else if(calcPosY > LogicController.getInstance().getCurrentMap().getPhysicalHeight()- visualBoundary.getHeight()/2)
-                calcPosY = LogicController.getInstance().getCurrentMap().getPhysicalHeight()- visualBoundary.getHeight()/2;
-            posX = calcPosX;
-            posY = calcPosY;
+
+        if(calcPosX < collisionBoundary.getWidth()/2) calcPosX = collisionBoundary.getWidth()/2;
+        else if(calcPosX > LogicController.getInstance().getCurrentMap().getPhysicalWidth()- collisionBoundary.getWidth()/2)
+            calcPosX = LogicController.getInstance().getCurrentMap().getPhysicalWidth()- collisionBoundary.getWidth()/2;
+        if(calcPosY < collisionBoundary.getHeight()/2) calcPosY = collisionBoundary.getHeight()/2;
+        else if(calcPosY > LogicController.getInstance().getCurrentMap().getPhysicalHeight()- collisionBoundary.getHeight()/2)
+            calcPosY = LogicController.getInstance().getCurrentMap().getPhysicalHeight()- collisionBoundary.getHeight()/2;
+        if(collideChecker[0] == 1){
+            isColliding = true;
+            calcPosX = collideChecker[1];
+            calcPosY = collideChecker[2];
+
+        }else isColliding = false;
+        posX = calcPosX;
+        posY = calcPosY;
             updateVisualBoundary();
-        }
+
 
     }
     @Override
@@ -199,28 +173,20 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
 
     @Override
     public void draw(GraphicsContext gc) {
-        if(LogicController.getInstance().getGameState() == GameState.BAITING ||
-            LogicController.getInstance().getGameState() == GameState.FISHING){
-            baitProgress = Math.min(baitProgress, 1.0);
-            gc.setLineWidth(2.0);
-            gc.setStroke(Color.BLACK);
-            gc.strokeLine(visualBoundary.getCenterX(),visualBoundary.getCenterY(),
-                    visualBoundary.getCenterX()*(1-baitProgress)+baitX*baitProgress,
-                    visualBoundary.getCenterY()*(1-baitProgress)+baitY*baitProgress);
-            if(baitProgress==1.0){
-                gc.setStroke(Color.BLACK);
-                gc.setFill(Color.RED);
-                gc.fillOval(baitX-5,baitY-5,10,10);
-                gc.strokeOval(baitX-5,baitY-5,10,10);
-            }
-            baitProgress+=0.035;
+        switch (LogicController.getInstance().getGameState()){
+            case WALK -> drawWalkingChar(gc);
+            case FISHING, BAITING ->  {drawWalkingChar(gc); animateFishingRod(gc);}
+            case AFTERFISHING -> drawAfterFishing(gc);
         }
+    }
+
+    private void drawWalkingChar(GraphicsContext gc) {
         switch(facing){
             case STABLE -> {
                 if(isRight){
-                    gc.drawImage(ResourcesLoader.w1,visualBoundary.left(),visualBoundary.top(),visualBoundary.getWidth(), visualBoundary.getHeight());
+                    gc.drawImage(ResourcesLoader.w4,visualBoundary.left(),visualBoundary.top(),visualBoundary.getWidth(), visualBoundary.getHeight());
                 } else{
-                    gc.drawImage(ResourcesLoader.w1,visualBoundary.left()+160,visualBoundary.top(),-visualBoundary.getWidth(), visualBoundary.getHeight());
+                    gc.drawImage(ResourcesLoader.w4,visualBoundary.left()+160,visualBoundary.top(),-visualBoundary.getWidth(), visualBoundary.getHeight());
                 }
             }
             case N, S ->{
@@ -236,6 +202,61 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
                 drawSP(gc,spriteCounter,spriteNum,isRight);
             }
         }
+    }
+
+    private void animateFishingRod(GraphicsContext gc) {
+        if(baitSprite!=2){
+            if(baitSpriteCounter>5){
+                baitSpriteCounter=0;
+                baitSprite++;
+            }
+            baitSpriteCounter++;
+        }
+        else{
+            baitProgress += 0.035;
+            baitProgress = Math.min(baitProgress, 1.0);
+        }
+        drawFishingRod(isRight, gc);
+
+
+    }
+
+    private void drawFishingRod(boolean isRight, GraphicsContext gc){
+        int rodSize=100;
+        int rodPosX, rodPosY=visualBoundary.top()+30;
+        int rodTipX, rodTipY = rodPosY+(33*rodSize)/64;
+        int flip;
+        if(isRight){
+            rodPosX = visualBoundary.right()-55;
+            rodTipX = rodPosX+(54*rodSize)/64;
+            flip = 1;
+        }
+        else{
+            rodPosX = visualBoundary.left()+55;
+            rodTipX = rodPosX-(54*rodSize)/64;
+            flip = -1;
+        }
+        gc.drawImage(ResourcesLoader.fishingRod[baitSprite],rodPosX, rodPosY, rodSize*flip, rodSize);
+        gc.setLineWidth(2.0);
+        gc.setStroke(Color.BLACK);
+        gc.strokeLine(rodTipX, rodTipY,
+                rodTipX * (1 - baitProgress) + baitX * baitProgress,
+                rodTipY * (1 - baitProgress) + baitY * baitProgress);
+        if (baitProgress == 1.0) {
+            gc.setStroke(Color.BLACK);
+            gc.setFill(Color.RED);
+            gc.fillOval(baitX - 5, baitY - 5, 10, 10);
+            gc.strokeOval(baitX - 5, baitY - 5, 10, 10);
+        }
+
+    }
+
+    private void drawAfterFishing(GraphicsContext gc){
+        gc.drawImage(ResourcesLoader.wShow,visualBoundary.left(),visualBoundary.top(),visualBoundary.getWidth(), visualBoundary.getHeight());
+        gc.drawImage(LogicController.getInstance().getCaughtfish().getImage(),
+                visualBoundary.getCenterX()- FishUtils.imgW/2,
+                visualBoundary.top()-FishUtils.imgH/2,
+                FishUtils.imgW, FishUtils.imgH);
     }
 
     public void drawSP(GraphicsContext gc, int spriteCounter, int spriteNum, boolean isRight){
@@ -286,6 +307,12 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         this.facing = d;
     }
 
+    public void setIsRightToClicked(double mouseX){
+        facing = Direction.STABLE;
+        if(visualBoundary.getCenterX() < mouseX) isRight = true;
+        else if(visualBoundary.getCenterX() > mouseX) isRight = false;
+    }
+
     @Override
     public double getSpeed() {
         return speed;
@@ -306,5 +333,10 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
 
     public void setBaitProgress(double baitProgress) {
         this.baitProgress = baitProgress;
+    }
+
+    public void setBaitSprite(int baitSprite) {
+        this.baitSprite = baitSprite;
+        baitSpriteCounter=0;
     }
 }

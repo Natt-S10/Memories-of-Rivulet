@@ -2,9 +2,12 @@ package Logic;
 
 import Input.InputUtils;
 import Input.KeyMap;
+import Items.Fish.Fish;
 import Renderer.GameScreen;
 import Renderer.RenderableHolder;
+import Renderer.ResourcesLoader;
 import UIpanel.VisualFX.FishCaughtFX;
+import UIpanel.VisualFX.LoadingFX;
 import UIpanel.fishing.FishingPanel;
 import entity.Character;
 import entity.base.Collidable;
@@ -19,12 +22,15 @@ public class LogicController {
     private final ArrayList<Collidable> collidableEntities;
     private Character mainChar;
     private Map currentMap;
+    private Map nextMap;
+    private int MapLoadingT;
     private FishingPanel fishingPanel;
     private FishCaughtFX fishCaughtFX;
 
 
+
     private GameState gameState; //game status
-    private int frameCount;
+    private int timeCount;
     //TODO: Baiting
 
 
@@ -35,19 +41,19 @@ public class LogicController {
     private static final double trigPenalty = 5;
 
     //TODO: AfterFishing state fields
-    //missing Type Fish
     private boolean isFishCaught;
     private static final int CongratAnimateDur = 120; // 2.5sec x 60fps
+    private Fish caughtfish;
 
 
 
     //private static final Character mainChar;
-    public static LogicController getInstance(){return instance;}
     private LogicController(){
         movableEntities = new ArrayList<>();
         collidableEntities = new ArrayList<>();
-        gameState = GameState.WALK;
 
+        gameState = GameState.WALK;
+        MapLoadingT = 240;
         //for fishing
         qtState = new boolean[]{false, false, false, false};
         fishingPanel = new FishingPanel(GameScreen.screenWidth,GameScreen.screenHeight);
@@ -61,7 +67,7 @@ public class LogicController {
 
 
     }
-
+    public static LogicController getInstance(){return instance;}
 
     public void addMovable(Movable m){movableEntities.add(m);}
     public void addCollidable(Collidable c){collidableEntities.add(c);}
@@ -69,37 +75,77 @@ public class LogicController {
     public void update(){
         fishingPanel.update();
         fishCaughtFX.update();
+        currentMap.update();
+
         switch (gameState){
             case WALK -> walkingState();
             case BAITING -> baitingState();
             case FISHING -> fishingState();
             case AFTERFISHING -> afterFishingState();
+            case LOADING -> loading();
+            case LOADED -> loadedMap();
         }
+    }
+    public void loading(){
+
+            try{
+
+                if(MapLoadingT == 240){
+
+                    RenderableHolder.getInstance().resetElements();
+                    this.currentMap = new Map(ResourcesLoader.Loading_map);
+                    RenderableHolder.getInstance().add(currentMap);
+                    LoadingFX loadingFX = new LoadingFX();
+                    RenderableHolder.getInstance().add(loadingFX);
+
+                }
+
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+            if(MapLoadingT <0){
+                gameState = GameState.LOADED;
+            }
+            MapLoadingT--;
+
+
+    }
+
+    private void loadedMap(){
+        try{
+            setCurrentMap(nextMap);
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        gameState = GameState.WALK;
     }
     private void walkingState(){
         for (Movable eM : movableEntities) {
             eM.move();
             eM.update();
         }
-        currentMap.update();
     }
     public void startBaiting(){
         gameState = GameState.BAITING;
-        frameCount = (int)(300+Math.random()*900);
+        timeCount = (int)(300+Math.random()*900);
         mainChar.setBaitX(InputUtils.mouseX);
         mainChar.setBaitY(InputUtils.mouseY);
         mainChar.setBaitProgress(0.0);
+        mainChar.setBaitSprite(0);
     }
     private void baitingState(){
         if(InputUtils.isLeftClickTriggered()){
             gameState = GameState.WALK;
             return;
         }
-        if(frameCount<0){
+        if(timeCount <0){
             startFishing();
             return;
         }
-        frameCount--;
+        timeCount--;
     }
 
     private void fishingState(){
@@ -143,6 +189,7 @@ public class LogicController {
         this.trigCount =trigCount;
         isFishCaught = false;
         qtState = new boolean[]{false,false,false,false};
+
         nextQTEvent();
     }
     public void startFishing(){
@@ -154,16 +201,20 @@ public class LogicController {
     }
 
     private void afterFishingState(){
-        if(frameCount<0){
+        if(timeCount <0){
             gameState = GameState.WALK;
             return;
         }
-        frameCount--;
+        timeCount--;
     }
     private void finishFishing(boolean success){
-        isFishCaught = success;
-        gameState = GameState.AFTERFISHING;
-        frameCount = CongratAnimateDur;
+        if(success) {
+            timeCount = CongratAnimateDur;
+            caughtfish = new Fish();
+            gameState = GameState.AFTERFISHING;
+        }
+        else gameState = GameState.WALK;
+
     }
 
 
@@ -211,17 +262,33 @@ public class LogicController {
     }
 
     public void setCurrentMap(Map map){
-        if(this.currentMap == null){
-            this.currentMap = map;
-            RenderableHolder.getInstance().add(currentMap);
-            return;
-        }
 
-        //change-map method is asap
+            this.currentMap = map;
+            RenderableHolder.getInstance().resetElements();
+            RenderableHolder.getInstance().add(currentMap);
+            setMainChar(ResourcesLoader.mainChar);
+            RenderableHolder.getInstance().add(ResourcesLoader.mainChar);
+            return;
 
     }
     public Map getCurrentMap() {
         return currentMap;
+    }
+
+    public FishingPanel getFishingPanel() {
+        return fishingPanel;
+    }
+
+    public void setFishingPanel(FishingPanel fishingPanel) {
+        this.fishingPanel = fishingPanel;
+    }
+
+    public FishCaughtFX getFishCaughtFX() {
+        return fishCaughtFX;
+    }
+
+    public void setFishCaughtFX(FishCaughtFX fishCaughtFX) {
+        this.fishCaughtFX = fishCaughtFX;
     }
 
     public GameState getGameState() {
@@ -258,5 +325,25 @@ public class LogicController {
 
     public void setQtState(boolean[] qtState) {
         this.qtState = qtState;
+    }
+
+    public Map getNextMap() {
+        return nextMap;
+    }
+
+    public void setNextMap(Map nextMap) {
+        this.nextMap = nextMap;
+    }
+
+    public int getMapLoadingT() {
+        return MapLoadingT;
+    }
+
+    public void setMapLoadingT(int mapLoadingT) {
+        MapLoadingT = mapLoadingT;
+    }
+
+    public Fish getCaughtfish() {
+        return caughtfish;
     }
 }

@@ -24,6 +24,9 @@ public class Map implements IRenderable {
     private int mapWidth; //pref 32
     private int mapHeight; //pref 18
     private int physicalWidth, physicalHeight;
+    private int spriteCounter;
+    private int spriteNum;
+
     private TileType[][] tileMatrix;
 
     static {
@@ -36,6 +39,8 @@ public class Map implements IRenderable {
         this.tileMatrix = tileMatrix;
         mapHeight = tileMatrix.length;
         mapWidth = tileMatrix[0].length;
+        spriteCounter = 0;
+        spriteNum = 1;
     }
 
     public Map() { //demo constructer
@@ -52,6 +57,8 @@ public class Map implements IRenderable {
         mapWidth = tileMatrix[0].length;
         physicalWidth = mapWidth * tileSize;
         physicalHeight = mapHeight *tileSize;
+        spriteCounter = 0;
+        spriteNum = 1;
     }
     //hee
     public Map(String filePath) throws Exception{
@@ -72,6 +79,8 @@ public class Map implements IRenderable {
             physicalWidth = mapWidth * tileSize;
             physicalHeight = mapHeight *tileSize;
             tileMatrix = new TileType[mapHeight][mapWidth]; //Y-axis then X-axis
+            spriteCounter = 0;
+            spriteNum = 1;
 
             for (int i = 0 ; i < mapHeight; i++ ) {
                 for( int j = 0 ; j < mapWidth; j++) {
@@ -90,8 +99,7 @@ public class Map implements IRenderable {
         for (int i = 0; i < mapHeight; i++) {
             for (int j = 0; j < mapWidth; j++) {
                 switch (tileMatrix[i][j]) {
-//                    case DIRT -> croppedTile = new WritableImage(ResourcesLoader.dirt.getPixelReader(), tileSize, tileSize);
-//                    case WATER -> croppedTile = new WritableImage(ResourcesLoader.water.getPixelReader(), tileSize, tileSize);
+
                     case DIRT -> croppedTile = ResourcesLoader.dirt16;
                     case WATER -> croppedTile = ResourcesLoader.water16;
                 }
@@ -114,10 +122,20 @@ public class Map implements IRenderable {
         for(int j=max(lowJ,0); j< min(hiJ,mapHeight); j++){
             for(int i = max(lowI,0); i<min(hiI,mapWidth); i++){
                 switch (tileMatrix[j][i]) {
-//                    case DIRT -> croppedTile = new WritableImage(ResourcesLoader.dirt.getPixelReader(), tileSize, tileSize);
-//                    case WATER -> croppedTile = new WritableImage(ResourcesLoader.water.getPixelReader(), tileSize, tileSize);
+                    case LOAD -> croppedTile = ResourcesLoader.load;
+                    case GRASS -> croppedTile = ResourcesLoader.grass;
                     case DIRT -> croppedTile = ResourcesLoader.dirt16;
-                    case WATER -> croppedTile = ResourcesLoader.water16;
+                    case WATER -> {
+                        if( spriteNum <=8 ){
+                            croppedTile = ResourcesLoader.water16;
+                        } else if (spriteNum >=9 ){
+                            croppedTile = ResourcesLoader.water16_2;
+                        }
+                    }
+                    case GRASS_WATER_UP -> croppedTile = ResourcesLoader.grass_water_up;
+                    case GRASS_WATER_DOWN -> croppedTile = ResourcesLoader.grass_water_down;
+                    case WOOD ->  croppedTile = ResourcesLoader.wood;
+                    case SAND -> croppedTile = ResourcesLoader.sand;
                 }
                 gc.drawImage(croppedTile, i* tileSize - anchorX, j * tileSize - anchorY); //posx, posy
             }
@@ -126,37 +144,38 @@ public class Map implements IRenderable {
 
 
 
-    public void viewAroundCharacter(GraphicsContext gc){
-        //TODO getCharPos -> Calc i j -> render map within (i,j) to (i2,j2)
-    }
-
 
 
     public boolean isCollidable(int x, int y) { //for charactor logic
         //System.out.println(x+ " " +y);
         int i = y / tileSize;
         int j = x / tileSize;
+
+        if (i>= tileMatrix.length || j >= tileMatrix[i].length) return true;
         return switch (tileMatrix[i][j]) {
-            case DIRT -> false;
-            case WATER -> true;
+            case DIRT, GRASS,WOOD,SAND -> false;
+            case WATER,GRASS_WATER_DOWN,GRASS_WATER_UP -> true;
             default -> true;
         };
     }
     // TODO: Render only visible tiles
     public void update(){
+        if(LogicController.getInstance().getGameState() == GameState.LOADING) return;
+//        System.out.println(LogicController.getInstance().getGameState());
         double anchorX, anchorY;
         anchorX = LogicController.getInstance().getAnchorX();
         anchorY = LogicController.getInstance().getAnchorY();
-        if(InputUtils.mouseOnScreen && InputUtils.isLeftClickTriggered() &&
-                LogicController.getInstance().getMainChar().isReachable(InputUtils.mouseX,InputUtils.mouseY)) {
-            int i = snapToGrid(InputUtils.mouseX + anchorX);
-            int j = snapToGrid(InputUtils.mouseY + anchorY);
-            if (0 <= i && i < mapWidth && 0 <= j && j < mapHeight)
-                //System.out.println(tileMatrix[j][i].toString());
-            if(tileMatrix[j][i] == TileType.WATER) {
-                LogicController.getInstance().startBaiting();
+
+//        System.out.println(spriteNum);
+//        System.out.println(spriteCounter);
+        if(spriteCounter > 16){
+            if(spriteNum == 16) {
+                spriteNum = 1;
             }
+            spriteNum++;
+            spriteCounter = 0;
         }
+        spriteCounter++;
     }
 
     private int snapToGrid(double pos){return (int)(pos/tileSize);}
@@ -197,5 +216,15 @@ public class Map implements IRenderable {
 
     public int getPhysicalHeight() {
         return physicalHeight;
+    }
+
+    public int getTileSize(){
+        return tileSize;
+    }
+
+    public TileType clickedTile(){
+        int i = snapToGrid(InputUtils.mouseX + LogicController.getInstance().getAnchorX());
+        int j = snapToGrid(InputUtils.mouseY + LogicController.getInstance().getAnchorY());
+        return tileMatrix[j][i];
     }
 }
