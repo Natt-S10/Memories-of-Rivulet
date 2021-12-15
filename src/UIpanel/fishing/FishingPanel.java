@@ -56,7 +56,7 @@ public class FishingPanel implements IRenderable {
 
     public void update(){
         timer.update();
-        if(LogicController.getInstance().getGameState() == GameState.FISHING) isVisible = true;
+        if(LogicController.getInstance().getGameState() == GameState.FISHING) setVisible(true);
         else isVisible = false;
     }
 }

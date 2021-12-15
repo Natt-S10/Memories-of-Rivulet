@@ -4,6 +4,7 @@ import Renderer.*;
 import UIcontainer.ButtonList;
 import UIcontainer.MapChanger;
 import UIcontainer.UIButton;
+import UIpanel.VisualFX.LoadingFX;
 import entity.ActuallyBall;
 import entity.Character;
 import entity.Entity;
@@ -25,8 +26,6 @@ import static Renderer.ResourcesLoader.sceneH;
 import static Renderer.ResourcesLoader.sceneW;
 
 public class Main extends Application {
-    public static final int sceneW = 1280;
-    public static final int sceneH = 720;
     public static long lastFrameST = 0;
 
 
@@ -47,7 +46,7 @@ public class Main extends Application {
         Map demoMap = new Map();
         try {
             demoMap = new Map(ResourcesLoader.demo_map);
-            //demoMap = new Map();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,9 +79,10 @@ public class Main extends Application {
                 //System.out.println(InputUtils.isLeftClickDown()+" "+InputUtils.mouseOnScreen);
                 //System.out.println(1000000000.0/(lastFrameST-l)); lastFrameST = l;
                 buttonlists.update();
+
                 //Logic update
                 LogicController.getInstance().update();
-                finalDemoMap.update();
+                //finalDemoMap.update();
                 //render
                 RenderableHolder.getInstance().update();
                 mapCanvas.paintComponent();

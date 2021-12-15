@@ -122,6 +122,7 @@ public class Map implements IRenderable {
         for(int j=max(lowJ,0); j< min(hiJ,mapHeight); j++){
             for(int i = max(lowI,0); i<min(hiI,mapWidth); i++){
                 switch (tileMatrix[j][i]) {
+                    case LOAD -> croppedTile = ResourcesLoader.load;
                     case GRASS -> croppedTile = ResourcesLoader.grass;
                     case DIRT -> croppedTile = ResourcesLoader.dirt16;
                     case WATER -> {
@@ -131,6 +132,10 @@ public class Map implements IRenderable {
                             croppedTile = ResourcesLoader.water16_2;
                         }
                     }
+                    case GRASS_WATER_UP -> croppedTile = ResourcesLoader.grass_water_up;
+                    case GRASS_WATER_DOWN -> croppedTile = ResourcesLoader.grass_water_down;
+                    case WOOD ->  croppedTile = ResourcesLoader.wood;
+                    case SAND -> croppedTile = ResourcesLoader.sand;
                 }
                 gc.drawImage(croppedTile, i* tileSize - anchorX, j * tileSize - anchorY); //posx, posy
             }
@@ -152,8 +157,8 @@ public class Map implements IRenderable {
 
         if (i>= tileMatrix.length || j >= tileMatrix[i].length) return true;
         return switch (tileMatrix[i][j]) {
-            case DIRT, GRASS -> false;
-            case WATER -> true;
+            case DIRT, GRASS,WOOD,SAND -> false;
+            case WATER,GRASS_WATER_DOWN,GRASS_WATER_UP -> true;
             default -> true;
         };
     }
