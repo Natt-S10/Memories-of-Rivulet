@@ -18,7 +18,7 @@ public class PauseButtonList {
         this.root = root;
 
         continuePlay = new MenuButton(ResourcesLoader.button_resume,223,108, GameState.RESUME);
-        option = new MenuButton(ResourcesLoader.button_option,223,108,GameState.OPTION);
+        option = new MenuButton(ResourcesLoader.button_option,223,108,GameState.OPTIONP);
         menu = new MenuButton(ResourcesLoader.button_menu,223,108,GameState.MENU);
         exit = new MenuButton(ResourcesLoader.button_exit,223,108,GameState.EXIT);
 

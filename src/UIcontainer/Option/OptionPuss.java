@@ -6,18 +6,17 @@ import Renderer.ResourcesLoader;
 import UIcontainer.Menu.MenuButton;
 import javafx.scene.layout.StackPane;
 
-public class OptionMenu {
+public class OptionPuss {
 
 
     private final StackPane root;
     private static MenuButton menu;
 
 
-    public OptionMenu(StackPane root){
+    public OptionPuss(StackPane root){
         this.root = root;
 
-
-        menu = new MenuButton(ResourcesLoader.button_menu,223,108, GameState.MENU);
+        menu = new MenuButton(ResourcesLoader.button_menu,223,108, GameState.PAUSE);
 
         menu.setTranslateY(75);
 

@@ -18,7 +18,7 @@ public class MenuButtonList {
             this.root = root;
 
             start = new MenuButton(ResourcesLoader.button_play,223,108, GameState.NEW_GAME);
-            option = new MenuButton(ResourcesLoader.button_option,223,108,GameState.OPTION);
+            option = new MenuButton(ResourcesLoader.button_option,223,108,GameState.OPTIONM);
             load =new MenuButton(ResourcesLoader.button_load,223,108,GameState.LOAD_GAME);
             exit = new MenuButton(ResourcesLoader.button_exit,223,108,GameState.EXIT);
 

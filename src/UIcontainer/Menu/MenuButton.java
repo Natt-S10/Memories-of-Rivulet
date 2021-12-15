@@ -21,10 +21,13 @@ public class MenuButton extends UIButton {
     public void pressButton() {
         this.setOnMousePressed((MouseEvent event)->{
             if(event.getButton() == MouseButton.PRIMARY && isVisible()){
-                if(state == GameState.MENU){ //reset all bas status
+                if(state == GameState.MENU){ //reset all bad status
                     ButtonList.setAllValid();
                 }
+
+
                 LogicController.getInstance().setGameState(state);
+
                 MenuButtonList.setVisible(false);
                 PauseButtonList.setVisible(false);
                 LogicController.getInstance().setSetup(false);

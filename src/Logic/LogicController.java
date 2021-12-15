@@ -9,6 +9,7 @@ import Renderer.ResourcesLoader;
 import UIcontainer.MapChanger.*;
 import UIcontainer.Menu.*;
 import UIcontainer.Option.OptionMenu;
+import UIcontainer.Option.OptionPuss;
 import UIpanel.VisualFX.FishCaughtFX;
 import UIpanel.VisualFX.LoadingFX;
 import UIpanel.fishing.FishingPanel;
@@ -40,6 +41,7 @@ public class LogicController  implements Serializable{
 
     private GameState menuOpuss;
     private boolean isResume;
+    private boolean isMenu;
 
 
 
@@ -92,8 +94,12 @@ public class LogicController  implements Serializable{
 
     public void update(){
         ResourcesLoader.fishCaughtFX.update();
-
-
+        //System.out.println(LogicController.getInstance().getGameState());
+        //System.out.println((LogicController.getInstance().isMenu()));
+        //System.out.println(isMenu);
+       // System.out.println(menuOpuss);
+        //System.out.println((LogicController.getInstance().getMenuOpuss() == GameState.MENU));
+        //System.out.println((LogicController.getInstance().getMenuOpuss() == GameState.MENU) ? GameState.MENU: GameState.PAUSE);
 
         switch (gameState){
             case WALK -> walkingState();
@@ -106,7 +112,8 @@ public class LogicController  implements Serializable{
             case MENU -> mainMenu();
             case NEW_GAME -> newGame();
             case LOAD_GAME -> loadGame(ResourcesLoader.saveData);
-            case OPTION -> option();
+            case OPTIONM -> optionm();
+            case OPTIONP -> optionp();
             case PAUSE -> pauseMenu();
             case EXIT -> exit();
             case SAVE -> save(ResourcesLoader.saveData);
@@ -122,6 +129,7 @@ public class LogicController  implements Serializable{
             MenuButtonList.setVisible(true);
             isSetup = true;
             menuOpuss = GameState.MENU;
+            isMenu = true;
 
         }
     }
@@ -153,10 +161,10 @@ public class LogicController  implements Serializable{
             LoadHoldingScreen();
             PauseButtonList.setVisible(true);
             isSetup = true;
+            isMenu = false;
             menuOpuss = GameState.PAUSE;
             save(ResourcesLoader.saveData);
         }
-
     }
 
     private void LoadHoldingScreen() {
@@ -168,6 +176,7 @@ public class LogicController  implements Serializable{
             e.printStackTrace();
         }
         OptionMenu.setVisible(false);
+        OptionPuss.setVisible(false);
         ButtonList.setVisible(false);
         PauseButtonList.setVisible(false);
     }
@@ -223,7 +232,7 @@ public class LogicController  implements Serializable{
 
     }
 
-    public void option(){
+    public void optionm(){
         if(!isSetup){
             try{
                 RenderableHolder.getInstance().resetElements();
@@ -232,8 +241,28 @@ public class LogicController  implements Serializable{
             }catch (Exception e){
                 e.printStackTrace();
             }
+
             OptionMenu.setVisible(true);
             MenuButtonList.setVisible(false);
+
+            isSetup = true;
+        }
+
+    }
+
+    public void optionp(){
+        if(!isSetup){
+            try{
+                RenderableHolder.getInstance().resetElements();
+                this.currentMap = new Map(ResourcesLoader.Loading_map);
+                RenderableHolder.getInstance().add(currentMap);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            OptionPuss.setVisible(true);
+            MenuButtonList.setVisible(false);
+
             isSetup = true;
         }
 
@@ -283,6 +312,7 @@ public class LogicController  implements Serializable{
         gameState = GameState.WALK;
     }
     private void walkingState(){
+
 
         for (Movable eM : movableEntities) {
             eM.move();
@@ -550,5 +580,13 @@ public class LogicController  implements Serializable{
 
     public Fish getCaughtFish() {
         return caughtFish;
+    }
+
+    public boolean isMenu() {
+        return isMenu;
+    }
+
+    public void setMenu(boolean menu) {
+        isMenu = menu;
     }
 }

@@ -5,6 +5,7 @@ import Renderer.*;
 import UIcontainer.MapChanger.*;
 import UIcontainer.Menu.*;
 import UIcontainer.Option.OptionMenu;
+import UIcontainer.Option.OptionPuss;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -45,6 +46,7 @@ public class Main extends Application {
         MenuButtonList menuButtonList = new MenuButtonList(root);
         PauseButtonList pauseButtonList = new PauseButtonList(root);
         OptionMenu optionMenu = new OptionMenu(root);
+        OptionPuss optionPuss = new OptionPuss(root);
 
         LogicController.getInstance().setMainChar(ResourcesLoader.mainChar);
         LogicController.getInstance().setCurrentMap(demoMap);
@@ -74,6 +76,7 @@ public class Main extends Application {
                 menuButtonList.update();
                 pauseButtonList.update();
                 optionMenu.update();
+                optionPuss.update();
                 //Logic update
                 LogicController.getInstance().update();
                 //finalDemoMap.update();
