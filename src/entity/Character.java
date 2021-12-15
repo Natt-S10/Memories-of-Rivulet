@@ -2,12 +2,10 @@ package entity;
 
 import Input.InputUtils;
 import Items.Fish.FishUtils;
-import Logic.GameState;
 import Logic.LogicController;
 import Renderer.GameScreen;
 import Renderer.IRenderable;
 import Renderer.ResourcesLoader;
-import com.sun.javafx.reflect.FieldUtil;
 import entity.base.Boundary;
 import entity.base.Collidable;
 import entity.base.Direction;
@@ -176,7 +174,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         switch (LogicController.getInstance().getGameState()){
             case WALK -> drawWalkingChar(gc);
             case FISHING, BAITING ->  {drawWalkingChar(gc); animateFishingRod(gc);}
-            case AFTERFISHING -> drawAfterFishing(gc);
+            case FISHRAISING -> drawAfterFishing(gc);
         }
     }
 
@@ -253,7 +251,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
 
     private void drawAfterFishing(GraphicsContext gc){
         gc.drawImage(ResourcesLoader.wShow,visualBoundary.left(),visualBoundary.top(),visualBoundary.getWidth(), visualBoundary.getHeight());
-        gc.drawImage(LogicController.getInstance().getCaughtfish().getImage(),
+        gc.drawImage(LogicController.getInstance().getCaughtFish().getImage(),
                 visualBoundary.getCenterX()- FishUtils.imgW/2,
                 visualBoundary.top()-FishUtils.imgH/2,
                 FishUtils.imgW, FishUtils.imgH);

@@ -41,9 +41,8 @@ public class LogicController {
     private static final double trigPenalty = 5;
 
     //TODO: AfterFishing state fields
-    private boolean isFishCaught;
     private static final int CongratAnimateDur = 120; // 2.5sec x 60fps
-    private Fish caughtfish;
+    private Fish caughtFish;
 
 
 
@@ -61,7 +60,6 @@ public class LogicController {
         trigCount = 0;
 
         //for afterFishing
-        isFishCaught = false;
         fishCaughtFX = new FishCaughtFX();
         RenderableHolder.getInstance().add(fishCaughtFX);
 
@@ -73,7 +71,6 @@ public class LogicController {
     public void addCollidable(Collidable c){collidableEntities.add(c);}
 
     public void update(){
-        fishingPanel.update();
         fishCaughtFX.update();
         currentMap.update();
 
@@ -81,6 +78,7 @@ public class LogicController {
             case WALK -> walkingState();
             case BAITING -> baitingState();
             case FISHING -> fishingState();
+            case FISHRAISING -> fishRaisingState();
             case AFTERFISHING -> afterFishingState();
             case LOADING -> loading();
             case LOADED -> loadedMap();
@@ -187,7 +185,6 @@ public class LogicController {
     public void startFishing(int trigCount){
         setGameState(GameState.FISHING);
         this.trigCount =trigCount;
-        isFishCaught = false;
         qtState = new boolean[]{false,false,false,false};
 
         nextQTEvent();
@@ -201,6 +198,14 @@ public class LogicController {
     }
 
     private void afterFishingState(){
+        if(caughtFish != null){
+            timeCount = CongratAnimateDur;
+            gameState = GameState.FISHRAISING;
+            return;
+        }
+    }
+
+    private void fishRaisingState(){
         if(timeCount <0){
             gameState = GameState.WALK;
             return;
@@ -210,7 +215,16 @@ public class LogicController {
     private void finishFishing(boolean success){
         if(success) {
             timeCount = CongratAnimateDur;
-            caughtfish = new Fish();
+            caughtFish = null;
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                caughtFish = new Fish();
+            });
+            thread.start();
             gameState = GameState.AFTERFISHING;
         }
         else gameState = GameState.WALK;
@@ -343,7 +357,11 @@ public class LogicController {
         MapLoadingT = mapLoadingT;
     }
 
-    public Fish getCaughtfish() {
-        return caughtfish;
+    public boolean isFishCaught(){
+        return (gameState == GameState.AFTERFISHING);
+    }
+
+    public Fish getCaughtFish() {
+        return caughtFish;
     }
 }

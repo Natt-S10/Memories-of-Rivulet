@@ -39,11 +39,11 @@ public class FishCaughtFX implements IRenderable {
     }
 
     public void update(){
-        if(LogicController.getInstance().getGameState() == GameState.AFTERFISHING &&
+        if(LogicController.getInstance().getGameState() == GameState.FISHRAISING &&
             !isVisible){
             randomWink();
         }
-        isVisible = LogicController.getInstance().getGameState() == GameState.AFTERFISHING;
+        isVisible = LogicController.getInstance().getGameState() == GameState.FISHRAISING;
     }
 
     @Override

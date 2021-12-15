@@ -19,6 +19,7 @@ public class ResourcesLoader {
 
     public static Image ballsri;
     public static Image fishing_rodSP;
+    public static Image spin_rodSP;
     public static WritableImage wood;
     public static WritableImage dirt16;
     public static WritableImage water16;
@@ -45,6 +46,7 @@ public class ResourcesLoader {
     public static final Image loadingSP;
     public static final WritableImage[] fireworks;
     public static final WritableImage[] fishingRod;
+    public static final WritableImage[] spin_rod;
     public static final WritableImage[] loadings;
 
     public static  Character mainChar;
@@ -82,9 +84,11 @@ public class ResourcesLoader {
         String loadingPath = "heart.png";
 
         int size = 160;
-        String fireworkPath = "Firework.png";
         int logoW = 328;
         int logoH = 302;
+
+        String fireworkPath = "Firework.png";
+        String spin_rodPath = "spin_rod.png";
 
         String walk1 = "player/Frame_1.png";
         String walk2 = "player/Frame_2.png";
@@ -113,6 +117,9 @@ public class ResourcesLoader {
 
         fishing_rodSP = new Image(ClassLoader.getSystemResource(fishing_rodPath).toString());
         fishingRod = loadFishing_rod();
+
+        spin_rodSP = new Image(ClassLoader.getSystemResource(spin_rodPath).toString());
+        spin_rod = loadSpinRod();
 
         loadingSP = new Image(ClassLoader.getSystemResource(loadingPath).toString());
         loadings = new WritableImage[6];
@@ -189,5 +196,15 @@ public class ResourcesLoader {
             }
         }
         return loading;
+    }
+
+    private static WritableImage[] loadSpinRod(){
+        WritableImage[] frameArray = new WritableImage[15];
+        int size= 256;
+        int counter=0;
+        for(int i=0; i<frameArray.length; i++){
+            frameArray[counter++] = new WritableImage(spin_rodSP.getPixelReader(),size*i,0, size,size);
+        }
+        return frameArray;
     }
 }
