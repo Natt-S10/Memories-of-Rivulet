@@ -414,6 +414,7 @@ public class LogicController  implements Serializable{
                 }
                 caughtFish = new Fish();
                 money+= caughtFish.getFishPrice();
+                fishAchievement[FishUtils.fishIndex(caughtFish.getSpecies())] = true;
             });
             thread.start();
             gameState = GameState.AFTERFISHING;
@@ -597,5 +598,9 @@ public class LogicController  implements Serializable{
 
     public void addMoney(int diff){
         money+=diff;
+    }
+
+    public boolean[] getFishAchievement() {
+        return fishAchievement;
     }
 }
