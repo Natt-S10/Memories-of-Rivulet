@@ -4,7 +4,9 @@ import Items.itemBase.ItemBase;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public class Fish extends ItemBase {
+import java.io.Serializable;
+
+public class Fish extends ItemBase implements Serializable {
     private FishSpecies species;
     private double fishLength;
     private double fishWeight;

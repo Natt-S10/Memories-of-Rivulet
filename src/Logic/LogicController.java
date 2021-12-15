@@ -32,8 +32,7 @@ public class LogicController  implements Serializable{
     private Map currentMap;
     private Map nextMap;
     private int MapLoadingT;
-    private FishingPanel fishingPanel;
-    private FishCaughtFX fishCaughtFX;
+
 
     //MENU SETTING
     private boolean isSetup;
@@ -71,12 +70,12 @@ public class LogicController  implements Serializable{
         MapLoadingT = 240;
         //for fishing
         qtState = new boolean[]{false, false, false, false};
-        fishingPanel = new FishingPanel(GameScreen.screenWidth,GameScreen.screenHeight);
+
         //RenderableHolder.getInstance().add(fishingPanel);
         trigCount = 0;
         warpDist = 350;
         //for afterFishing
-        fishCaughtFX = new FishCaughtFX();
+
         //RenderableHolder.getInstance().add(fishCaughtFX);
 
         isSetup = false;
@@ -92,7 +91,7 @@ public class LogicController  implements Serializable{
     public void addCollidable(Collidable c){collidableEntities.add(c);}
 
     public void update(){
-        fishCaughtFX.update();
+        ResourcesLoader.fishCaughtFX.update();
 
 
 
@@ -119,9 +118,11 @@ public class LogicController  implements Serializable{
     public void mainMenu(){
         if(!isSetup){
             LoadHoldingScreen();
+            ResourcesLoader.saveData = ResourcesLoader.newsaveData;
             MenuButtonList.setVisible(true);
             isSetup = true;
             menuOpuss = GameState.MENU;
+
         }
     }
 
@@ -462,21 +463,6 @@ public class LogicController  implements Serializable{
         return currentMap;
     }
 
-    public FishingPanel getFishingPanel() {
-        return fishingPanel;
-    }
-
-    public void setFishingPanel(FishingPanel fishingPanel) {
-        this.fishingPanel = fishingPanel;
-    }
-
-    public FishCaughtFX getFishCaughtFX() {
-        return fishCaughtFX;
-    }
-
-    public void setFishCaughtFX(FishCaughtFX fishCaughtFX) {
-        this.fishCaughtFX = fishCaughtFX;
-    }
 
     public GameState getGameState() {
         return gameState;

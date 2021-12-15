@@ -4,7 +4,9 @@ import Logic.LogicController;
 import Renderer.ResourcesLoader;
 import javafx.scene.canvas.GraphicsContext;
 
-public class SpinningRod extends BaseObject{
+import java.io.Serializable;
+
+public class SpinningRod extends BaseObject implements Serializable {
     int spriteNum, animationCounter;
 
     public SpinningRod(int anchorX, int anchorY){

@@ -1,6 +1,8 @@
 package Items.Fish;
 
-public enum FishSpecies {
+import java.io.Serializable;
+
+public enum FishSpecies implements Serializable {
     Brown_Trout,
     Catfish,
     Cod,

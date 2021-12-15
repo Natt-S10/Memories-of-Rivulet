@@ -1,6 +1,8 @@
 package Renderer;
 
 import Logic.LogicController;
+import UIpanel.VisualFX.FishCaughtFX;
+import UIpanel.fishing.FishingPanel;
 import entity.Character;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
@@ -56,6 +58,8 @@ public class ResourcesLoader {
     public static final WritableImage[] loadings;
     public static LogicController saveLogic;
     public static LogicController defaultLogic;
+    public static FishingPanel fishingPanel;
+    public static FishCaughtFX fishCaughtFX;
 
     public static  Character mainChar;
 
@@ -68,6 +72,8 @@ public class ResourcesLoader {
 
     static {
 
+        fishingPanel = new FishingPanel(GameScreen.screenWidth,GameScreen.screenHeight);
+        fishCaughtFX = new FishCaughtFX();
 
         saveData = "";
         newsaveData = "gamesave.sav";

@@ -37,10 +37,9 @@ public class RenderableHolder {
 
     public void resetElements(){
         elements.clear();
-        FishingPanel fishingPanel = new FishingPanel(GameScreen.screenWidth,GameScreen.screenHeight);
-        FishCaughtFX fishCaughtFX = new FishCaughtFX();
-        LogicController.getInstance().setFishingPanel(fishingPanel);
-        LogicController.getInstance().setFishCaughtFX(fishCaughtFX);
+        FishingPanel fishingPanel = ResourcesLoader.fishingPanel;
+        FishCaughtFX fishCaughtFX = ResourcesLoader.fishCaughtFX;
+
         RenderableHolder.getInstance().add(fishCaughtFX);
         RenderableHolder.getInstance().add(fishingPanel);
     }

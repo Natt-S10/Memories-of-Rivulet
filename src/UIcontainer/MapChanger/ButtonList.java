@@ -62,12 +62,33 @@ public class ButtonList  {
             logo_river.setAvalaible(false);
             logo_sea.setAvalaible(false);
             logo_waterfall.setAvalaible(false);
+        }
+    }
 
+    public void CheckMap(){
+        switch(LogicController.getInstance().getCurrentMap().getMapName()){
+            case RIVER_MAP -> {
+                logo_river.setBlocked(true);
+                logo_waterfall.setBlocked(false);
+                logo_sea.setBlocked(false);
+            }
+            case BEACH_MAP -> {
+                logo_river.setBlocked(false);
+                logo_waterfall.setBlocked(false);
+                logo_sea.setBlocked(true);
+
+            }
+            case WATERFALL_MAP -> {
+                logo_river.setBlocked(false);
+                logo_waterfall.setBlocked(true);
+                logo_sea.setBlocked(false);
+            }
         }
 
     }
 
     public void update(){
+        CheckMap();
         checkDistace();
         logo_fire.pressButton();
         logo_river.pressButton();
