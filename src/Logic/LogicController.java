@@ -12,12 +12,12 @@ import UIcontainer.Option.OptionFish;
 import UIcontainer.Option.OptionMenu;
 import UIcontainer.Option.OptionPuss;
 import UIcontainer.SideLineStroke;
-import UIpanel.VisualFX.LoadingFX;
-import entity.Character;
-import entity.base.Collidable;
-import entity.base.Movable;
+import InGamePanel.VisualFX.LoadingFX;
+import Entity.Character;
+import Entity.base.Collidable;
+import Entity.base.Movable;
 import javafx.stage.FileChooser;
-import map.Map;
+import Map.GameMap;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -27,8 +27,8 @@ public class LogicController  implements Serializable{
     private final ArrayList<Movable> movableEntities;
     private final ArrayList<Collidable> collidableEntities;
     private Character mainChar;
-    private Map currentMap;
-    private Map nextMap;
+    private GameMap currentGameMap;
+    private GameMap nextGameMap;
     private int money;
     private int MapLoadingT;
 
@@ -97,7 +97,7 @@ public class LogicController  implements Serializable{
 
     public void update(){
         ResourcesLoader.fishCaughtFX.update();
-        currentMap.update();
+        currentGameMap.update();
         //System.out.println(LogicController.getInstance().getGameState());
         //System.out.println((LogicController.getInstance().isMenu()));
         //System.out.println(isMenu);
@@ -143,7 +143,7 @@ public class LogicController  implements Serializable{
         try{
 
 
-            nextMap = new Map(ResourcesLoader.demo_map);
+            nextGameMap = new GameMap(ResourcesLoader.demo_map);
             ResourcesLoader.saveData = ResourcesLoader.newsaveData;
             ResourcesLoader.saveLogic = ResourcesLoader.defaultLogic;
             ResourcesLoader.saveLogic.mainChar = ResourcesLoader.mainChar;
@@ -176,8 +176,8 @@ public class LogicController  implements Serializable{
     private void LoadHoldingScreen() {
         try{
             RenderableHolder.getInstance().resetElements();
-            this.currentMap = new Map(ResourcesLoader.Loading_map);
-            RenderableHolder.getInstance().add(currentMap);
+            this.currentGameMap = new GameMap(ResourcesLoader.Loading_map);
+            RenderableHolder.getInstance().add(currentGameMap);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -228,8 +228,8 @@ public class LogicController  implements Serializable{
                     fishAchievement = ResourcesLoader.saveLogic.getFishAchievement();
                     money = ResourcesLoader.saveLogic.money;
 
-                    nextMap = ResourcesLoader.saveLogic.getNextMap();
-                    System.out.println(nextMap.getMapName());
+                    nextGameMap = ResourcesLoader.saveLogic.getNextMap();
+                    System.out.println(nextGameMap.getMapName());
                     setMainChar(ResourcesLoader.saveLogic.mainChar);
 
                     ResourcesLoader.saveData = selectedFile.toString();
@@ -251,8 +251,8 @@ public class LogicController  implements Serializable{
         if(!isSetup){
             try{
                 RenderableHolder.getInstance().resetElements();
-                this.currentMap = new Map(ResourcesLoader.Loading_map);
-                RenderableHolder.getInstance().add(currentMap);
+                this.currentGameMap = new GameMap(ResourcesLoader.Loading_map);
+                RenderableHolder.getInstance().add(currentGameMap);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -269,8 +269,8 @@ public class LogicController  implements Serializable{
         if(!isSetup){
             try{
                 RenderableHolder.getInstance().resetElements();
-                this.currentMap = new Map(ResourcesLoader.Loading_map);
-                RenderableHolder.getInstance().add(currentMap);
+                this.currentGameMap = new GameMap(ResourcesLoader.Loading_map);
+                RenderableHolder.getInstance().add(currentGameMap);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -305,8 +305,8 @@ public class LogicController  implements Serializable{
                 if(MapLoadingT == 240){
 
                     RenderableHolder.getInstance().resetElements();
-                    this.currentMap = new Map(ResourcesLoader.Loading_map);
-                    RenderableHolder.getInstance().add(currentMap);
+                    this.currentGameMap = new GameMap(ResourcesLoader.Loading_map);
+                    RenderableHolder.getInstance().add(currentGameMap);
                     LoadingFX loadingFX = new LoadingFX();
                     RenderableHolder.getInstance().add(loadingFX);
                     SideLineStroke.setVisible(true);
@@ -323,7 +323,7 @@ public class LogicController  implements Serializable{
 
     private void loadedMap(){
         try{
-            setCurrentMap(nextMap);
+            setCurrentMap(nextGameMap);
             buttonTriggered = false;
             ButtonList.setVisible(true);
             SideLineStroke.setVisible(false);
@@ -499,33 +499,33 @@ public class LogicController  implements Serializable{
     public Double getAnchorX(){
         double anchorX = (mainChar.getPosX() - GameScreen.screenWidth/2);
         if(anchorX <0) anchorX = 0.0;
-        else if(anchorX > currentMap.getPhysicalWidth() - GameScreen.screenWidth) anchorX = currentMap.getPhysicalWidth() - GameScreen.screenWidth;
+        else if(anchorX > currentGameMap.getPhysicalWidth() - GameScreen.screenWidth) anchorX = currentGameMap.getPhysicalWidth() - GameScreen.screenWidth;
         return anchorX;
     }
 
     public Double getAnchorY(){
         double anchorY = (mainChar.getPosY() - GameScreen.screenHeight/2); // true location sys
         if(anchorY <0) anchorY = 0.0;
-        else if(anchorY > currentMap.getPhysicalHeight() - GameScreen.screenHeight) anchorY = currentMap.getPhysicalHeight() - GameScreen.screenHeight;
+        else if(anchorY > currentGameMap.getPhysicalHeight() - GameScreen.screenHeight) anchorY = currentGameMap.getPhysicalHeight() - GameScreen.screenHeight;
         return anchorY;
     }
 
-    public void setCurrentMap(Map map){
+    public void setCurrentMap(GameMap gameMap){
 
-        this.currentMap = map;
+        this.currentGameMap = gameMap;
         RenderableHolder.getInstance().resetElements();
         movableEntities.clear();
 
-        RenderableHolder.getInstance().add(currentMap);
+        RenderableHolder.getInstance().add(currentGameMap);
         setMainChar(ResourcesLoader.mainChar);
         RenderableHolder.getInstance().add(mainChar);
-        if(!isResume) mainChar.setValidPOS(currentMap);
+        if(!isResume) mainChar.setValidPOS(currentGameMap);
 
 
 
     }
-    public Map getCurrentMap() {
-        return currentMap;
+    public GameMap getCurrentMap() {
+        return currentGameMap;
     }
 
 
@@ -565,12 +565,12 @@ public class LogicController  implements Serializable{
         this.qtState = qtState;
     }
 
-    public Map getNextMap() {
-        return nextMap;
+    public GameMap getNextMap() {
+        return nextGameMap;
     }
 
-    public void setNextMap(Map nextMap) {
-        this.nextMap = nextMap;
+    public void setNextMap(GameMap nextGameMap) {
+        this.nextGameMap = nextGameMap;
     }
 
     public int getMapLoadingT() {

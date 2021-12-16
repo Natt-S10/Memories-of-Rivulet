@@ -3,13 +3,11 @@ package UIcontainer.Menu;
 import Logic.GameState;
 import Logic.LogicController;
 import Renderer.AudioAsset;
-import Renderer.GameScreenUtils;
 import UIcontainer.MapChanger.ButtonList;
 import UIcontainer.UIButton;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import map.Map;
 
 public class MenuButton extends UIButton {
     GameState state;

@@ -8,13 +8,12 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import map.Map;
+import Map.GameMap;
 
 import static Renderer.ResourcesLoader.sceneH;
 import static Renderer.ResourcesLoader.sceneW;
 
 public class Main extends Application {
-    public static long lastFrameST = 0;
     public static GameScreen mapCanvas;
 
 
@@ -32,9 +31,9 @@ public class Main extends Application {
 
         mapCanvas.requestFocus();
 
-        Map demoMap = new Map();
+        GameMap demoGameMap = new GameMap();
         try {
-            demoMap = new Map(ResourcesLoader.River_map);
+            demoGameMap = new GameMap(ResourcesLoader.River_map);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,10 +42,10 @@ public class Main extends Application {
 
 
         LogicController.getInstance().setMainChar(ResourcesLoader.mainChar);
-        LogicController.getInstance().setCurrentMap(demoMap);
+        LogicController.getInstance().setCurrentMap(demoGameMap);
         LogicController.getInstance().setGameState(GameState.MENU);
 
-        RenderableHolder.getInstance().add(demoMap);
+        RenderableHolder.getInstance().add(demoGameMap);
         RenderableHolder.getInstance().add(ResourcesLoader.mainChar);
         UIcontainer container = new UIcontainer(root);
 
@@ -60,7 +59,7 @@ public class Main extends Application {
 
         //Map finalDemoMap = demoMap;
 
-        Map finalDemoMap = demoMap;
+        GameMap finalDemoGameMap = demoGameMap;
 
         AnimationTimer animation = new AnimationTimer() {
             @Override

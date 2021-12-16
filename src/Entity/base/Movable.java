@@ -1,4 +1,4 @@
-package entity.base;
+package Entity.base;
 
 import Input.InputUtils;
 import Input.KeyMap;

@@ -1,4 +1,4 @@
-package UIpanel.fishing;
+package InGamePanel.Fishing;
 
 import javafx.scene.canvas.GraphicsContext;
 

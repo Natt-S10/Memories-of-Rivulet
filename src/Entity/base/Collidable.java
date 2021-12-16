@@ -1,4 +1,4 @@
-package entity.base;
+package Entity.base;
 
 public interface Collidable {
     public Boundary getCollisionBoundary();

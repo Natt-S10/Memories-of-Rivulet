@@ -1,8 +1,7 @@
-package entity;
+package Entity;
 
-import entity.base.Boundary;
+import Entity.base.Boundary;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
 import java.io.Serializable;
 

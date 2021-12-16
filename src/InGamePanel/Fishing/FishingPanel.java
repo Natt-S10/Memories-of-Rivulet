@@ -1,13 +1,11 @@
-package UIpanel.fishing;
+package InGamePanel.Fishing;
 
-import Logic.GameState;
 import Logic.LogicController;
 import Renderer.IRenderable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.io.Serializable;
-import java.lang.invoke.LambdaConversionException;
 
 public class FishingPanel implements IRenderable, Serializable {
     //for Panel Background

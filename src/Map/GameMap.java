@@ -1,15 +1,12 @@
-package map;
+package Map;
 
 import Input.InputUtils;
-import Logic.GameState;
 import Logic.LogicController;
-import Renderer.AudioAsset;
 import Renderer.GameScreen;
 import Renderer.IRenderable;
 import Renderer.ResourcesLoader;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
-import javafx.scene.media.MediaPlayer;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -19,7 +16,7 @@ import java.util.ArrayList;
 
 import static java.lang.Math.*;
 
-public class Map implements IRenderable, java.io.Serializable {
+public class GameMap implements IRenderable, java.io.Serializable {
     public static final int tileSize;
     //map info
     private MapName mapName;
@@ -37,7 +34,7 @@ public class Map implements IRenderable, java.io.Serializable {
 
     private WritableImage croppedTile;
 
-    public Map(TileType[][] tileMatrix) {
+    public GameMap(TileType[][] tileMatrix) {
         this.tileMatrix = tileMatrix;
         mapHeight = tileMatrix.length;
         mapWidth = tileMatrix[0].length;
@@ -45,7 +42,7 @@ public class Map implements IRenderable, java.io.Serializable {
         spriteNum = 1;
     }
 
-    public Map() { //demo constructer
+    public GameMap() { //demo constructer
         this.tileMatrix = new TileType[][]
                 {{TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT},
                         {TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT, TileType.DIRT},
@@ -63,7 +60,7 @@ public class Map implements IRenderable, java.io.Serializable {
         spriteNum = 1;
     }
     //hee
-    public Map(String filePath) throws Exception{
+    public GameMap(String filePath) throws Exception{
 
         try{
             String row;

@@ -7,7 +7,7 @@ import UIcontainer.UIButton;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import map.Map;
+import Map.GameMap;
 
 public class MapChanger extends UIButton {
     private Image image;
@@ -31,7 +31,7 @@ public class MapChanger extends UIButton {
                     AudioAsset.click.play(LogicController.getSFXVol());
                     LogicController.getInstance().setMapLoadingT(240);
                     LogicController.getInstance().setGameState(GameState.LOADING);
-                    LogicController.getInstance().setNextMap(new Map(map));
+                    LogicController.getInstance().setNextMap(new GameMap(map));
                     LogicController.getInstance().setButtonTriggered(true);
                 } catch (Exception e) {
                     e.printStackTrace();

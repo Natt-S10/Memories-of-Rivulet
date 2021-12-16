@@ -1,11 +1,11 @@
-package map;
+package Map;
 
 import Renderer.GameScreen;
 
 public enum MapName {
     RIVER_MAP, BEACH_MAP, WATERFALL_MAP, LOADING_MAP, DEMO_MAP, DEMO_MAP1;
 
-    public static int getValidX(Map m){
+    public static int getValidX(GameMap m){
         switch (m.getMapName()){
             case DEMO_MAP,DEMO_MAP1,BEACH_MAP -> {
                 return 12;
@@ -19,7 +19,7 @@ public enum MapName {
         return GameScreen.screenWidth/2;
 
     }
-    public static int getValidY(Map m){
+    public static int getValidY(GameMap m){
         switch (m.getMapName()){
             case DEMO_MAP,DEMO_MAP1,BEACH_MAP -> {
                 return 12;

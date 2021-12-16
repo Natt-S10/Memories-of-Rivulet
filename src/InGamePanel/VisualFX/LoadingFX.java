@@ -1,4 +1,4 @@
-package UIpanel.VisualFX;
+package InGamePanel.VisualFX;
 
 import Renderer.GameScreen;
 import Renderer.IRenderable;

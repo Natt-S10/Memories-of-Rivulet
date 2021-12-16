@@ -1,4 +1,4 @@
-package UIpanel.fishing;
+package InGamePanel.Fishing;
 
 import Logic.LogicController;
 import javafx.scene.canvas.GraphicsContext;
@@ -7,7 +7,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import java.io.Serializable;
-import java.lang.invoke.LambdaConversionException;
 
 public class QuickTimeSign extends BaseObject implements Serializable {
    private final String[] buttonSign = {"W","A","S","D"};

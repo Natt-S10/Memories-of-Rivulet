@@ -1,4 +1,4 @@
-package entity.base;
+package Entity.base;
 
 public class Boundary implements  java.io.Serializable{
     private int posX, posY, width, height;

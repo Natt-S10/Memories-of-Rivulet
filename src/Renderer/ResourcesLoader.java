@@ -1,19 +1,12 @@
 package Renderer;
 
 import Logic.LogicController;
-import UIpanel.MoneyStatus.MoneyBar;
-import UIpanel.VisualFX.FishCaughtFX;
-import UIpanel.fishing.FishingPanel;
-import entity.Character;
+import InGamePanel.MoneyStatus.MoneyBar;
+import InGamePanel.VisualFX.FishCaughtFX;
+import InGamePanel.Fishing.FishingPanel;
+import Entity.Character;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.MappedByteBuffer;
 
 public class ResourcesLoader {
     public static final String demo_map;

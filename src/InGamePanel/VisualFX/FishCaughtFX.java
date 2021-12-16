@@ -1,4 +1,4 @@
-package UIpanel.VisualFX;
+package InGamePanel.VisualFX;
 
 import Logic.GameState;
 import Logic.LogicController;

@@ -1,10 +1,9 @@
 package Renderer;
 
 import Logic.LogicController;
-import UIpanel.MoneyStatus.MoneyBar;
-import UIpanel.VisualFX.FishCaughtFX;
-import UIpanel.fishing.FishingPanel;
-import map.Map;
+import InGamePanel.MoneyStatus.MoneyBar;
+import InGamePanel.VisualFX.FishCaughtFX;
+import InGamePanel.Fishing.FishingPanel;
 
 import java.util.ArrayList;
 import java.util.Comparator;

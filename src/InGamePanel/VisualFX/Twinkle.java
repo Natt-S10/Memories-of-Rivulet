@@ -1,6 +1,5 @@
-package UIpanel.VisualFX;
+package InGamePanel.VisualFX;
 
-import Renderer.GameScreen;
 import Renderer.ResourcesLoader;
 import javafx.scene.canvas.GraphicsContext;
 

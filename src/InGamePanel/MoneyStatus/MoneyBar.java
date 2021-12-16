@@ -1,4 +1,4 @@
-package UIpanel.MoneyStatus;
+package InGamePanel.MoneyStatus;
 
 import Logic.LogicController;
 import Renderer.IRenderable;
@@ -9,8 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-
-import java.util.Collection;
 
 public class MoneyBar implements IRenderable {
     private int posX, posY, height, width, textShiftX, textShiftY;

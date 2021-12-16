@@ -1,14 +1,11 @@
 package UIcontainer.AudioController;
 
-import Logic.GameState;
 import Logic.LogicController;
 import Renderer.AudioAsset;
-import UIcontainer.MapChanger.ButtonList;
 import UIcontainer.UIButton;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import map.Map;
 
 public class VolumeButton extends UIButton {
     private boolean inRange;

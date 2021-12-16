@@ -1,4 +1,4 @@
-package entity;
+package Entity;
 
 import Input.InputUtils;
 import Items.Fish.FishUtils;
@@ -7,21 +7,19 @@ import Renderer.AudioAsset;
 import Renderer.GameScreen;
 import Renderer.IRenderable;
 import Renderer.ResourcesLoader;
-import entity.base.Boundary;
-import entity.base.Collidable;
-import entity.base.Direction;
-import entity.base.Movable;
-import javafx.geometry.VPos;
+import Entity.base.Boundary;
+import Entity.base.Collidable;
+import Entity.base.Direction;
+import Entity.base.Movable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import map.Map;
-import map.MapName;
-import map.TileType;
+import Map.GameMap;
+import Map.MapName;
+import Map.TileType;
 
 public class Character extends Entity implements IRenderable, Movable, Collidable, java.io.Serializable {
     private static final long serialVersionUID = 1113799434508676095L;
@@ -36,7 +34,6 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     private int spriteNum;
     public final int screenX;
     public final int screenY;
-    public Map playerCurMap;
 
 
 
@@ -371,9 +368,9 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         return (Math.sqrt(Math.pow(deltaX,2)+Math.pow(deltaY,2)) < LogicController.getInstance().getWarpDist()/LogicController.getInstance().getCurrentMap().getTileSize());
     }
 
-    public void setValidPOS(Map map){
-        setPosX(MapName.getValidX(map)*map.getTileSize());
-        setPosY(MapName.getValidY(map)*map.getTileSize());
+    public void setValidPOS(GameMap gameMap){
+        setPosX(MapName.getValidX(gameMap)* gameMap.getTileSize());
+        setPosY(MapName.getValidY(gameMap)* gameMap.getTileSize());
 
     }
 
