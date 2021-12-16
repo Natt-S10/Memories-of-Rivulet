@@ -32,7 +32,7 @@ public class RenderableHolder {
     public void add(IRenderable entity) {
         elements.add(entity);
         elements.sort(layerComparator);
-        System.out.println(elements);
+       // System.out.println(elements);
     }
 
     public void resetElements(){

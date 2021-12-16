@@ -7,7 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import java.io.Serializable;
 
 public class SpinningRod extends BaseObject implements Serializable {
-    int spriteNum, animationCounter;
+    private int spriteNum, animationCounter;
 
     public SpinningRod(int anchorX, int anchorY){
         spriteNum = animationCounter =0;

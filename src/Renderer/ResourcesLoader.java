@@ -186,8 +186,8 @@ public class ResourcesLoader {
             wood = new WritableImage(ResourcesLoader.rpg.getPixelReader(),35 * (size+10),17 * (size+10), size, size);
             sand = new WritableImage(ResourcesLoader.rpg.getPixelReader(),8 * (size+10),0, size, size);
             grass_water_up = new WritableImage(ResourcesLoader.rpg.getPixelReader(),3*(size+10),0, size, size);
-            grass_water_down = new WritableImage(ResourcesLoader.rpg.getPixelReader(),3*(size+10),2*(size+15), size, size);
-            load = new WritableImage(ResourcesLoader.rpg.getPixelReader(),7*(size+10),27*(size+10), size, size);
+            grass_water_down = new WritableImage(ResourcesLoader.rpg.getPixelReader(),3*(size+10),2*(size+10), size, size);
+            load = new WritableImage(ResourcesLoader.rpg.getPixelReader(),18*(size+10),15*(size+10), size, size);
             stone = new WritableImage(ResourcesLoader.rpg.getPixelReader(),7*(size+10),1*(size+10), size, size);
             spawn = new WritableImage(ResourcesLoader.rpg.getPixelReader(),3*(size+10),7*(size+10), size, size);
 

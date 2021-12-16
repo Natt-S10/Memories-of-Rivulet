@@ -22,7 +22,8 @@ public class GameMap implements IRenderable, java.io.Serializable {
     private MapName mapName;
     private int mapWidth; //pref 32
     private int mapHeight; //pref 18
-    private int physicalWidth, physicalHeight;
+    private int physicalWidth;
+    private int physicalHeight;
     private int spriteCounter;
     private int spriteNum;
 
@@ -32,7 +33,6 @@ public class GameMap implements IRenderable, java.io.Serializable {
         tileSize = 80; // kuay
     }
 
-    private WritableImage croppedTile;
 
     public GameMap(TileType[][] tileMatrix) {
         this.tileMatrix = tileMatrix;
@@ -144,7 +144,7 @@ public class GameMap implements IRenderable, java.io.Serializable {
                     case WOOD ->  croppedTile = ResourcesLoader.wood;
                     case SAND -> croppedTile = ResourcesLoader.sand;
                 }
-                gc.drawImage(croppedTile, i* tileSize - anchorX, j * tileSize - anchorY); //posx, posy
+                gc.drawImage(croppedTile, i* tileSize - anchorX, j * tileSize - anchorY,tileSize,tileSize); //posx, posy
             }
         }
     }

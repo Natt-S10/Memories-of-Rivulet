@@ -59,8 +59,6 @@ public class Main extends Application {
 
         //Map finalDemoMap = demoMap;
 
-        GameMap finalDemoGameMap = demoGameMap;
-
         AnimationTimer animation = new AnimationTimer() {
             @Override
             public void handle(long l) {
