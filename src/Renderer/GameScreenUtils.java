@@ -38,6 +38,8 @@ public class GameScreenUtils {
                 InputUtils.keyPressed(KeyMap.SPACE);
             }
 
+
+
         });
 
         gameScreen.setOnKeyReleased((KeyEvent event) -> {

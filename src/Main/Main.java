@@ -1,12 +1,9 @@
+package Main;
+
 import Input.InputUtils;
 import Logic.GameState;
 import Logic.LogicController;
 import Renderer.*;
-import UIcontainer.ListFish.ListFish;
-import UIcontainer.MapChanger.*;
-import UIcontainer.Menu.*;
-import UIcontainer.Option.OptionMenu;
-import UIcontainer.Option.OptionPuss;
 import UIcontainer.UIcontainer;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -20,6 +17,7 @@ import static Renderer.ResourcesLoader.sceneW;
 
 public class Main extends Application {
     public static long lastFrameST = 0;
+    public static GameScreen mapCanvas;
 
 
     public static void main(String[] args) {
@@ -31,7 +29,7 @@ public class Main extends Application {
         StackPane root = new StackPane();
         Scene gameScene = new Scene(root, sceneW, sceneH);
 
-        GameScreen mapCanvas = new GameScreen(sceneW, sceneH);
+        mapCanvas = new GameScreen(sceneW, sceneH);
         root.getChildren().add(mapCanvas);
 
         mapCanvas.requestFocus();
@@ -53,6 +51,7 @@ public class Main extends Application {
         RenderableHolder.getInstance().add(demoMap);
         RenderableHolder.getInstance().add(ResourcesLoader.mainChar);
         UIcontainer container = new UIcontainer(root);
+
 
         stage.setTitle("Memories of Rivulet");
         stage.setResizable(false);

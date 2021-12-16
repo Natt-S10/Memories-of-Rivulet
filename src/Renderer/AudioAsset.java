@@ -42,6 +42,18 @@ public class AudioAsset {
         ropeTension.setVolume(musicVolume);
     }
 
+    public static void setFXVolume(double FXVolume){
+        baitSwing.setVolume(FXVolume);
+        baitRetrieve.setVolume(FXVolume);
+        congrats.setVolume(FXVolume);
+        wrongKey.setVolume(FXVolume);
+        correctKey.setVolume(FXVolume);
+        fishCaught.setVolume(FXVolume);
+        splash.setVolume(FXVolume);
+        ping.setVolume(FXVolume);
+        footsteps.setVolume(FXVolume);
+    }
+
     public static void playBGM(boolean play){
         //System.out.println(BGM.getStatus());
         playMusic(BGM,play);

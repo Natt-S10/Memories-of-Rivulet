@@ -30,9 +30,7 @@ public class ListFish extends GridPane {
             j = i%8;
             this.add(listF[i],j,k);
             if(j == 7) k++;
-//            root.getChildren().add(listF[i]);
-//            listF[i].setTranslateY(k+50);
-//            listF[i].setTranslateX(j+40);
+
         }
 
         this.setVgap(20);

@@ -19,9 +19,9 @@ public class InputUtils {
     public static void keyPressed(int keyNumber){
         keyPressed[keyNumber] = true;
         keyTriggered[keyNumber] = true;
-//        System.out.print("PRESSED : ");
-//        for(boolean e : keyPressed) System.out.print(e + " ");
-//        System.out.println();
+        System.out.print("PRESSED : ");
+        for(boolean e : keyPressed) System.out.print(e + " ");
+        System.out.println();
     }
     public static void keyReleased(int keyNumber){
         keyPressed[keyNumber] = false;

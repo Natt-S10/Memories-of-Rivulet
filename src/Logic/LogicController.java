@@ -4,10 +4,9 @@ import Input.InputUtils;
 import Input.KeyMap;
 import Items.Fish.Fish;
 import Items.Fish.FishUtils;
-import Renderer.AudioAsset;
-import Renderer.GameScreen;
-import Renderer.RenderableHolder;
-import Renderer.ResourcesLoader;
+import Main.Main;
+import Renderer.*;
+import UIcontainer.AudioController.VolumeControl;
 import UIcontainer.ListFish.ListFish;
 import UIcontainer.MapChanger.*;
 import UIcontainer.Menu.*;
@@ -36,6 +35,8 @@ public class LogicController  implements Serializable{
     private Map nextMap;
     private int money;
     private int MapLoadingT;
+
+
 
 
     //MENU SETTING
@@ -326,7 +327,6 @@ public class LogicController  implements Serializable{
 
     private void loadedMap(){
         try{
-
             setCurrentMap(nextMap);
             buttonTriggered = false;
             ButtonList.setVisible(true);
@@ -336,6 +336,7 @@ public class LogicController  implements Serializable{
             e.printStackTrace();
         }
         isResume = false;
+
 
         gameState = GameState.WALK;
     }
@@ -648,6 +649,13 @@ public class LogicController  implements Serializable{
         if(0<=musicVolume && musicVolume <=1){
             this.musicVolume = musicVolume;
             AudioAsset.setMusicVolume(musicVolume);
+        }
+    }
+
+    public void setFXVolume(double musicVolume){
+        if(0<=musicVolume && musicVolume <=1){
+            this.sfxVolume = musicVolume;
+            //AudioAsset.setFXVolume(musicVolume);
         }
     }
 

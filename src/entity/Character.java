@@ -202,8 +202,9 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     @Override
     public boolean isVisible() {
         switch (LogicController.getInstance().getGameState()){
-            case LOADING -> {return false;}
+            case LOADING,PAUSE,OPTIONM,OPTIONP,MENU -> {return false;}
             case WALK ,AFTERFISHING, BAITING , FISHING, LOADED-> {return true;}
+
         }
         return true;
     }

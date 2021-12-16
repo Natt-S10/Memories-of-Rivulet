@@ -2,6 +2,8 @@ package UIcontainer.Menu;
 
 import Logic.GameState;
 import Logic.LogicController;
+import Main.Main;
+import Renderer.GameScreenUtils;
 import UIcontainer.MapChanger.ButtonList;
 import UIcontainer.UIButton;
 import javafx.scene.image.Image;
@@ -24,8 +26,7 @@ public class MenuButton extends UIButton {
                 if(state == GameState.MENU){ //reset all bad status
                     ButtonList.setAllValid();
                 }
-
-
+                //GameScreenUtils.addListener(Main.mapCanvas);
                 LogicController.getInstance().setGameState(state);
 
                 MenuButtonList.setVisible(false);
