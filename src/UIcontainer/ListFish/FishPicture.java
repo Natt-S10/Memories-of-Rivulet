@@ -15,14 +15,13 @@ public class FishPicture extends VBox {
     private Image image;
     private ImageView fish;
     private boolean isFound;
-    private final int sizex = 100;
-    private final int sizey = 80;
+    private final int sizex = 120;
+    private final int sizey = 90;
 
     public FishPicture(String name, Image image, boolean isFound){
         this.image = image;
         this.fish = new ImageView();
-        if(isFound) this.fish.setImage(image);
-        else this.fish.setImage(ResourcesLoader.block);
+        setFound(isFound);
         fish.setFitWidth(sizex);
         fish.setFitHeight(sizey);
         Text below = new Text(name);
@@ -31,7 +30,7 @@ public class FishPicture extends VBox {
         this.setAlignment(Pos.CENTER);
         this.setPrefHeight(sizey);
         this.setPrefWidth(sizex);
-        this.setPadding(new Insets(5,5,5,5));
+        //this.setPadding(new Insets(5,5,5,5));
         this.getChildren().addAll(fish,below);
 
         this.setVisible(true);
@@ -41,8 +40,10 @@ public class FishPicture extends VBox {
 
     public void setFound(boolean t){
         isFound = t;
-        if(isFound) this.fish.setImage(image);
+        if(t)
+        this.fish.setImage(image);
         else this.fish.setImage(ResourcesLoader.block);
+
     }
 
 

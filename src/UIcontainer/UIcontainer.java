@@ -36,6 +36,7 @@ public class UIcontainer {
         optionMenu.update();
         optionPuss.update();
         optionFish.update();
+        listFish.update();
     }
 
 }

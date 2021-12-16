@@ -21,7 +21,7 @@ public class OptionFish {
 
         menu = new MenuButton(ResourcesLoader.button_menu,223,108, GameState.PAUSE);
 
-        menu.setTranslateY(150);
+        menu.setTranslateY(250);
 
 
         root.getChildren().addAll(menu);
