@@ -220,6 +220,9 @@ public class LogicController  implements Serializable{
 
                     ResourcesLoader.saveLogic = (LogicController) ois.readObject();
 
+                    fishAchievement = ResourcesLoader.saveLogic.getFishAchievement();
+                    money = ResourcesLoader.saveLogic.money;
+
                     nextMap = ResourcesLoader.saveLogic.getNextMap();
                     System.out.println(nextMap.getMapName());
                     setMainChar(ResourcesLoader.saveLogic.mainChar);
