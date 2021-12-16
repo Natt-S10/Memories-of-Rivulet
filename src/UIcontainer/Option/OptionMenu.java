@@ -23,7 +23,6 @@ public class OptionMenu {
         v = new VolumeControl();
         menu.setTranslateY(180);
         v.setTranslateY(-75);
-        //v.setTranslateX(0);
 
 
         root.getChildren().addAll(v,menu);
@@ -42,7 +41,6 @@ public class OptionMenu {
     public void update(){
         menu.pressButton();
         v.update();
-
     }
 
 

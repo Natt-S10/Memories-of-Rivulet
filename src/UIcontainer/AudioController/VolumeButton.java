@@ -27,30 +27,31 @@ public class VolumeButton extends UIButton {
             if(event.getButton() == MouseButton.PRIMARY  && inRange){
                 if(isRight){
                     if(isMusic){
-                        LogicController.getInstance().setMusicVolume(LogicController.getMusicVol()+0.10);
+                        LogicController.getInstance().setMusicVolume(LogicController.getMusicVol()+0.1);
                     } else{
-                        LogicController.getInstance().setFXVolume(LogicController.getSFXVol()+0.10);
+                        LogicController.getInstance().setFXVolume(LogicController.getSFXVol()+0.1);
 
                     }
 
                 } else {
                     if(isMusic){
-                        LogicController.getInstance().setMusicVolume(LogicController.getMusicVol()-0.10);
+                        LogicController.getInstance().setMusicVolume(LogicController.getMusicVol()-0.1);
                     } else{
-                        LogicController.getInstance().setFXVolume(LogicController.getSFXVol()-0.10);
+                        LogicController.getInstance().setFXVolume(LogicController.getSFXVol()-0.1);
 
                     }
 
                 }
 
-                if(LogicController.getSFXVol() <0||LogicController.getSFXVol()>1 ||
-                        LogicController.getMusicVol() <0|| LogicController.getMusicVol() >1){
+                if(LogicController.getSFXVol() <=0||LogicController.getSFXVol()>=1 ||
+                        LogicController.getMusicVol() <=0|| LogicController.getMusicVol() >=1){
                     inRange = false;
                 }
 
-                System.out.println("HEE");
+                //System.out.println(inRange);
             }
         });
+        //System.out.println(inRange);
 
         block();
 

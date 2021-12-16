@@ -29,12 +29,12 @@ public class VolumeControl extends VBox {
 //        music = new Sliders(true);
 //        fx = new Sliders(false);
 
-        musicr = new VolumeButton(ResourcesLoader.block,223,108,false,true,true);
-        musicl = new VolumeButton(ResourcesLoader.block,223,108,false,false,true);
-        fxr = new VolumeButton(ResourcesLoader.block,223,108,false,true,false);
-        fxl = new VolumeButton(ResourcesLoader.block,223,108,false,false,false);
-        mvol = new Text(Integer.toString((int)(LogicController.getMusicVol()*100)));
-        fvol = new Text(Integer.toString((int)(LogicController.getSFXVol()*100)));
+        musicr = new VolumeButton(ResourcesLoader.rarrow,223,108,false,true,true);
+        musicl = new VolumeButton(ResourcesLoader.larrow,223,108,false,false,true);
+        fxr = new VolumeButton(ResourcesLoader.rarrow,223,108,false,true,false);
+        fxl = new VolumeButton(ResourcesLoader.larrow,223,108,false,false,false);
+        mvol = new Text(Integer.toString((int)Math.round(LogicController.getMusicVol()*10.0)));
+        fvol = new Text(Integer.toString((int)Math.round(LogicController.getSFXVol()*10.0)));
 
 
         mvol.setFont(Font.font("Century Gothic", FontWeight.LIGHT, 35));
@@ -85,14 +85,18 @@ public class VolumeControl extends VBox {
 
     public void update(){
 
-        mvol.setText(Integer.toString((int)(LogicController.getMusicVol()*10)));
-        fvol.setText(Integer.toString((int)(LogicController.getSFXVol()*10)));
+        mvol.setText(Integer.toString((int)Math.round(LogicController.getMusicVol()*10.0)));
+        fvol.setText(Integer.toString((int)Math.round(LogicController.getSFXVol()*10.0)));
 
         musicr.pressButton();
         musicl.pressButton();
         fxl.pressButton();
         fxr.pressButton();
     }
+
+
+
+
 
 
 

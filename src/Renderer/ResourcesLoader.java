@@ -53,6 +53,8 @@ public class ResourcesLoader {
     public static Image button_fish;
     public static Image block;
     public static Image moneyBarImg;
+    public static Image larrow;
+    public static Image rarrow;
     public static final Image w1,w2,w3,w4,w5,w6,w7,w8, wShow;
 
     public static final Image fireworkSP;
@@ -107,10 +109,13 @@ public class ResourcesLoader {
         String logoPath = "logo/logo.png";
         String loadingPath = "heart.png";
         String moneyBarPath = "moneyBar.png";
+        String r_arrow = "rarrow.png";
+        String l_arrow = "larrow.png";
 
         int size = 160;
         int logoW = 328;
         int logoH = 302;
+
 
         String fireworkPath = "Firework.png";
         String spin_rodPath = "spin_rod.png";
@@ -133,7 +138,8 @@ public class ResourcesLoader {
         String bmenu = "button/menu.png";
         String bfish = "button/fish.png";
 
-
+        rarrow = new Image((ClassLoader.getSystemResource(r_arrow).toString()));
+        larrow = new Image((ClassLoader.getSystemResource(l_arrow).toString()));
 
         w1 = new Image((ClassLoader.getSystemResource(walk1).toString()));
         w2 = new Image((ClassLoader.getSystemResource(walk2).toString()));
