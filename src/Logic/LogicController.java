@@ -306,6 +306,7 @@ public class LogicController  implements Serializable{
                     RenderableHolder.getInstance().add(currentMap);
                     LoadingFX loadingFX = new LoadingFX();
                     RenderableHolder.getInstance().add(loadingFX);
+                    SideLineStroke.setVisible(true);
 
                 }
             } catch (Exception e){
