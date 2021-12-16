@@ -57,6 +57,7 @@ public class ResourcesLoader {
 
     public static final Image fireworkSP;
     public static final Image loadingSP;
+    public static final Image logo;
     public static final WritableImage[] fireworks;
     public static final WritableImage[] fishingRod;
     public static final WritableImage[] spin_rod;
@@ -83,7 +84,7 @@ public class ResourcesLoader {
         saveData = "";
         newsaveData = "gamesave.sav";
 
-        String blockf = "block.jpg";
+        String blockf = "block.png";
         demo_map = "res/demo_Map.csv";
         River_map = "res/River_Map.csv";
         Beach_map = "res/Beach_Map.csv";
@@ -103,6 +104,7 @@ public class ResourcesLoader {
         String logoSBPath = "logo/logo_sea_BLOCK.png";
         String logoWBPath = "logo/logo_waterfall_BLOCK.png";
         String logoFBPath = "logo/logo_fire_BLOCK.png";
+        String logoPath = "logo/logo.png";
         String loadingPath = "heart.png";
         String moneyBarPath = "moneyBar.png";
 
@@ -143,7 +145,7 @@ public class ResourcesLoader {
         w8 = new Image((ClassLoader.getSystemResource(walk8).toString()));
         wShow = new Image((ClassLoader.getSystemResource(showFish).toString()));
 
-
+        logo = new Image((ClassLoader.getSystemResource(logoPath).toString()));
         button_play = new Image((ClassLoader.getSystemResource(bplay).toString()));
         button_load = new Image((ClassLoader.getSystemResource(bload).toString()));
         button_option = new Image((ClassLoader.getSystemResource(boption).toString()));

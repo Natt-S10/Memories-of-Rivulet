@@ -13,6 +13,7 @@ import UIcontainer.Menu.*;
 import UIcontainer.Option.OptionFish;
 import UIcontainer.Option.OptionMenu;
 import UIcontainer.Option.OptionPuss;
+import UIcontainer.SideLineStroke;
 import UIcontainer.UIcontainer;
 import UIpanel.VisualFX.FishCaughtFX;
 import UIpanel.VisualFX.LoadingFX;
@@ -163,6 +164,7 @@ public class LogicController  implements Serializable{
         if(!isSetup){
             LoadHoldingScreen();
             PauseButtonList.setVisible(true);
+            SideLineStroke.setVisible(true);
             isSetup = true;
             isMenu = false;
             menuOpuss = GameState.PAUSE;
@@ -281,6 +283,7 @@ public class LogicController  implements Serializable{
     public void listFish(){
         ListFish.setOn(true);
         OptionFish.setVisible(true);
+        SideLineStroke.setVisible(false);
 
 
     }
@@ -320,6 +323,7 @@ public class LogicController  implements Serializable{
             setCurrentMap(nextMap);
             buttonTriggered = false;
             ButtonList.setVisible(true);
+            SideLineStroke.setVisible(false);
 
         } catch (Exception e){
             e.printStackTrace();

@@ -4,6 +4,8 @@ import Logic.GameState;
 import Renderer.ResourcesLoader;
 import UIcontainer.MapChanger.MapChanger;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class PauseButtonList {
 
@@ -15,6 +17,7 @@ public class PauseButtonList {
     private static MenuButton exit;
     private static MenuButton fish;
 
+
     public PauseButtonList(StackPane root){
         this.root = root;
 
@@ -23,6 +26,7 @@ public class PauseButtonList {
         menu = new MenuButton(ResourcesLoader.button_menu,223,108,GameState.MENU);
         exit = new MenuButton(ResourcesLoader.button_exit,223,108,GameState.EXIT);
         fish = new MenuButton((ResourcesLoader.button_fish),223,108,GameState.LISTOFISH);
+
 
         root.getChildren().addAll(continuePlay,option,menu,exit,fish);
         continuePlay.setTranslateY(-100);
@@ -59,6 +63,7 @@ public class PauseButtonList {
         menu.setVisible(t);
         exit.setVisible(t);
         fish.setVisible(t);
+
     }
 
 

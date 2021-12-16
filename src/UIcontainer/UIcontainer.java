@@ -17,6 +17,7 @@ public class UIcontainer {
     public OptionMenu optionMenu;
     public OptionPuss optionPuss;
     public OptionFish optionFish;
+    public SideLineStroke s;
 
     public UIcontainer(StackPane root){
         listFish = new ListFish();
@@ -27,6 +28,8 @@ public class UIcontainer {
         optionMenu = new OptionMenu(root);
         optionPuss = new OptionPuss(root);
         optionFish = new OptionFish(root);
+        s  = new SideLineStroke(root);
+
     }
 
     public void update(){
