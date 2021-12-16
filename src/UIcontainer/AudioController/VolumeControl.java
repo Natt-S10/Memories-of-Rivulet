@@ -88,6 +88,12 @@ public class VolumeControl extends VBox {
         mvol.setText(Integer.toString((int)Math.round(LogicController.getMusicVol()*10.0)));
         fvol.setText(Integer.toString((int)Math.round(LogicController.getSFXVol()*10.0)));
 
+        musicr.update();
+        musicl.update();
+        fxr.update();
+        fxl.update();
+
+
         musicr.pressButton();
         musicl.pressButton();
         fxl.pressButton();

@@ -1,5 +1,3 @@
-package Main;
-
 import Input.InputUtils;
 import Logic.GameState;
 import Logic.LogicController;

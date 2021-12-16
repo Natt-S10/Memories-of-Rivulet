@@ -4,9 +4,7 @@ import Input.InputUtils;
 import Input.KeyMap;
 import Items.Fish.Fish;
 import Items.Fish.FishUtils;
-import Main.Main;
 import Renderer.*;
-import UIcontainer.AudioController.VolumeControl;
 import UIcontainer.ListFish.ListFish;
 import UIcontainer.MapChanger.*;
 import UIcontainer.Menu.*;
@@ -14,8 +12,6 @@ import UIcontainer.Option.OptionFish;
 import UIcontainer.Option.OptionMenu;
 import UIcontainer.Option.OptionPuss;
 import UIcontainer.SideLineStroke;
-import UIcontainer.UIcontainer;
-import UIpanel.VisualFX.FishCaughtFX;
 import UIpanel.VisualFX.LoadingFX;
 import entity.Character;
 import entity.base.Collidable;
@@ -646,17 +642,19 @@ public class LogicController  implements Serializable{
     }
 
     public void setMusicVolume(double musicVolume){
-        if(0<=musicVolume && musicVolume <=1){
-            this.musicVolume = musicVolume;
+        musicVolume = Math.max(0,musicVolume);
+        musicVolume = Math.min(1,musicVolume);
+        this.musicVolume= musicVolume;
             AudioAsset.setMusicVolume(musicVolume);
-        }
+
     }
 
     public void setFXVolume(double musicVolume){
-        if(0<=musicVolume && musicVolume <=1){
+        musicVolume = Math.max(0,musicVolume);
+        musicVolume = Math.min(1,musicVolume);
             this.sfxVolume = musicVolume;
-            //AudioAsset.setFXVolume(musicVolume);
-        }
+
+
     }
 
     public static double getSFXVol(){

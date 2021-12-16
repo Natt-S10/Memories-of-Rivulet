@@ -43,12 +43,10 @@ public class VolumeButton extends UIButton {
 
                 }
 
-                if(LogicController.getSFXVol() <=0||LogicController.getSFXVol()>=1 ||
-                        LogicController.getMusicVol() <=0|| LogicController.getMusicVol() >=1){
-                    inRange = false;
-                }
 
-                //System.out.println(inRange);
+
+
+                System.out.println(inRange);
             }
         });
         //System.out.println(inRange);
@@ -58,8 +56,45 @@ public class VolumeButton extends UIButton {
     }
 
     public void block(){
-        if(!inRange){
-            setVisible(false);
-        } else setVisible(true);
+        setVisible(inRange);
+
     }
+
+    public void update(){
+        if (isMusic) {
+            if(isRight){
+                if( (Math.round(LogicController.getMusicVol()*10.0)) >=10) {
+                    inRange = false;
+                }else inRange = true;
+
+
+            } else{
+                if(Math.round(LogicController.getMusicVol()*10.0)<=0){
+                    inRange = false;
+                }else inRange = true;
+
+
+
+            }
+
+
+        } else {
+            if(isRight){
+                if(Math.round(LogicController.getSFXVol()*10.0)>=10){
+                    inRange = false;
+                } else inRange = true;
+
+            } else{
+                if(Math.round(LogicController.getSFXVol()*10.0) <=0){
+                    inRange = false;
+                } else inRange = true;
+            }
+
+
+
+        }
+
+    }
+
+
 }
