@@ -75,6 +75,9 @@ public class ResourcesLoader {
     public static final int sceneH = 720;
 
 
+    //private static final Image moneyBarImg ;
+
+    public static final Image moneyBarImg ;
 
     static {
 
@@ -83,7 +86,7 @@ public class ResourcesLoader {
         saveData = "";
         newsaveData = "gamesave.sav";
 
-        String blockf = "block.png";
+        String blockf = "block.jpg";
         demo_map = "res/demo_Map.csv";
         River_map = "res/River_Map.csv";
         Beach_map = "res/Beach_Map.csv";

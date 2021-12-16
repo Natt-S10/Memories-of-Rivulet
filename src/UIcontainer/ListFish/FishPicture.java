@@ -34,7 +34,7 @@ public class FishPicture extends VBox {
         this.setPadding(new Insets(5,5,5,5));
         this.getChildren().addAll(fish,below);
 
-        this.setVisible(false);
+        this.setVisible(true);
 
 
     }

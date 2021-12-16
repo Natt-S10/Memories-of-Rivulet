@@ -10,7 +10,7 @@ import UIcontainer.Option.OptionPuss;
 import javafx.scene.layout.StackPane;
 
 public class UIcontainer {
-    public ListFish listFish;
+    public static ListFish listFish;
     public ButtonList buttonlists;
     public MenuButtonList menuButtonList;
     public PauseButtonList pauseButtonList;
@@ -19,7 +19,8 @@ public class UIcontainer {
     public OptionFish optionFish;
 
     public UIcontainer(StackPane root){
-        listFish = new ListFish(root);
+        listFish = new ListFish();
+        root.getChildren().add(listFish);
         buttonlists = new ButtonList(root);
         menuButtonList = new MenuButtonList(root);
         pauseButtonList = new PauseButtonList(root);
