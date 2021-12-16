@@ -2,6 +2,7 @@ package UIcontainer.Menu;
 
 import Logic.GameState;
 import Logic.LogicController;
+import Renderer.AudioAsset;
 import UIcontainer.UIButton;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
@@ -16,8 +17,8 @@ public class HomeButton extends UIButton {
     public void pressButton() {
         this.setOnMousePressed((MouseEvent event)->{
             if(event.getButton() == MouseButton.PRIMARY){
+                AudioAsset.click.play(LogicController.getSFXVol());
                 LogicController.getInstance().setGameState(GameState.PAUSE);
-
             }
         });
     }

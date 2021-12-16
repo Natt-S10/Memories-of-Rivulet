@@ -2,6 +2,7 @@ package UIcontainer.AudioController;
 
 import Logic.GameState;
 import Logic.LogicController;
+import Renderer.AudioAsset;
 import UIcontainer.MapChanger.ButtonList;
 import UIcontainer.UIButton;
 import javafx.scene.image.Image;
@@ -25,6 +26,7 @@ public class VolumeButton extends UIButton {
     public void pressButton() {
         this.setOnMousePressed((MouseEvent event)->{
             if(event.getButton() == MouseButton.PRIMARY  && inRange){
+                AudioAsset.click.play(LogicController.getSFXVol());
                 if(isRight){
                     if(isMusic){
                         LogicController.getInstance().setMusicVolume(LogicController.getMusicVol()+0.1);

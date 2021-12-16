@@ -2,7 +2,7 @@ package UIcontainer.Menu;
 
 import Logic.GameState;
 import Logic.LogicController;
-
+import Renderer.AudioAsset;
 import Renderer.GameScreenUtils;
 import UIcontainer.MapChanger.ButtonList;
 import UIcontainer.UIButton;
@@ -23,6 +23,7 @@ public class MenuButton extends UIButton {
     public void pressButton() {
         this.setOnMousePressed((MouseEvent event)->{
             if(event.getButton() == MouseButton.PRIMARY && isVisible()){
+                AudioAsset.click.play(LogicController.getSFXVol());
                 if(state == GameState.MENU){ //reset all bad status
                     ButtonList.setAllValid();
                 }

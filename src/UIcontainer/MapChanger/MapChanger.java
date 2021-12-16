@@ -2,6 +2,7 @@ package UIcontainer.MapChanger;
 
 import Logic.GameState;
 import Logic.LogicController;
+import Renderer.AudioAsset;
 import UIcontainer.UIButton;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
@@ -27,7 +28,7 @@ public class MapChanger extends UIButton {
         this.setOnMousePressed((MouseEvent event)->{
             if(event.getButton() == MouseButton.PRIMARY && !isBlocked && isAvalaible){
                 try {
-
+                    AudioAsset.click.play(LogicController.getSFXVol());
                     LogicController.getInstance().setMapLoadingT(240);
                     LogicController.getInstance().setGameState(GameState.LOADING);
                     LogicController.getInstance().setNextMap(new Map(map));

@@ -13,6 +13,7 @@ public enum MapName {
             case  RIVER_MAP ->{
                 return 15;
             }
+            case WATERFALL_MAP -> {return 12;}
 
         }
         return GameScreen.screenWidth/2;
@@ -26,6 +27,7 @@ public enum MapName {
             case RIVER_MAP -> {
                 return 25;
             }
+            case WATERFALL_MAP -> {return 15;}
 
         }
         return GameScreen.screenHeight/2;

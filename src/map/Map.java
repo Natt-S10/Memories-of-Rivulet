@@ -140,6 +140,8 @@ public class Map implements IRenderable, java.io.Serializable {
                             croppedTile = ResourcesLoader.water16_2;
                         }
                     }
+                    case SPAWN -> croppedTile = ResourcesLoader.spawn;
+                    case STONE -> croppedTile = ResourcesLoader.stone;
                     case GRASS_WATER_UP -> croppedTile = ResourcesLoader.grass_water_up;
                     case GRASS_WATER_DOWN -> croppedTile = ResourcesLoader.grass_water_down;
                     case WOOD ->  croppedTile = ResourcesLoader.wood;
@@ -161,8 +163,8 @@ public class Map implements IRenderable, java.io.Serializable {
 
         if (i>= tileMatrix.length || j >= tileMatrix[i].length) return true;
         return switch (tileMatrix[i][j]) {
-            case DIRT, GRASS,WOOD,SAND -> false;
-            case WATER,GRASS_WATER_DOWN,GRASS_WATER_UP -> true;
+            case DIRT, GRASS,WOOD,SAND, STONE, SPAWN -> false;
+            case WATER,GRASS_WATER_DOWN, GRASS_WATER_UP -> true;
             default -> true;
         };
     }

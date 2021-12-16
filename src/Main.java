@@ -34,7 +34,7 @@ public class Main extends Application {
 
         Map demoMap = new Map();
         try {
-            demoMap = new Map(ResourcesLoader.demo_map);
+            demoMap = new Map(ResourcesLoader.River_map);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -34,6 +34,8 @@ public class ResourcesLoader {
     public static WritableImage grass_water_down;
     public static WritableImage sand;
     public static WritableImage load;
+    public static WritableImage stone;
+    public static WritableImage spawn;
 
     public static Image logo_river;
     public static Image logo_sea;
@@ -87,10 +89,9 @@ public class ResourcesLoader {
         newsaveData = "gamesave.sav";
 
         String blockf = "block.png";
-        demo_map = "res/demo_Map.csv";
-        River_map = "res/River_Map.csv";
+        demo_map =  River_map = "res/River_Map.csv";
         Beach_map = "res/Beach_Map.csv";
-        Waterfall_map = "res/demo_Map1.csv";
+        Waterfall_map = "res/waterfall_Map.csv";
         Loading_map = "res/loading_Map.csv";
 
 
@@ -194,6 +195,8 @@ public class ResourcesLoader {
             grass_water_up = new WritableImage(ResourcesLoader.rpg.getPixelReader(),3*(size+10),0, size, size);
             grass_water_down = new WritableImage(ResourcesLoader.rpg.getPixelReader(),3*(size+10),2*(size+15), size, size);
             load = new WritableImage(ResourcesLoader.rpg.getPixelReader(),7*(size+10),27*(size+10), size, size);
+            stone = new WritableImage(ResourcesLoader.rpg.getPixelReader(),7*(size+10),1*(size+10), size, size);
+            spawn = new WritableImage(ResourcesLoader.rpg.getPixelReader(),3*(size+10),7*(size+10), size, size);
 
 
 

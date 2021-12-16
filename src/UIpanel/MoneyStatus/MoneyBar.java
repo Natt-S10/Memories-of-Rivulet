@@ -42,14 +42,15 @@ public class MoneyBar implements IRenderable {
     }
     @Override
     public void draw(GraphicsContext gc) {
+        String text = (LogicController.getInstance().getMoney()>= 5000)?"WIN" :
+                padLeftSpaces(Integer.toString(LogicController.getInstance().getMoney()),4);
         gc.drawImage(ResourcesLoader.moneyBarImg,posX,posY);
         gc.setFont(Font.font("Century Gothic", FontWeight.LIGHT, 35));
         gc.setFill(Color.BLACK);
         gc.setTextAlign(TextAlignment.RIGHT);
 
         gc.setTextBaseline(VPos.TOP);
-        gc.fillText(padLeftSpaces(Integer.toString(LogicController.getInstance().getMoney()),4),
-                posX+width+textShiftX, posY+textShiftY);
+        gc.fillText(text, posX+width+textShiftX, posY+textShiftY);
         gc.setTextAlign(TextAlignment.LEFT);
         gc.setTextBaseline(VPos.BASELINE);
     }

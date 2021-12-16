@@ -13,7 +13,8 @@ public class AudioAsset {
             fishCaught,
             splash,
             baitSwing,
-            ping;
+            ping,
+            click;
 
     public static MediaPlayer BGM,ropeTension,footsteps;
 
@@ -26,6 +27,7 @@ public class AudioAsset {
         fishCaught = loadAudioClip("Audio/fish_caught.aif");
         splash = loadAudioClip("Audio/splash.mp3");
         ping = loadAudioClip("Audio/ping.mp3");
+        click = loadAudioClip("Audio/click.mp3");
 
         BGM = loadMedia("Audio/bgm.mp3");
         ropeTension = loadMedia("Audio/rope_tension.mp3");
