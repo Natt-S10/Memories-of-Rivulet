@@ -82,10 +82,10 @@ public class ResourcesLoader {
         newsaveData = "gamesave.sav";
 
         String blockf = "block.png";
-        demo_map =  River_map = "res/River_Map.csv";
-        Beach_map = "res/Beach_Map.csv";
-        Waterfall_map = "res/waterfall_Map.csv";
-        Loading_map = "res/loading_Map.csv";
+        demo_map =  River_map = "River_Map.csv";
+        Beach_map = "Beach_Map.csv";
+        Waterfall_map = "waterfall_Map.csv";
+        Loading_map = "loading_Map.csv";
 
 
         String ballsriPath = "Ball.png";

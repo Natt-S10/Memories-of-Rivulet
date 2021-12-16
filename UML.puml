@@ -23,7 +23,7 @@ class Renderer.RenderableHolder {
 + void doBGM()
 + ArrayList<IRenderable> getElements()
 }
-class entity.base.Boundary {
+class Entity.base.Boundary {
 - int posX
 + <<Create>> Boundary(int,int,int,int)
 + <<Create>> Boundary(int,int)
@@ -57,7 +57,7 @@ class Renderer.GameScreen {
 + <<Create>> GameScreen(double,double)
 + void paintComponent()
 }
-class entity.Character {
+class Entity.Character {
 - {static} long serialVersionUID
 - Boundary collisionBoundary
 - Direction facing
@@ -70,7 +70,6 @@ class entity.Character {
 - int spriteNum
 + int screenX
 + int screenY
-+ Map playerCurMap
 + <<Create>> Character(String,int,int,int,int,double,double)
 + boolean updateVisualBoundary()
 + void update()
@@ -88,7 +87,7 @@ class entity.Character {
 - void drawNameTag(GraphicsContext)
 + boolean isReachable(double,double)
 + boolean isWarpable()
-+ void setValidPOS(Map)
++ void setValidPOS(GameMap)
 + Boundary getCollisionBoundary()
 + Direction getDirection()
 + void setDirection(Direction)
@@ -103,32 +102,29 @@ class entity.Character {
 class UIcontainer.Option.OptionPuss {
 - StackPane root
 - {static} MenuButton menu
+- {static} VolumeControl v
 + <<Create>> OptionPuss(StackPane)
 + {static} void setVisible(boolean)
 + void update()
 }
-class UIpanel.VisualFX.LoadingFX {
-- int posX
-- int posY
-- int animateCounter
-- int z
-- boolean isVisible
-+ <<Create>> LoadingFX()
-+ int getLayer()
-+ void draw(GraphicsContext)
-+ boolean isDestroyed()
-+ boolean isVisible()
-- void update()
-}
 class UIcontainer.Option.OptionMenu {
 - StackPane root
 - {static} MenuButton menu
+- {static} VolumeControl v
 + <<Create>> OptionMenu(StackPane)
 + {static} void setVisible(boolean)
 + void update()
 }
-interface UIpanel.IPanel {
-+ void stateUpdate()
+class InGamePanel.VisualFX.FishCaughtFX {
+- boolean isVisible
+- Twinkle[] twinkles
++ <<Create>> FishCaughtFX()
+- void randomWink()
++ int getLayer()
++ void draw(GraphicsContext)
++ void update()
++ boolean isDestroyed()
++ boolean isVisible()
 }
 class Input.KeyMap {
 + {static} int keyAmount
@@ -142,30 +138,14 @@ class Input.KeyMap {
 + {static} int RIGHT
 + {static} int SPACE
 }
-class UIpanel.fishing.FishingPanel {
-- {static} int panelW
-- int anchorX
-- boolean isVisible
-- Timer timer
-- QuickTimeSign qtSign
-- SpinningRod spinningRod
-+ <<Create>> FishingPanel(int,int)
-+ int getLayer()
-+ void draw(GraphicsContext)
-+ boolean isDestroyed()
-+ boolean isVisible()
-+ void setVisible(boolean)
-}
-class UIpanel.VisualFX.FishCaughtFX {
-- boolean isVisible
-- Twinkle[] twinkles
-+ <<Create>> FishCaughtFX()
-- void randomWink()
-+ int getLayer()
-+ void draw(GraphicsContext)
+class UIcontainer.AudioController.VolumeButton {
+- boolean inRange
+- boolean isRight
+- boolean isMusic
++ <<Create>> VolumeButton(Image,int,int,boolean,boolean,boolean)
++ void pressButton()
++ void block()
 + void update()
-+ boolean isDestroyed()
-+ boolean isVisible()
 }
 class UIcontainer.Menu.PauseButtonList {
 - StackPane root
@@ -178,57 +158,19 @@ class UIcontainer.Menu.PauseButtonList {
 + {static} void setVisible(boolean)
 + void update()
 }
-class Items.Fish.FishUtils {
-+ {static} Map<FishSpecies,Object[]> fishStatMap
-+ {static} int imgW
-+ {static} int speciesCount
-+ {static} Image[] fishImage
-+ {static} Random rand
-+ {static} int fishIndex(FishSpecies)
-+ {static} double fishBaseLength(FishSpecies)
-+ {static} double fishBaseWeight(FishSpecies)
-+ {static} int fishBasePrice(FishSpecies)
-+ {static} Image fishImg(FishSpecies)
-+ {static} FishSpecies randomFish()
-+ {static} double randomFishWeight(FishSpecies)
-+ {static} double randomFishLength(FishSpecies)
-- {static} Map loadFishStat(String)
-- {static} double randNormRange(double,double)
-}
-class Input.InputUtils {
-+ {static} double mouseX
-+ {static} boolean mouseOnScreen
-- {static} boolean isLeftDown
-- {static} boolean isLeftClickedLastTick
-- {static} boolean[] keyPressed
-- {static} boolean[] keyTriggered
-+ {static} void mouseLeftDown()
-+ {static} void mouseLeftRelease()
-+ {static} void keyPressed(int)
-+ {static} void keyReleased(int)
-+ {static} boolean isLeftClickDown()
-+ {static} boolean isLeftClickTriggered()
-+ {static} boolean isKeyDown(int)
-+ {static} boolean isKeyTriggered(int)
-+ {static} void updateInputState()
-}
-interface entity.base.Collidable {
-+ Boundary getCollisionBoundary()
-+ {static} boolean isCollide(Collidable,Collidable)
-}
-class map.Map {
+class Map.GameMap {
 + {static} int tileSize
 - MapName mapName
 - int mapWidth
 - int mapHeight
 - int physicalWidth
+- int physicalHeight
 - int spriteCounter
 - int spriteNum
 - TileType[][] tileMatrix
-- WritableImage croppedTile
-+ <<Create>> Map(TileType[][])
-+ <<Create>> Map()
-+ <<Create>> Map(String)
++ <<Create>> GameMap(TileType[][])
++ <<Create>> GameMap()
++ <<Create>> GameMap(String)
 + void drawEveryTiles(GraphicsContext)
 + void drawCamView(GraphicsContext)
 + boolean isCollidable(int,int)
@@ -248,25 +190,70 @@ class map.Map {
 + void setMapList(MapName)
 + TileType clickedTile()
 }
+class Items.Fish.FishUtils {
++ {static} Map<FishSpecies,Object[]> fishStatMap
++ {static} int imgW
++ {static} int speciesCount
++ {static} Image[] fishImage
++ {static} Random rand
++ {static} int fishIndex(FishSpecies)
++ {static} double fishBaseLength(FishSpecies)
++ {static} double fishBaseWeight(FishSpecies)
++ {static} int fishBasePrice(FishSpecies)
++ {static} Image fishImg(FishSpecies)
++ {static} FishSpecies randomFish()
++ {static} double randomFishWeight(FishSpecies)
++ {static} double randomFishLength(FishSpecies)
+- {static} Map loadFishStat(String)
+- {static} double randNormRange(double,double)
+}
+class Input.InputUtils {
+- {static} boolean isLeftClickedLastTick
+- {static} boolean[] keyPressed
+- {static} boolean[] keyTriggered
++ {static} double mouseX
++ {static} boolean mouseOnScreen
+- {static} boolean isLeftDown
++ {static} void mouseLeftDown()
++ {static} void mouseLeftRelease()
++ {static} void keyPressed(int)
++ {static} void keyReleased(int)
++ {static} boolean isLeftClickDown()
++ {static} boolean isLeftClickTriggered()
++ {static} boolean isKeyDown(int)
++ {static} boolean isKeyTriggered(int)
++ {static} void updateInputState()
+}
+interface Entity.base.Collidable {
++ Boundary getCollisionBoundary()
++ {static} boolean isCollide(Collidable,Collidable)
+}
 class UIcontainer.Menu.MenuButton {
 ~ GameState state
 + <<Create>> MenuButton(Image,int,int,GameState)
 + void pressButton()
 }
-class UIpanel.fishing.Timer {
-- {static} int DIAMETER
-+ <<Create>> Timer(int,int)
-+ void draw(int,int,GraphicsContext)
-}
 class UIcontainer.Menu.MenuButtonList {
 - StackPane root
 - {static} MenuButton start
 - {static} MenuButton load
-- {static} MenuButton option
 - {static} MenuButton exit
 - {static} ImageView logo
 + <<Create>> MenuButtonList(StackPane)
 + {static} void setVisible(boolean)
++ void update()
+}
+class UIcontainer.AudioController.VolumeControl {
+- {static} Text tmusic
+- {static} Text tfx
+- {static} VolumeButton musicr
+- {static} VolumeButton fxr
+- {static} VolumeButton musicl
+- {static} VolumeButton fxl
+- {static} Text mvol
+- {static} Text fvol
++ <<Create>> VolumeControl()
++ void setOn(boolean)
 + void update()
 }
 class UIcontainer.ListFish.ListFish {
@@ -283,11 +270,16 @@ class UIcontainer.Option.OptionFish {
 + {static} void setVisible(boolean)
 + void update()
 }
+class InGamePanel.Fishing.SpinningRod {
+- int spriteNum
++ <<Create>> SpinningRod(int,int)
++ void draw(int,int,GraphicsContext)
+}
 class UIcontainer.Menu.HomeButton {
 + <<Create>> HomeButton(Image,int)
 + void pressButton()
 }
-interface entity.base.Movable {
+interface Entity.base.Movable {
 + {static} double sqrt2
 + void update()
 + void move()
@@ -301,15 +293,22 @@ interface entity.base.Movable {
 + {static} double deltaY(double,Direction)
 }
 class Main {
-+ {static} long lastFrameST
++ {static} GameScreen mapCanvas
 + {static} void main(String[])
 + void start(Stage)
 }
-class UIpanel.fishing.QuickTimeSign {
-- String[] buttonSign
-- int spacing
-+ <<Create>> QuickTimeSign(int,int)
-+ void draw(int,int,GraphicsContext)
+class InGamePanel.VisualFX.LoadingFX {
+- int posX
+- int posY
+- int animateCounter
+- int z
+- boolean isVisible
++ <<Create>> LoadingFX()
++ int getLayer()
++ void draw(GraphicsContext)
++ boolean isDestroyed()
++ boolean isVisible()
+- void update()
 }
 class UIcontainer.MapChanger.ButtonList {
 - StackPane root
@@ -324,24 +323,19 @@ class UIcontainer.MapChanger.ButtonList {
 + void CheckMap()
 + void update()
 }
-class entity.ActuallyBall {
-- boolean isNight
-- Boundary collisionBoundary
-- int z
-+ <<Create>> ActuallyBall(String,int,int,int,int,boolean)
-+ void update()
+class InGamePanel.Fishing.FishingPanel {
+- {static} int panelW
+- int anchorX
+- boolean isVisible
+- Timer timer
+- QuickTimeSign qtSign
+- SpinningRod spinningRod
++ <<Create>> FishingPanel(int,int)
 + int getLayer()
 + void draw(GraphicsContext)
 + boolean isDestroyed()
 + boolean isVisible()
-+ void setCollisionBoundary(Boundary)
-+ Boundary getCollisionBoundary()
-+ void setNight(boolean)
-+ boolean getNight()
-}
-class entity.TaeZaa {
-+ <<Create>> TaeZaa(String,int,int,int,int)
-+ void draw(GraphicsContext)
++ void setVisible(boolean)
 }
 class Renderer.ResourcesLoader {
 + {static} String demo_map
@@ -361,6 +355,8 @@ class Renderer.ResourcesLoader {
 + {static} WritableImage grass_water_down
 + {static} WritableImage sand
 + {static} WritableImage load
++ {static} WritableImage stone
++ {static} WritableImage spawn
 + {static} Image logo_river
 + {static} Image logo_sea
 + {static} Image logo_waterfall
@@ -379,6 +375,8 @@ class Renderer.ResourcesLoader {
 + {static} Image button_fish
 + {static} Image block
 + {static} Image moneyBarImg
++ {static} Image larrow
++ {static} Image rarrow
 + {static} Image w1
 + {static} Image fireworkSP
 + {static} Image loadingSP
@@ -414,6 +412,15 @@ class Items.Fish.Fish {
 + double getFishWeight()
 + String toString()
 }
+class InGamePanel.MoneyStatus.MoneyBar {
+- int posX
++ <<Create>> MoneyBar(int,int,int,int)
+- String padLeftSpaces(String,int)
++ int getLayer()
++ void draw(GraphicsContext)
++ boolean isDestroyed()
++ boolean isVisible()
+}
 class UIcontainer.ListFish.FishPicture {
 - String name
 - Image image
@@ -424,9 +431,15 @@ class UIcontainer.ListFish.FishPicture {
 + <<Create>> FishPicture(String,Image,boolean)
 + void setFound(boolean)
 }
-class UIpanel.fishing.SpinningRod {
-~ int spriteNum
-+ <<Create>> SpinningRod(int,int)
+class InGamePanel.Fishing.QuickTimeSign {
+- String[] buttonSign
+- int spacing
++ <<Create>> QuickTimeSign(int,int)
++ void draw(int,int,GraphicsContext)
+}
+class InGamePanel.Fishing.Timer {
+- {static} int DIAMETER
++ <<Create>> Timer(int,int)
 + void draw(int,int,GraphicsContext)
 }
 class UIcontainer.UIcontainer {
@@ -449,14 +462,22 @@ abstract class UIcontainer.UIButton {
 + <<Create>> UIButton(Image,int,int,boolean)
 + {abstract}void pressButton()
 }
-abstract class UIpanel.fishing.BaseObject {
+class InGamePanel.VisualFX.Twinkle {
+- int posX
+- int animateCounter
++ <<Create>> Twinkle(int,int,int,int)
++ void draw(GraphicsContext)
+- void update()
++ void setSpriteNum(int)
+}
+abstract class InGamePanel.Fishing.BaseObject {
 # int refpointX
 + {abstract}void draw(int,int,GraphicsContext)
 }
 abstract class Items.itemBase.ItemBase {
 + {abstract}Image getImage()
 }
-abstract class entity.Entity {
+abstract class Entity.Entity {
 # String name
 # Boundary visualBoundary
 # double posX
@@ -498,8 +519,8 @@ class Logic.LogicController {
 - ArrayList<Movable> movableEntities
 - ArrayList<Collidable> collidableEntities
 - Character mainChar
-- Map currentMap
-- Map nextMap
+- GameMap currentGameMap
+- GameMap nextGameMap
 - int money
 - int MapLoadingT
 - boolean isSetup
@@ -553,8 +574,8 @@ class Logic.LogicController {
 + void setMainChar(Character)
 + Double getAnchorX()
 + Double getAnchorY()
-+ void setCurrentMap(Map)
-+ Map getCurrentMap()
++ void setCurrentMap(GameMap)
++ GameMap getCurrentMap()
 + GameState getGameState()
 + void setGameState(GameState)
 + double getInitFishingDur()
@@ -564,8 +585,8 @@ class Logic.LogicController {
 + void setFishingTimeCount(double)
 + boolean[] getQtState()
 + void setQtState(boolean[])
-+ Map getNextMap()
-+ void setNextMap(Map)
++ GameMap getNextMap()
++ void setNextMap(GameMap)
 + int getMapLoadingT()
 + void setMapLoadingT(int)
 + boolean isSetup()
@@ -584,68 +605,50 @@ class Logic.LogicController {
 + void addMoney(int)
 + boolean[] getFishAchievement()
 + void setMusicVolume(double)
++ void setFXVolume(double)
 + {static} double getSFXVol()
 + {static} double getMusicVol()
-}
-class UIpanel.VisualFX.Twinkle {
-- int posX
-- int animateCounter
-+ <<Create>> Twinkle(int,int,int,int)
-+ void draw(GraphicsContext)
-- void update()
-+ void setSpriteNum(int)
 }
 class Renderer.GameScreenUtils {
 + {static} void addListener(GameScreen)
 }
-class UIpanel.MoneyStatus.MoneyBar {
-- int posX
-+ <<Create>> MoneyBar(int,int,int,int)
-- String padLeftSpaces(String,int)
-+ int getLayer()
-+ void draw(GraphicsContext)
-+ boolean isDestroyed()
-+ boolean isVisible()
-}
 
 
-entity.base.Serializable <|.. entity.base.Boundary
+Entity.base.Serializable <|.. Entity.base.Boundary
 javafx.scene.canvas.Canvas <|-- Renderer.GameScreen
-Renderer.IRenderable <|.. entity.Character
-entity.base.Movable <|.. entity.Character
-entity.base.Collidable <|.. entity.Character
-entity.Serializable <|.. entity.Character
-entity.Entity <|-- entity.Character
-Renderer.IRenderable <|.. UIpanel.VisualFX.LoadingFX
-Renderer.IRenderable <|.. UIpanel.fishing.FishingPanel
-java.io.Serializable <|.. UIpanel.fishing.FishingPanel
-Renderer.IRenderable <|.. UIpanel.VisualFX.FishCaughtFX
-java.io.Serializable <|.. UIpanel.VisualFX.FishCaughtFX
-Renderer.IRenderable <|.. map.Map
-map.Serializable <|.. map.Map
+Renderer.IRenderable <|.. Entity.Character
+Entity.base.Movable <|.. Entity.Character
+Entity.base.Collidable <|.. Entity.Character
+Entity.Serializable <|.. Entity.Character
+Entity.Entity <|-- Entity.Character
+Renderer.IRenderable <|.. InGamePanel.VisualFX.FishCaughtFX
+java.io.Serializable <|.. InGamePanel.VisualFX.FishCaughtFX
+UIcontainer.UIButton <|-- UIcontainer.AudioController.VolumeButton
+Renderer.IRenderable <|.. Map.GameMap
+Map.Serializable <|.. Map.GameMap
 UIcontainer.UIButton <|-- UIcontainer.Menu.MenuButton
-java.io.Serializable <|.. UIpanel.fishing.Timer
-UIpanel.fishing.BaseObject <|-- UIpanel.fishing.Timer
+javafx.scene.layout.VBox <|-- UIcontainer.AudioController.VolumeControl
 javafx.scene.layout.GridPane <|-- UIcontainer.ListFish.ListFish
+java.io.Serializable <|.. InGamePanel.Fishing.SpinningRod
+InGamePanel.Fishing.BaseObject <|-- InGamePanel.Fishing.SpinningRod
 UIcontainer.UIButton <|-- UIcontainer.Menu.HomeButton
 javafx.application.Application <|-- Main
-java.io.Serializable <|.. UIpanel.fishing.QuickTimeSign
-UIpanel.fishing.BaseObject <|-- UIpanel.fishing.QuickTimeSign
-entity.base.Collidable <|.. entity.ActuallyBall
-Renderer.IRenderable <|.. entity.ActuallyBall
-entity.Entity <|-- entity.ActuallyBall
-entity.Entity <|-- entity.TaeZaa
+Renderer.IRenderable <|.. InGamePanel.VisualFX.LoadingFX
+Renderer.IRenderable <|.. InGamePanel.Fishing.FishingPanel
+java.io.Serializable <|.. InGamePanel.Fishing.FishingPanel
 java.io.Serializable <|.. Items.Fish.Fish
 Items.itemBase.ItemBase <|-- Items.Fish.Fish
+Renderer.IRenderable <|.. InGamePanel.MoneyStatus.MoneyBar
 javafx.scene.layout.VBox <|-- UIcontainer.ListFish.FishPicture
-java.io.Serializable <|.. UIpanel.fishing.SpinningRod
-UIpanel.fishing.BaseObject <|-- UIpanel.fishing.SpinningRod
+java.io.Serializable <|.. InGamePanel.Fishing.QuickTimeSign
+InGamePanel.Fishing.BaseObject <|-- InGamePanel.Fishing.QuickTimeSign
+java.io.Serializable <|.. InGamePanel.Fishing.Timer
+InGamePanel.Fishing.BaseObject <|-- InGamePanel.Fishing.Timer
 javafx.scene.image.ImageView <|-- UIcontainer.UIButton
-java.io.Serializable <|.. UIpanel.fishing.BaseObject
+java.io.Serializable <|.. InGamePanel.VisualFX.Twinkle
+java.io.Serializable <|.. InGamePanel.Fishing.BaseObject
 java.io.Serializable <|.. Items.itemBase.ItemBase
-java.io.Serializable <|.. entity.Entity
+java.io.Serializable <|.. Entity.Entity
 UIcontainer.UIButton <|-- UIcontainer.MapChanger.MapChanger
 Logic.Serializable <|.. Logic.LogicController
-java.io.Serializable <|.. UIpanel.VisualFX.Twinkle
-Renderer.IRenderable <|.. UIpanel.MoneyStatus.MoneyBar
 @enduml

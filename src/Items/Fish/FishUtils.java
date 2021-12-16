@@ -2,15 +2,17 @@ package Items.Fish;
 
 import javafx.scene.image.Image;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 public class FishUtils {
-    public static final Map<FishSpecies,Object[]> fishStatMap = loadFishStat("res/fish_stat.csv");
+    public static final Map<FishSpecies,Object[]> fishStatMap = loadFishStat("fish_stat.csv");
     // FishSpecies -> [int idx, double baseLength, double baseWeight]
     public static final int imgW = 200, imgH = 150;
     public static final int speciesCount = FishSpecies.values().length;
@@ -59,7 +61,11 @@ public class FishUtils {
         Map<FishSpecies, Object[] > fishStatMap = new HashMap();
         try{
             String row;
-            BufferedReader csvReader = new BufferedReader(new FileReader(filePath));
+            BufferedReader csvReader = new BufferedReader(
+                    new InputStreamReader(
+                            new BufferedInputStream(
+                                    ClassLoader.getSystemResourceAsStream(filePath)),
+                            "UTF-8"));
             while ((row = csvReader.readLine()) != null){
                 String[] data = row.split(",");
                 Object [] stats = {Integer.valueOf(data[1]),

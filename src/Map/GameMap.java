@@ -8,10 +8,7 @@ import Renderer.ResourcesLoader;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 import static java.lang.Math.*;
@@ -64,7 +61,11 @@ public class GameMap implements IRenderable, java.io.Serializable {
 
         try{
             String row;
-            BufferedReader csvReader = new BufferedReader(new FileReader(filePath));
+            BufferedReader csvReader = new BufferedReader(
+                    new InputStreamReader(
+                            new BufferedInputStream(
+                                    ClassLoader.getSystemResourceAsStream(filePath)),
+                            "UTF-8"));
             ArrayList<String[]> preMap = new ArrayList<>();
             while ((row = csvReader.readLine()) != null) {
                 String[] data = row.split(",");
@@ -93,7 +94,7 @@ public class GameMap implements IRenderable, java.io.Serializable {
         }
         String[] name = filePath.split("/");
         //System.out.println(name[1]);
-        String[] nameOnly = name[1].split("\\.");
+        String[] nameOnly = name[0].split("\\.");
         //System.out.println(nameOnly[0]);
         mapName = MapName.valueOf(nameOnly[0].toUpperCase());
 
