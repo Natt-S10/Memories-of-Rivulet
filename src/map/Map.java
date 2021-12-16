@@ -3,11 +3,13 @@ package map;
 import Input.InputUtils;
 import Logic.GameState;
 import Logic.LogicController;
+import Renderer.AudioAsset;
 import Renderer.GameScreen;
 import Renderer.IRenderable;
 import Renderer.ResourcesLoader;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
+import javafx.scene.media.MediaPlayer;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

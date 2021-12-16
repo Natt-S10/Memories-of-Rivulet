@@ -3,6 +3,7 @@ package entity;
 import Input.InputUtils;
 import Items.Fish.FishUtils;
 import Logic.LogicController;
+import Renderer.AudioAsset;
 import Renderer.GameScreen;
 import Renderer.IRenderable;
 import Renderer.ResourcesLoader;
@@ -13,6 +14,7 @@ import entity.base.Movable;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -79,6 +81,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         if(InputUtils.mouseOnScreen && InputUtils.isLeftClickTriggered() &&
                 isReachable(InputUtils.mouseX,InputUtils.mouseY)) {
             if(LogicController.getInstance().getCurrentMap().clickedTile() == TileType.WATER) {
+                AudioAsset.baitSwing.play(LogicController.getSFXVol());
                 setIsRightToClicked(InputUtils.mouseX);
                 LogicController.getInstance().startBaiting();
             }
@@ -208,7 +211,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     @Override
     public void draw(GraphicsContext gc) {
         switch (LogicController.getInstance().getGameState()){
-            case WALK -> drawWalkingChar(gc);
+            case WALK -> {drawWalkingChar(gc);}
             case FISHING, AFTERFISHING, BAITING->  {drawWalkingChar(gc); animateFishingRod(gc);}
             case FISHRAISING -> drawFishRaising(gc);
         }
@@ -217,6 +220,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     private void drawWalkingChar(GraphicsContext gc) {
         switch(facing){
             case STABLE -> {
+                AudioAsset.playFootsteps(false);
                 if(isRight){
                     gc.drawImage(ResourcesLoader.w4,visualBoundary.left(),visualBoundary.top(),visualBoundary.getWidth(), visualBoundary.getHeight());
                 } else{
@@ -225,14 +229,17 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
             }
             case N, S ->{
                 //gc.drawImage(ResourcesLoader.w1,visualBoundary.left(),visualBoundary.top(),visualBoundary.getWidth(), visualBoundary.getHeight());
+                AudioAsset.playFootsteps(true);
                 drawSP(gc,spriteCounter,spriteNum,isRight);
             }
             case NE, SE, E -> {
                 isRight = true;
+                AudioAsset.playFootsteps(true);
                 drawSP(gc,spriteCounter,spriteNum,isRight);
             }
             case NW, SW , W-> {
                 isRight = false;
+                AudioAsset.playFootsteps(true);
                 drawSP(gc,spriteCounter,spriteNum,isRight);
             }
         }

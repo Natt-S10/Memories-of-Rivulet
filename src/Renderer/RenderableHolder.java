@@ -52,7 +52,13 @@ public class RenderableHolder {
             if (elements.get(i).isDestroyed()) {
                 elements.remove(i);
             }
+        }
+    }
 
+    public void doBGM(){
+        switch (LogicController.getInstance().getGameState()){
+            case WALK, BAITING, AFTERFISHING, FISHRAISING, FISHING -> AudioAsset.playBGM(true);
+            default -> AudioAsset.playBGM(false);
         }
     }
 

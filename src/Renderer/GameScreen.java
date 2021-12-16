@@ -21,6 +21,7 @@ public class GameScreen extends Canvas {
     public void paintComponent() {
         GraphicsContext gc = this.getGraphicsContext2D();
         gc.setFill(Color.BLACK);
+        RenderableHolder.getInstance().doBGM();
         for (IRenderable element : RenderableHolder.getInstance().getElements()) {
             if (element.isVisible() && !element.isDestroyed()) {
                 element.draw(gc);

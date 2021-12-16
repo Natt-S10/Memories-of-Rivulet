@@ -4,6 +4,7 @@ import Input.InputUtils;
 import Input.KeyMap;
 import Items.Fish.Fish;
 import Items.Fish.FishUtils;
+import Renderer.AudioAsset;
 import Renderer.GameScreen;
 import Renderer.RenderableHolder;
 import Renderer.ResourcesLoader;
@@ -46,6 +47,7 @@ public class LogicController  implements Serializable{
     private boolean isMenu;
 
     private boolean[] fishAchievement;
+    private double sfxVolume, musicVolume;
 
 
 
@@ -72,6 +74,8 @@ public class LogicController  implements Serializable{
         movableEntities = new ArrayList<>();
         collidableEntities = new ArrayList<>();
         fishAchievement = new boolean[FishUtils.fishStatMap.size()];
+        sfxVolume = 0.30;
+        setMusicVolume(0.30);
 
         gameState = GameState.WALK;
         isResume = false;
@@ -221,6 +225,8 @@ public class LogicController  implements Serializable{
                     ObjectInputStream ois = new ObjectInputStream(fis);
 
                     ResourcesLoader.saveLogic = (LogicController) ois.readObject();
+                    sfxVolume = ResourcesLoader.saveLogic.sfxVolume;
+                    setMusicVolume(ResourcesLoader.saveLogic.musicVolume);
 
                     fishAchievement = ResourcesLoader.saveLogic.getFishAchievement();
                     money = ResourcesLoader.saveLogic.money;
@@ -349,7 +355,11 @@ public class LogicController  implements Serializable{
         mainChar.animateBating();
     }
     private void baitingState(){
+        if(timeCount % 360 ==0) AudioAsset.splash.play(sfxVolume);
+
+
         if(InputUtils.isLeftClickTriggered()){
+            AudioAsset.baitRetrieve.play(sfxVolume);
             gameState = GameState.WALK;
             return;
         }
@@ -361,22 +371,11 @@ public class LogicController  implements Serializable{
     }
 
     private void fishingState(){
-        if(InputUtils.isKeyTriggered(KeyMap.W)) {
-            if(qtState[0]) qtState[0]= false;
-            else fishingTimeCount-=trigPenalty;
-        }
-        if(InputUtils.isKeyTriggered(KeyMap.A)) {
-            if(qtState[1]) qtState[1]= false;
-            else fishingTimeCount-=trigPenalty;
-        }
-        if(InputUtils.isKeyTriggered(KeyMap.S)) {
-            if(qtState[2]) qtState[2]= false;
-            else fishingTimeCount-=trigPenalty;
-        }
-        if(InputUtils.isKeyTriggered(KeyMap.D)) {
-            if(qtState[3]) qtState[3]= false;
-            else fishingTimeCount-=trigPenalty;
-        }
+        AudioAsset.playRopeTension(true);
+        qtKeyProcess(KeyMap.W, 0);
+        qtKeyProcess(KeyMap.A, 1);
+        qtKeyProcess(KeyMap.S, 2);
+        qtKeyProcess(KeyMap.D, 3);
 
         //terminating cond/
         boolean check = false;
@@ -396,7 +395,21 @@ public class LogicController  implements Serializable{
         fishingTimeCount -= 1;
     }
 
+    private void qtKeyProcess(int w, int i) {
+        if (InputUtils.isKeyTriggered(w)) {
+            if (qtState[i]) {
+                AudioAsset.correctKey.play(sfxVolume);
+                qtState[i] = false;
+            }
+            else {
+                AudioAsset.wrongKey.play(sfxVolume);
+                fishingTimeCount -= trigPenalty;
+            }
+        }
+    }
+
     public void startFishing(int trigCount){
+        AudioAsset.fishCaught.play(sfxVolume);
         setGameState(GameState.FISHING);
         this.trigCount =trigCount;
         qtState = new boolean[]{false,false,false,false};
@@ -427,6 +440,8 @@ public class LogicController  implements Serializable{
     }
 
     private void finishFishing(boolean success){
+        AudioAsset.playRopeTension(false);
+        AudioAsset.ping.play(sfxVolume);
         if(success) {
             timeCount = CongratAnimateDur;
             caughtFish = null;
@@ -439,6 +454,7 @@ public class LogicController  implements Serializable{
                 caughtFish = new Fish();
                 money+= caughtFish.getFishPrice();
                 fishAchievement[FishUtils.fishIndex(caughtFish.getSpecies())] = true;
+                AudioAsset.congrats.play(sfxVolume);
             });
             thread.start();
             gameState = GameState.AFTERFISHING;
@@ -626,5 +642,19 @@ public class LogicController  implements Serializable{
 
     public boolean[] getFishAchievement() {
         return fishAchievement;
+    }
+
+    public void setMusicVolume(double musicVolume){
+        if(0<=musicVolume && musicVolume <=1){
+            this.musicVolume = musicVolume;
+            AudioAsset.setMusicVolume(musicVolume);
+        }
+    }
+
+    public static double getSFXVol(){
+        return LogicController.getInstance().sfxVolume;
+    }
+    public static double getMusicVol(){
+        return LogicController.getInstance().musicVolume;
     }
 }
