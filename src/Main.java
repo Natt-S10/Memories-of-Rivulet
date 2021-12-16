@@ -2,10 +2,12 @@ import Input.InputUtils;
 import Logic.GameState;
 import Logic.LogicController;
 import Renderer.*;
+import UIcontainer.ListFish.ListFish;
 import UIcontainer.MapChanger.*;
 import UIcontainer.Menu.*;
 import UIcontainer.Option.OptionMenu;
 import UIcontainer.Option.OptionPuss;
+import UIcontainer.UIcontainer;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -42,11 +44,7 @@ public class Main extends Application {
             e.printStackTrace();
         }
 
-        ButtonList buttonlists = new ButtonList(root);
-        MenuButtonList menuButtonList = new MenuButtonList(root);
-        PauseButtonList pauseButtonList = new PauseButtonList(root);
-        OptionMenu optionMenu = new OptionMenu(root);
-        OptionPuss optionPuss = new OptionPuss(root);
+
 
         LogicController.getInstance().setMainChar(ResourcesLoader.mainChar);
         LogicController.getInstance().setCurrentMap(demoMap);
@@ -54,7 +52,7 @@ public class Main extends Application {
 
         RenderableHolder.getInstance().add(demoMap);
         RenderableHolder.getInstance().add(ResourcesLoader.mainChar);
-
+        UIcontainer container = new UIcontainer(root);
 
         stage.setTitle("Memories of Rivulet");
         stage.setResizable(false);
@@ -72,11 +70,7 @@ public class Main extends Application {
             public void handle(long l) {
                 //System.out.println(InputUtils.isLeftClickDown()+" "+InputUtils.mouseOnScreen);
                 //System.out.println(1000000000.0/(lastFrameST-l)); lastFrameST = l;
-                buttonlists.update();
-                menuButtonList.update();
-                pauseButtonList.update();
-                optionMenu.update();
-                optionPuss.update();
+                container.update();
                 //Logic update
                 LogicController.getInstance().update();
                 //finalDemoMap.update();

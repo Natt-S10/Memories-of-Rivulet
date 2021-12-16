@@ -13,6 +13,7 @@ public class PauseButtonList {
     private static MenuButton option;
     private static MenuButton menu;
     private static MenuButton exit;
+    private static MenuButton fish;
 
     public PauseButtonList(StackPane root){
         this.root = root;
@@ -21,8 +22,9 @@ public class PauseButtonList {
         option = new MenuButton(ResourcesLoader.button_option,223,108,GameState.OPTIONP);
         menu = new MenuButton(ResourcesLoader.button_menu,223,108,GameState.MENU);
         exit = new MenuButton(ResourcesLoader.button_exit,223,108,GameState.EXIT);
+        fish = new MenuButton((ResourcesLoader.button_fish),223,108,GameState.LISTOFISH);
 
-        root.getChildren().addAll(continuePlay,option,menu,exit);
+        root.getChildren().addAll(continuePlay,option,menu,exit,fish);
         continuePlay.setTranslateY(-100);
 
 
@@ -31,6 +33,9 @@ public class PauseButtonList {
         exit.setTranslateY(200);
         continuePlay.setTranslateY(75);
         continuePlay.setTranslateX(-150);
+
+        fish.setTranslateX(0);
+        fish.setTranslateY(-75);
 
 
         option.setTranslateY(75);
@@ -53,6 +58,7 @@ public class PauseButtonList {
         option.setVisible(t);
         menu.setVisible(t);
         exit.setVisible(t);
+        fish.setVisible(t);
     }
 
 
@@ -62,6 +68,7 @@ public class PauseButtonList {
         option.pressButton();
         menu.pressButton();
         exit.pressButton();
+        fish.pressButton();
     }
 
 

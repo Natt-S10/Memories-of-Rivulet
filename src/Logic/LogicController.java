@@ -7,10 +7,14 @@ import Items.Fish.FishUtils;
 import Renderer.GameScreen;
 import Renderer.RenderableHolder;
 import Renderer.ResourcesLoader;
+import UIcontainer.ListFish.ListFish;
 import UIcontainer.MapChanger.*;
 import UIcontainer.Menu.*;
+import UIcontainer.Option.OptionFish;
 import UIcontainer.Option.OptionMenu;
 import UIcontainer.Option.OptionPuss;
+import UIcontainer.UIcontainer;
+import UIpanel.VisualFX.FishCaughtFX;
 import UIpanel.VisualFX.LoadingFX;
 import entity.Character;
 import entity.base.Collidable;
@@ -116,6 +120,7 @@ public class LogicController  implements Serializable{
             case EXIT -> exit();
             case SAVE -> save(ResourcesLoader.saveData);
             case RESUME -> resume();
+            case LISTOFISH -> listFish();
         }
     }
 
@@ -176,6 +181,8 @@ public class LogicController  implements Serializable{
         OptionMenu.setVisible(false);
         OptionPuss.setVisible(false);
         ButtonList.setVisible(false);
+        OptionFish.setVisible(false);
+        ListFish.setOn(false);
         PauseButtonList.setVisible(false);
     }
 
@@ -210,7 +217,9 @@ public class LogicController  implements Serializable{
 
                     FileInputStream fis = new FileInputStream(selectedFile);
                     ObjectInputStream ois = new ObjectInputStream(fis);
+
                     ResourcesLoader.saveLogic = (LogicController) ois.readObject();
+
                     nextMap = ResourcesLoader.saveLogic.getNextMap();
                     System.out.println(nextMap.getMapName());
                     setMainChar(ResourcesLoader.saveLogic.mainChar);
@@ -263,6 +272,13 @@ public class LogicController  implements Serializable{
 
             isSetup = true;
         }
+
+    }
+
+    public void listFish(){
+        ListFish.setOn(true);
+        OptionFish.setVisible(true);
+
 
     }
 
