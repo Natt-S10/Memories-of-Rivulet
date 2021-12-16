@@ -15,11 +15,14 @@ public class FishUtils {
     public static final int imgW = 200, imgH = 150;
     public static final int speciesCount = FishSpecies.values().length;
     public static final Image[] fishImage = new Image[speciesCount];
+
     public static final Random rand = new Random();
 
     static {
         for(FishSpecies species: FishSpecies.values()){
-            fishImage[fishIndex(species)] = new Image(ClassLoader.getSystemResource("fish/"+species.toString()+".png").toString());
+            int id = fishIndex(species);
+            fishImage[id] = new Image(ClassLoader.getSystemResource("fish/"+species.toString()+".png").toString());
+
         }
     }
 

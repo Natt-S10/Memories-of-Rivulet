@@ -48,8 +48,10 @@ public class ResourcesLoader {
     public static Image button_resume;
     public static Image button_exit;
     public static Image button_menu;
+    public static Image button_fish;
+    public static Image block;
     public static final Image w1,w2,w3,w4,w5,w6,w7,w8, wShow;
-    public static Image logo;
+
     public static final Image fireworkSP;
     public static final Image loadingSP;
     public static final WritableImage[] fireworks;
@@ -78,7 +80,7 @@ public class ResourcesLoader {
         saveData = "";
         newsaveData = "gamesave.sav";
 
-
+        String blockf = "block.png";
         demo_map = "res/demo_Map.csv";
         River_map = "res/River_Map.csv";
         Beach_map = "res/Beach_Map.csv";
@@ -128,6 +130,7 @@ public class ResourcesLoader {
         String bexit = "button/quit.png";
         String bresume = "button/resume.png";
         String bmenu = "button/menu.png";
+        String bfish = "button/fish.png";
 
 
 
@@ -148,6 +151,8 @@ public class ResourcesLoader {
         button_resume = new Image((ClassLoader.getSystemResource(bresume).toString()));
         button_exit = new Image((ClassLoader.getSystemResource(bexit).toString()));
         button_menu = new Image((ClassLoader.getSystemResource(bmenu).toString()));
+        button_fish = new Image((ClassLoader.getSystemResource(bfish).toString()));
+        block = new Image((ClassLoader.getSystemResource(blockf).toString()));
 
         fireworkSP = new Image(ClassLoader.getSystemResource(fireworkPath).toString());
         fireworks = loadFireworks();
@@ -222,18 +227,7 @@ public class ResourcesLoader {
         return frameArray;
     }
 
-    private static WritableImage[] loadingLogo(){
-        WritableImage[] loading = new WritableImage[6];
 
-        for(int i = 0; i < 6; i++){
-            if(i < 3){
-                loading[i] = new WritableImage(loadingSP.getPixelReader(),34,34+i*101,74,196);
-            } else{
-                loading[i] = new WritableImage(loadingSP.getPixelReader(),263,34+(i-3)*101,74,196);
-            }
-        }
-        return loading;
-    }
 
     private static WritableImage[] loadSpinRod(){
         WritableImage[] frameArray = new WritableImage[15];
