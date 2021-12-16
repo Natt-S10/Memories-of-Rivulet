@@ -96,7 +96,6 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
 //        System.out.println("vPOSY = " + visualBoundary.getCenterY());
 //        System.out.println("cPOSX = " + collisionBoundary.getCenterX());
 //        System.out.println("cPOSY = " + collisionBoundary.getCenterY());
-        facing = Movable.directionByKeyboard();
         collisionBoundary.setPosX((int)posX -this.getWidth()/6);
         collisionBoundary.setPosY((int)posY + (this.getHeight()/11));
 
@@ -210,7 +209,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     public void draw(GraphicsContext gc) {
         switch (LogicController.getInstance().getGameState()){
             case WALK -> drawWalkingChar(gc);
-            case FISHING, BAITING ->  {drawWalkingChar(gc); animateFishingRod(gc);}
+            case FISHING, AFTERFISHING, BAITING->  {drawWalkingChar(gc); animateFishingRod(gc);}
             case FISHRAISING -> drawFishRaising(gc);
         }
     }

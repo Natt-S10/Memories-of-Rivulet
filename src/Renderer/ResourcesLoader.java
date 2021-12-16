@@ -52,6 +52,7 @@ public class ResourcesLoader {
     public static Image button_menu;
     public static Image button_fish;
     public static Image block;
+    public static Image moneyBarImg;
     public static final Image w1,w2,w3,w4,w5,w6,w7,w8, wShow;
 
     public static final Image fireworkSP;
@@ -74,10 +75,6 @@ public class ResourcesLoader {
     public static final int sceneW = 1280;
     public static final int sceneH = 720;
 
-
-    //private static final Image moneyBarImg ;
-
-    public static final Image moneyBarImg ;
 
     static {
 

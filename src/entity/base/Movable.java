@@ -3,7 +3,11 @@ package entity.base;
 import Input.InputUtils;
 import Input.KeyMap;
 
+/**
+ * Hi above
+ */
 public interface Movable {
+    /* hi below */
     public static final double sqrt2 = Math.sqrt(2);
     public void update();
     public void move();
