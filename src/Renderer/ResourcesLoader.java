@@ -1,6 +1,7 @@
 package Renderer;
 
 import Logic.LogicController;
+import UIpanel.MoneyStatus.MoneyBar;
 import UIpanel.VisualFX.FishCaughtFX;
 import UIpanel.fishing.FishingPanel;
 import entity.Character;
@@ -12,6 +13,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.MappedByteBuffer;
 
 public class ResourcesLoader {
     public static final String demo_map;
@@ -48,6 +50,7 @@ public class ResourcesLoader {
     public static Image button_resume;
     public static Image button_exit;
     public static Image button_menu;
+    public static Image moneyBarImg;
     public static final Image w1,w2,w3,w4,w5,w6,w7,w8, wShow;
     public static Image logo;
     public static final Image fireworkSP;
@@ -56,12 +59,14 @@ public class ResourcesLoader {
     public static final WritableImage[] fishingRod;
     public static final WritableImage[] spin_rod;
     public static final WritableImage[] loadings;
+
+    //TODO: Game Objects
     public static LogicController saveLogic;
     public static LogicController defaultLogic;
     public static FishingPanel fishingPanel;
     public static FishCaughtFX fishCaughtFX;
-
-    public static  Character mainChar;
+    public static Character mainChar;
+    public static MoneyBar moneyBar;
 
     public static String saveData;
     public static String newsaveData;
@@ -72,8 +77,7 @@ public class ResourcesLoader {
 
     static {
 
-        fishingPanel = new FishingPanel(GameScreen.screenWidth,GameScreen.screenHeight);
-        fishCaughtFX = new FishCaughtFX();
+
 
         saveData = "";
         newsaveData = "gamesave.sav";
@@ -84,11 +88,6 @@ public class ResourcesLoader {
         Beach_map = "res/Beach_Map.csv";
         Waterfall_map = "res/demo_Map1.csv";
         Loading_map = "res/loading_Map.csv";
-
-        mainChar = new Character("Steve",
-                sceneW/2, sceneH/2,160,220, 7,270);
-
-        defaultLogic = new LogicController();
 
 
         String ballsriPath = "Ball.png";
@@ -104,6 +103,7 @@ public class ResourcesLoader {
         String logoWBPath = "logo/logo_waterfall_BLOCK.png";
         String logoFBPath = "logo/logo_fire_BLOCK.png";
         String loadingPath = "heart.png";
+        String moneyBarPath = "moneyBar.png";
 
         int size = 160;
         int logoW = 328;
@@ -148,6 +148,7 @@ public class ResourcesLoader {
         button_resume = new Image((ClassLoader.getSystemResource(bresume).toString()));
         button_exit = new Image((ClassLoader.getSystemResource(bexit).toString()));
         button_menu = new Image((ClassLoader.getSystemResource(bmenu).toString()));
+        moneyBarImg = new Image(ClassLoader.getSystemResource(moneyBarPath).toString());
 
         fireworkSP = new Image(ClassLoader.getSystemResource(fireworkPath).toString());
         fireworks = loadFireworks();
@@ -198,8 +199,18 @@ public class ResourcesLoader {
             e.printStackTrace();
         }
 
+        //Last thing to do
+        loadGameObjects();
 
+    }
 
+    private static void loadGameObjects() {
+        fishingPanel = new FishingPanel(GameScreen.screenWidth,GameScreen.screenHeight);
+        fishCaughtFX = new FishCaughtFX();
+        mainChar = new Character("Steve",
+                sceneW/2, sceneH/2,160,220, 7,270);
+        moneyBar = new MoneyBar(15,15,-10,10);
+        defaultLogic = new LogicController();
     }
 
     private static WritableImage[] loadFishing_rod(){

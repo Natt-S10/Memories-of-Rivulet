@@ -24,7 +24,7 @@ public class Fish extends ItemBase implements Serializable {
     }
 
     public int getFishPrice(){
-        return 0;
+        return (int)(FishUtils.fishBasePrice(species) * fishWeight / FishUtils.fishBaseWeight(species));
     }
 
     public FishSpecies getSpecies() {
@@ -37,5 +37,10 @@ public class Fish extends ItemBase implements Serializable {
 
     public double getFishWeight() {
         return fishWeight;
+    }
+
+    @Override
+    public String toString() {
+        return species.toString().replace("_"," ");
     }
 }

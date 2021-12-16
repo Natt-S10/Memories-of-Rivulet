@@ -35,6 +35,8 @@ public class FishUtils {
         return (double) fishStatMap.get(species)[2];
     }
 
+    public static int fishBasePrice(FishSpecies species){ return (int)fishStatMap.get(species)[3];}
+
     public static Image fishImg(FishSpecies species){
         return fishImage[fishIndex(species)];
     }
@@ -59,7 +61,8 @@ public class FishUtils {
                 String[] data = row.split(",");
                 Object [] stats = {Integer.valueOf(data[1]),
                     Double.valueOf(data[2]),
-                    Double.valueOf(data[3])};
+                    Double.valueOf(data[3]),
+                    Integer.valueOf(data[4])};
                 fishStatMap.put(FishSpecies.valueOf(data[0]),stats);
             }
             csvReader.close();

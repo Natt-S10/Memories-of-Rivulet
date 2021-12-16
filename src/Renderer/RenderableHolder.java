@@ -1,6 +1,7 @@
 package Renderer;
 
 import Logic.LogicController;
+import UIpanel.MoneyStatus.MoneyBar;
 import UIpanel.VisualFX.FishCaughtFX;
 import UIpanel.fishing.FishingPanel;
 import map.Map;
@@ -39,9 +40,11 @@ public class RenderableHolder {
         elements.clear();
         FishingPanel fishingPanel = ResourcesLoader.fishingPanel;
         FishCaughtFX fishCaughtFX = ResourcesLoader.fishCaughtFX;
+        MoneyBar moneyBar = ResourcesLoader.moneyBar;
 
         RenderableHolder.getInstance().add(fishCaughtFX);
         RenderableHolder.getInstance().add(fishingPanel);
+        RenderableHolder.getInstance().add(moneyBar);
     }
 
     public void update() {

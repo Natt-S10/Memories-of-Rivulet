@@ -23,9 +23,9 @@ public class FishingPanel implements IRenderable, Serializable {
         this.anchorX = (screenW-panelW)/2;
         this.anchorY = (screenH-panelH)/2;
         isVisible = false;
-        timer = new Timer(378,120);
-        qtSign = new QuickTimeSign(330, 180);
-        spinningRod = new SpinningRod(37,-45);
+        timer = new Timer(428,120);
+        qtSign = new QuickTimeSign(380, 180);
+        spinningRod = new SpinningRod(37,-75);
     }
 
     @Override
@@ -36,8 +36,8 @@ public class FishingPanel implements IRenderable, Serializable {
     @Override
     public void draw(GraphicsContext gc) {
         gc.setFill(Color.WHITE);
-        gc.fillRoundRect(anchorX,anchorY,panelW, panelH, 6,6);
-        gc.strokeRoundRect(anchorX,anchorY,panelW, panelH, 6,6);
+        gc.fillRoundRect(anchorX,anchorY,panelW, panelH, 30,30);
+        gc.strokeRoundRect(anchorX,anchorY,panelW, panelH, 30,30);
         timer.draw(anchorX, anchorY, gc);
         qtSign.draw(anchorX, anchorY, gc);
         spinningRod.draw(anchorX,anchorX,gc);
