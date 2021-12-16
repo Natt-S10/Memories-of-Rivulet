@@ -43,7 +43,7 @@ public class MoneyBar implements IRenderable {
         String text = (LogicController.getInstance().getMoney()>= 5000)?"WIN" :
                 padLeftSpaces(Integer.toString(LogicController.getInstance().getMoney()),4);
         gc.drawImage(ResourcesLoader.moneyBarImg,posX,posY);
-        gc.setFont(Font.font("Century Gothic", FontWeight.LIGHT, 35));
+        gc.setFont(Font.font("Century Gothic", FontWeight.NORMAL, 34));
         gc.setFill(Color.BLACK);
         gc.setTextAlign(TextAlignment.RIGHT);
 

@@ -161,7 +161,7 @@ public class LogicController  implements Serializable{
     }
 
     public void pauseMenu(){
-
+        AudioAsset.playFootsteps(false);
         if(!isSetup){
             LoadHoldingScreen();
             PauseButtonList.setVisible(true);
@@ -299,7 +299,7 @@ public class LogicController  implements Serializable{
 
     public void loading(){
 
-
+        AudioAsset.playFootsteps(false);
         ButtonList.setVisible(false);
             try{
                 if(MapLoadingT == 240){

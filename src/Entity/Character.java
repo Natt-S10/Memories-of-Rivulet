@@ -199,11 +199,9 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
     @Override
     public boolean isVisible() {
         switch (LogicController.getInstance().getGameState()){
-            case LOADING,PAUSE,OPTIONM,OPTIONP,MENU -> {return false;}
-            case WALK ,AFTERFISHING, BAITING , FISHING, LOADED-> {return true;}
-
+            case WALK ,AFTERFISHING, BAITING , FISHING, LOADED, FISHRAISING -> {return true;}
+            default -> {return false;}
         }
-        return true;
     }
 
     @Override
@@ -334,7 +332,7 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
 
         gc.setStroke(Color.BLACK);
         gc.setFill(Color.LEMONCHIFFON);
-        gc.setFont(Font.font("Century Gothic", FontWeight.LIGHT, 35));
+        gc.setFont(Font.font("Century Gothic", FontWeight.NORMAL, 35));
         gc.setTextAlign(TextAlignment.CENTER);
 
         gc.fillRoundRect(visualBoundary.getCenterX()-128,
@@ -345,6 +343,11 @@ public class Character extends Entity implements IRenderable, Movable, Collidabl
         gc.fillText(LogicController.getInstance().getCaughtFish().toString(),
                 visualBoundary.getCenterX(),
                 visualBoundary.top()-FishUtils.imgH+87
+                ,246);
+        gc.setFont(Font.font("Century Gothic", FontWeight.LIGHT, 17));
+        gc.fillText(Double.toString(Math.round(LogicController.getInstance().getCaughtFish().getFishWeight()))+" Kg",
+                visualBoundary.getCenterX()+95,
+                visualBoundary.top()-FishUtils.imgH+59
                 ,246);
         //reset
         gc.setTextAlign(TextAlignment.LEFT);
