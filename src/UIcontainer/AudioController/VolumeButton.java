@@ -45,7 +45,7 @@ public class VolumeButton extends UIButton {
 
 
 
-                System.out.println(inRange);
+                //System.out.println(inRange);
             }
         });
         //System.out.println(inRange);
